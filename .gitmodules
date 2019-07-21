@@ -1,0 +1,3 @@
+[submodule "scripts/makefiles/third_party/pasdam/makefiles"]
+	path = scripts/makefiles/third_party/pasdam/makefiles
+	url = git@github.com:pasdam/makefiles.git
