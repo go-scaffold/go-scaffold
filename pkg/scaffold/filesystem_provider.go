@@ -32,7 +32,7 @@ func (self *fileSystemProvider) HasMoreFiles() bool {
 	return len(self.filesPath) > 0
 }
 
-func (self *fileSystemProvider) NextFile() (string, error) {
+func (self *fileSystemProvider) NextFile() (string, FileReader, error) {
 	nextFilePath := self.filesPath[0]
 	nextFileInfo := self.filesInfo[0]
 
@@ -51,7 +51,8 @@ func (self *fileSystemProvider) NextFile() (string, error) {
 		return self.NextFile()
 	}
 
-	return strings.TrimPrefix(nextFilePath, self.templateDir), nil
+	reader, err := os.Open(nextFilePath)
+	return strings.TrimPrefix(nextFilePath, self.templateDir), reader, err
 }
 
 func (self *fileSystemProvider) indexDir(dirPath string) error {
