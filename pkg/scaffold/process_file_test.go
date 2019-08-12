@@ -2,6 +2,7 @@ package scaffold_test
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/pasdam/go-project-template/pkg/scaffold"
@@ -63,7 +64,7 @@ func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 	)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, outDir+"template_file", "This is a *test*\n")
+	testutils.FileExists(t, filepath.Join(outDir, "template_file"), "This is a *test*\n")
 }
 
 func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
@@ -82,10 +83,10 @@ func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 	)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, outDir+"test/regular_file.txt", "regular-file-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "test/regular_file.txt"), "regular-file-content\n")
 }
 
 func verifyOutputFileDoesNotExist(t *testing.T, outDir string, filePath string) {
-	_, err := os.Stat(outDir + filePath)
+	_, err := os.Stat(filepath.Join(outDir, filePath))
 	assert.NotNil(t, err)
 }

@@ -3,7 +3,7 @@ package scaffold_test
 import (
 	"errors"
 	"os"
-	"strings"
+	"path/filepath"
 	"testing"
 
 	"github.com/pasdam/go-project-template/pkg/scaffold"
@@ -42,15 +42,15 @@ func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithoutSuffix(t *te
 	err := scaffold.ProcessFiles(provider, validData, outDir)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, outDir+"regular_file.txt", "regular-file-content\n")
-	testutils.FileExists(t, outDir+"template_file", "This is a *test*\n")
-	testutils.FileExists(t, outDir+"file_system_provider/file0", "file0-content\n")
-	testutils.FileExists(t, outDir+"file_system_provider/file1", "file1-content\n")
-	testutils.FileExists(t, outDir+"file_system_provider/test_folder/fileA", "fileA-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "regular_file.txt"), "regular-file-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "template_file"), "This is a *test*\n")
+	testutils.FileExists(t, filepath.Join(outDir, "file_system_provider/file0"), "file0-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "file_system_provider/file1"), "file1-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "file_system_provider/test_folder/fileA"), "fileA-content\n")
 }
 
 func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithSuffix(t *testing.T) {
-	outDir := strings.TrimSuffix(testutils.TempDir(t), "/")
+	outDir := testutils.TempDir(t) + "/"
 	defer os.RemoveAll(outDir)
 
 	provider, _ := scaffold.NewFileSystemProvider("test/")
@@ -58,11 +58,11 @@ func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithSuffix(t *testi
 	err := scaffold.ProcessFiles(provider, validData, outDir)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, outDir+"/regular_file.txt", "regular-file-content\n")
-	testutils.FileExists(t, outDir+"/template_file", "This is a *test*\n")
-	testutils.FileExists(t, outDir+"/file_system_provider/file0", "file0-content\n")
-	testutils.FileExists(t, outDir+"/file_system_provider/file1", "file1-content\n")
-	testutils.FileExists(t, outDir+"/file_system_provider/test_folder/fileA", "fileA-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "/regular_file.txt"), "regular-file-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "/template_file"), "This is a *test*\n")
+	testutils.FileExists(t, filepath.Join(outDir, "/file_system_provider/file0"), "file0-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "/file_system_provider/file1"), "file1-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "/file_system_provider/test_folder/fileA"), "fileA-content\n")
 }
 
 type mockFileProvider struct {

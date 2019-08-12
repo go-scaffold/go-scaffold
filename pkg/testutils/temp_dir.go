@@ -1,21 +1,16 @@
 package testutils
 
 import (
-	"crypto/rand"
-	"fmt"
+	"io/ioutil"
 	"os"
 	"testing"
 )
 
 func TempDir(t *testing.T) string {
-	b := make([]byte, 16)
-	_, err := rand.Read(b)
+	dir, err := ioutil.TempDir(os.TempDir(), "go-scaffold")
 	if err != nil {
 		t.FailNow()
 	}
 
-	dirPath := fmt.Sprintf("/var/tmp/tempdir-%X/", b[0:])
-	os.MkdirAll(dirPath, os.ModePerm)
-
-	return dirPath
+	return dir
 }

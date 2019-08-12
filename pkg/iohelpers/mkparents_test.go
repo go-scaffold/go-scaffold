@@ -2,6 +2,7 @@ package iohelpers_test
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/pasdam/go-project-template/pkg/iohelpers"
@@ -20,7 +21,7 @@ func Test_MkParents_Fail_ShouldReturnErrorIfCannotCreateDir(t *testing.T) {
 func Test_MkParents_Success_ShouldCreateFolders(t *testing.T) {
 	tmpDir := testutils.TempDir(t)
 	outDir := tmpDir + "some/not/existing/folder/"
-	filePath := outDir + "some_file"
+	filePath := filepath.Join(outDir, "some_file")
 	defer os.RemoveAll(tmpDir)
 
 	err := iohelpers.MkParents(filePath)
