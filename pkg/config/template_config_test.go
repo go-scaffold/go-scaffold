@@ -8,14 +8,14 @@ import (
 )
 
 func Test_NewTemplateConfig_fail_shouldReturnErrorIfFailsToOpenFile(t *testing.T) {
-	templateConfig, err := config.NewTemplateConfig("test/not-existing-file.yaml")
+	templateConfig, err := config.NewTemplateConfig("testdata/not-existing-file.yaml")
 
 	assert.NotNil(t, err)
 	assert.Nil(t, templateConfig)
 }
 
 func Test_NewTemplateConfig_success_shouldCreateConfigIfFileIsValid(t *testing.T) {
-	templateConfig, err := config.NewTemplateConfig("test/test_config.yaml")
+	templateConfig, err := config.NewTemplateConfig("testdata/test_config.yaml")
 
 	assert.Nil(t, err)
 	assert.NotNil(t, templateConfig)

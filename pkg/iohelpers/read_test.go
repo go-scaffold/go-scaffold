@@ -9,7 +9,7 @@ import (
 )
 
 func Test_Read_Success_ShouldReadContentOfFile(t *testing.T) {
-	reader, err := os.Open("test/file_to_read.txt")
+	reader, err := os.Open("testdata/file_to_read.txt")
 	assert.Nil(t, err)
 	defer reader.Close()
 	assert.Equal(t, "file-to-read-content\n", iohelpers.Read(reader))

@@ -37,7 +37,7 @@ func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithoutSuffix(t *te
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	provider, _ := scaffold.NewFileSystemProvider("test/")
+	provider, _ := scaffold.NewFileSystemProvider("testdata/")
 
 	err := scaffold.ProcessFiles(provider, validData, outDir)
 
@@ -53,7 +53,7 @@ func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithSuffix(t *testi
 	outDir := testutils.TempDir(t) + "/"
 	defer os.RemoveAll(outDir)
 
-	provider, _ := scaffold.NewFileSystemProvider("test/")
+	provider, _ := scaffold.NewFileSystemProvider("testdata/")
 
 	err := scaffold.ProcessFiles(provider, validData, outDir)
 

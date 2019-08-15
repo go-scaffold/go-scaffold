@@ -14,7 +14,7 @@ func Test_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	file, err := os.Open("test/template_file.tpl")
+	file, err := os.Open("testdata/template_file.tpl")
 	assert.Nil(t, err)
 	defer file.Close()
 
@@ -33,7 +33,7 @@ func Test_ProcessFile_Fail_CantWriteOutputFile(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	file, err := os.Open("test/template_file.tpl")
+	file, err := os.Open("testdata/template_file.tpl")
 	assert.Nil(t, err)
 	defer file.Close()
 
@@ -41,18 +41,18 @@ func Test_ProcessFile_Fail_CantWriteOutputFile(t *testing.T) {
 		file,
 		validData,
 		outDir,
-		"some-non-existent-folder/test/template_file.tpl",
+		"some-non-existent-folder/testdata/template_file.tpl",
 	)
 
 	assert.NotNil(t, err)
-	verifyOutputFileDoesNotExist(t, outDir, "test/template_file.tpl")
+	verifyOutputFileDoesNotExist(t, outDir, "testdata/template_file.tpl")
 }
 
 func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	file, err := os.Open("test/template_file.tpl")
+	file, err := os.Open("testdata/template_file.tpl")
 	assert.Nil(t, err)
 	defer file.Close()
 
@@ -71,7 +71,7 @@ func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	file, err := os.Open("test/regular_file.txt")
+	file, err := os.Open("testdata/regular_file.txt")
 	assert.Nil(t, err)
 	defer file.Close()
 
@@ -79,11 +79,11 @@ func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 		file,
 		nil,
 		outDir,
-		"test/regular_file.txt",
+		"testdata/regular_file.txt",
 	)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, filepath.Join(outDir, "test/regular_file.txt"), "regular-file-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "testdata/regular_file.txt"), "regular-file-content\n")
 }
 
 func verifyOutputFileDoesNotExist(t *testing.T, outDir string, filePath string) {

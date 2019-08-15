@@ -23,7 +23,7 @@ func Test_NewFileSystemProvider_Succeed_FolderExist(t *testing.T) {
 }
 
 func Test_Reset_Succeed_ResetBeforeFirstRead(t *testing.T) {
-	provider, err := scaffold.NewFileSystemProvider("./test/file_system_provider")
+	provider, err := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
 	assert.Nil(t, err)
 	assert.True(t, provider.HasMoreFiles())
 
@@ -33,7 +33,7 @@ func Test_Reset_Succeed_ResetBeforeFirstRead(t *testing.T) {
 }
 
 func Test_Reset_Succeed_ResetAfterFirstRead(t *testing.T) {
-	provider, _ := scaffold.NewFileSystemProvider("./test/file_system_provider")
+	provider, _ := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
 
 	verifyNextFile(t, provider, "file0", "file0-content\n", true)
 
@@ -43,7 +43,7 @@ func Test_Reset_Succeed_ResetAfterFirstRead(t *testing.T) {
 }
 
 func Test_Reset_Succeed_ResetAfterReadSubfolder(t *testing.T) {
-	provider, _ := scaffold.NewFileSystemProvider("./test/file_system_provider")
+	provider, _ := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
 
 	verifyNextFile(t, provider, "file0", "file0-content\n", true)
 	verifyNextFile(t, provider, "file1", "file1-content\n", true)
