@@ -1,4 +1,4 @@
-package prompt
+package promptcli
 
 import "testing"
 
@@ -11,9 +11,9 @@ func Test_validateInteger(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{args: args{value: "invalid-number"}, wantErr: true},
-		{args: args{value: "1"}, wantErr: false},
-		{args: args{value: "0"}, wantErr: false},
+		{ args: args { value: "invalid-number" }, wantErr: true},
+		{ args: args { value: "1" }, wantErr: false},
+		{ args: args { value: "0" }, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
