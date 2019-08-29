@@ -48,6 +48,12 @@ func Test_Run_Fail_InvalidCliOptions(t *testing.T) {
 	handler := &fatalHandler{}
 	fatal = handler.Fatal
 
+	oldArgs := os.Args
+	defer func() { os.Args = oldArgs }()
+	os.Args = make([]string, 2)
+	os.Args[0] = ""
+	os.Args[1] = "--invalid-parameter"
+
 	Run()
 
 	assert.Equal(t, "Command line options error:", handler.Message)
