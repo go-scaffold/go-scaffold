@@ -26,7 +26,7 @@ func Test_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 	)
 
 	assert.NotNil(t, err)
-	verifyOutputFileDoesNotExist(t, outDir, "template_file.tpl")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "template_file.tpl"))
 }
 
 func Test_ProcessFile_Fail_CantWriteOutputFile(t *testing.T) {
@@ -45,7 +45,7 @@ func Test_ProcessFile_Fail_CantWriteOutputFile(t *testing.T) {
 	)
 
 	assert.NotNil(t, err)
-	verifyOutputFileDoesNotExist(t, outDir, "testdata/template_file.tpl")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "testdata/template_file.tpl"))
 }
 
 func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
@@ -84,9 +84,4 @@ func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 
 	assert.Nil(t, err)
 	testutils.FileExists(t, filepath.Join(outDir, "testdata/regular_file.txt"), "regular-file-content\n")
-}
-
-func verifyOutputFileDoesNotExist(t *testing.T, outDir string, filePath string) {
-	_, err := os.Stat(filepath.Join(outDir, filePath))
-	assert.NotNil(t, err)
 }
