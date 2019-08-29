@@ -4,11 +4,10 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/pasdam/go-project-template/pkg/prompt"
-	"github.com/pasdam/go-project-template/pkg/promptcli"
-
-	"github.com/pasdam/go-project-template/pkg/config"
-	"github.com/pasdam/go-project-template/pkg/scaffold"
+	"github.com/pasdam/go-scaffold/pkg/config"
+	"github.com/pasdam/go-scaffold/pkg/prompt"
+	"github.com/pasdam/go-scaffold/pkg/promptcli"
+	"github.com/pasdam/go-scaffold/pkg/scaffold"
 )
 
 var fatal = log.Fatal

@@ -1,6 +1,6 @@
-module github.com/pasdam/go-project-template
+module github.com/pasdam/go-scaffold
 
-replace github.com/pasdam/go-project-template/pkg => ./pkg
+replace github.com/pasdam/go-scaffold/pkg => ./pkg
 
 require (
 	github.com/alecthomas/units v0.0.0-20190717042225-c3de453c63f4 // indirect

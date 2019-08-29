@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/manifoldco/promptui"
-	"github.com/pasdam/go-project-template/pkg/prompt"
+	"github.com/pasdam/go-scaffold/pkg/prompt"
 )
 
 func Test_mapPrompt(t *testing.T) {

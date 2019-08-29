@@ -3,7 +3,7 @@ package config_test
 import (
 	"testing"
 
-	"github.com/pasdam/go-project-template/pkg/config"
+	"github.com/pasdam/go-scaffold/pkg/config"
 	"github.com/stretchr/testify/assert"
 )
 

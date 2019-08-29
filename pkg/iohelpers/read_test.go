@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/pasdam/go-project-template/pkg/iohelpers"
+	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 	"github.com/stretchr/testify/assert"
 )
 

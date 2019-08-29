@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pasdam/go-project-template/pkg/prompt"
-	"github.com/pasdam/go-project-template/pkg/testutils"
+	"github.com/pasdam/go-scaffold/pkg/prompt"
+	"github.com/pasdam/go-scaffold/pkg/testutils"
 	"github.com/stretchr/testify/assert"
 )
 

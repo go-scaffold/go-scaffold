@@ -2,7 +2,7 @@ package promptcli
 
 import (
 	"github.com/manifoldco/promptui"
-	"github.com/pasdam/go-project-template/pkg/prompt"
+	"github.com/pasdam/go-scaffold/pkg/prompt"
 )
 
 func mapPrompt(in *prompt.PromptConfig) *promptData {

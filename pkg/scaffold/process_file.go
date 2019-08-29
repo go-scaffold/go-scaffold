@@ -3,7 +3,7 @@ package scaffold
 import (
 	"path/filepath"
 
-	"github.com/pasdam/go-project-template/pkg/iohelpers"
+	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 )
 
 func ProcessFile(reader FileReader, config interface{}, outDir string, filePath string, onlyTemplate bool) error {

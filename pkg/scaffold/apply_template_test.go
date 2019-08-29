@@ -3,7 +3,7 @@ package scaffold_test
 import (
 	"testing"
 
-	"github.com/pasdam/go-project-template/pkg/scaffold"
+	"github.com/pasdam/go-scaffold/pkg/scaffold"
 	"github.com/stretchr/testify/assert"
 )
 

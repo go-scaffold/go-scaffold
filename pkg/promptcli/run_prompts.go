@@ -1,7 +1,7 @@
 package promptcli
 
 import (
-	"github.com/pasdam/go-project-template/pkg/prompt"
+	"github.com/pasdam/go-scaffold/pkg/prompt"
 )
 
 var promptConfigToPromptUIMapper func(in *prompt.PromptConfig) *promptData = mapPrompt
