@@ -23,6 +23,7 @@ func Test_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 		"invalid-data",
 		outDir,
 		"template_file.tpl",
+		false,
 	)
 
 	assert.NotNil(t, err)
@@ -42,6 +43,7 @@ func Test_ProcessFile_Fail_CantWriteOutputFile(t *testing.T) {
 		validData,
 		outDir,
 		"some-non-existent-folder/testdata/template_file.tpl",
+		false,
 	)
 
 	assert.NotNil(t, err)
@@ -61,6 +63,7 @@ func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 		validData,
 		outDir,
 		"template_file.tpl",
+		false,
 	)
 
 	assert.Nil(t, err)
@@ -80,8 +83,29 @@ func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 		nil,
 		outDir,
 		"testdata/regular_file.txt",
+		false,
 	)
 
 	assert.Nil(t, err)
 	testutils.FileExists(t, filepath.Join(outDir, "testdata/regular_file.txt"), "regular-file-content\n")
+}
+
+func Test_ProcessFile_Success_ShouldIgnoreFileIfItIsNotATemplateAndOnlyTemplatesIsTrue(t *testing.T) {
+	outDir := testutils.TempDir(t)
+	defer os.RemoveAll(outDir)
+
+	file, err := os.Open("testdata/regular_file.txt")
+	assert.Nil(t, err)
+	defer file.Close()
+
+	err = scaffold.ProcessFile(
+		file,
+		nil,
+		outDir,
+		"testdata/regular_file.txt",
+		true,
+	)
+
+	assert.Nil(t, err)
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "testdata/regular_file.txt"))
 }

@@ -38,7 +38,7 @@ func Run() {
 		return
 	}
 
-	err = scaffold.ProcessFiles(provider, data, string(options.OutputPath))
+	err = scaffold.ProcessFiles(provider, data, string(options.OutputPath), false)
 	if err != nil {
 		fatal("Error while processing files:", err)
 		return

@@ -18,7 +18,7 @@ func Test_ProcessFiles_Fail_ShouldReturnErrorIfFileProviderReturnsError(t *testi
 	expectedError := errors.New("Expected error")
 	provider := &mockFileProvider{err: expectedError}
 
-	err := scaffold.ProcessFiles(provider, validData, outDir)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false)
 
 	assert.Equal(t, expectedError, err)
 }
@@ -28,18 +28,18 @@ func Test_ProcessFiles_Fail_ShouldReturnErrorIfCannotProcessFile(t *testing.T) {
 	defer os.RemoveAll(outDir)
 	provider := &mockFileProvider{}
 
-	err := scaffold.ProcessFiles(provider, validData, outDir)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false)
 
 	assert.NotNil(t, err)
 }
 
-func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithoutSuffix(t *testing.T) {
+func Test_ProcessFiles_Success_ShouldCreateOutputFiles_DirWithoutSuffix(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
 	provider, _ := scaffold.NewFileSystemProvider("testdata/")
 
-	err := scaffold.ProcessFiles(provider, validData, outDir)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false)
 
 	assert.Nil(t, err)
 	testutils.FileExists(t, filepath.Join(outDir, "regular_file.txt"), "regular-file-content\n")
@@ -49,13 +49,30 @@ func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithoutSuffix(t *te
 	testutils.FileExists(t, filepath.Join(outDir, "file_system_provider/test_folder/fileA"), "fileA-content\n")
 }
 
+func Test_ProcessFiles_Success_ShouldCreateOutputFiles_DirWithoutSuffixOnlyTemplates(t *testing.T) {
+	outDir := testutils.TempDir(t)
+	defer os.RemoveAll(outDir)
+
+	provider, _ := scaffold.NewFileSystemProvider("testdata/")
+
+	err := scaffold.ProcessFiles(provider, validData, outDir, true)
+
+	assert.Nil(t, err)
+
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "regular_file.txt"))
+	testutils.FileExists(t, filepath.Join(outDir, "template_file"), "This is a *test*\n")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "file_system_provider/file0"))
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "file_system_provider/file1"))
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "file_system_provider/test_folder/fileA"))
+}
+
 func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithSuffix(t *testing.T) {
 	outDir := testutils.TempDir(t) + "/"
 	defer os.RemoveAll(outDir)
 
 	provider, _ := scaffold.NewFileSystemProvider("testdata/")
 
-	err := scaffold.ProcessFiles(provider, validData, outDir)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false)
 
 	assert.Nil(t, err)
 	testutils.FileExists(t, filepath.Join(outDir, "/regular_file.txt"), "regular-file-content\n")

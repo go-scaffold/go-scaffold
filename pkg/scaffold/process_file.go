@@ -6,7 +6,7 @@ import (
 	"github.com/pasdam/go-project-template/pkg/iohelpers"
 )
 
-func ProcessFile(reader FileReader, config interface{}, outDir string, filePath string) error {
+func ProcessFile(reader FileReader, config interface{}, outDir string, filePath string, onlyTemplate bool) error {
 	if IsTemplate(filePath) {
 
 		content, err := ApplyTemplate(iohelpers.Read(reader), config)
@@ -19,7 +19,7 @@ func ProcessFile(reader FileReader, config interface{}, outDir string, filePath 
 			return err
 		}
 
-	} else {
+	} else if !onlyTemplate {
 		return iohelpers.WriteFile(reader, filepath.Join(outDir, filePath))
 	}
 
