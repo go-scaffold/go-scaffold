@@ -2,6 +2,7 @@ package scaffold_test
 
 import (
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -92,7 +93,7 @@ func (m *mockFileProvider) HasMoreFiles() bool {
 	return true
 }
 
-func (m *mockFileProvider) NextFile() (path string, reader scaffold.FileReader, err error) {
+func (m *mockFileProvider) NextFile() (path string, reader io.ReadCloser, err error) {
 	return "", &mockReader{}, m.err
 }
 

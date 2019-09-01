@@ -2,6 +2,7 @@ package scaffold
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -32,7 +33,7 @@ func (self *fileSystemProvider) HasMoreFiles() bool {
 	return len(self.filesPath) > 0
 }
 
-func (self *fileSystemProvider) NextFile() (string, FileReader, error) {
+func (self *fileSystemProvider) NextFile() (string, io.ReadCloser, error) {
 	nextFilePath := self.filesPath[0]
 	nextFileInfo := self.filesInfo[0]
 
