@@ -1,0 +1,16 @@
+name: Continuous integration
+
+on: [push]
+
+jobs:
+  test:
+    name: Unit test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - uses: actions/setup-go@v1
+        with:
+          go-version: '1.12.9' # The Go version to download (if necessary) and use.
+      - run: make go-test
