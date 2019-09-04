@@ -8,21 +8,17 @@ import (
 )
 
 func ProcessFile(reader io.Reader, config interface{}, outDir string, filePath string, onlyTemplate bool) error {
+	var err error
 	if IsTemplate(filePath) {
-
-		content, err := ApplyTemplate(iohelpers.Read(reader), config)
+		reader, err = ProcessTemplate(reader, config)
 		if err != nil {
 			return err
 		}
+		filePath = OutputFilePath(filePath)
 
-		err = writeTextFile(content, filepath.Join(outDir, OutputFilePath(filePath)))
-		if err != nil {
-			return err
-		}
-
-	} else if !onlyTemplate {
-		return iohelpers.WriteFile(reader, filepath.Join(outDir, filePath))
+	} else if onlyTemplate {
+		return nil
 	}
 
-	return nil
+	return iohelpers.WriteFile(reader, filepath.Join(outDir, filePath))
 }

@@ -42,6 +42,7 @@ func Test_Run_Success_ValidTemplate(t *testing.T) {
 	Run()
 
 	testutils.FileExists(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
+	testutils.FileExists(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
 }
 
 func Test_Run_Fail_InvalidCliOptions(t *testing.T) {
@@ -72,7 +73,7 @@ func Test_Run_Fail_ErrorParsingPromptFile(t *testing.T) {
 	os.Args = make([]string, 5)
 	os.Args[0] = ""
 	os.Args[1] = "--template"
-	os.Args[2] = "invalid-folder"
+	os.Args[2] = filepath.Join("testdata", "valid_template", ".go-scaffold")
 	os.Args[3] = "--output"
 	os.Args[4] = outDir
 
@@ -82,7 +83,7 @@ func Test_Run_Fail_ErrorParsingPromptFile(t *testing.T) {
 	assert.NotNil(t, handler.Err)
 }
 
-func Test_Run_Fail_ErrorReadingTemplateFiles(t *testing.T) {
+func Test_Run_Fail_NotExistingFolder(t *testing.T) {
 	handler := &fatalHandler{}
 	fatal = handler.Fatal
 
@@ -94,7 +95,7 @@ func Test_Run_Fail_ErrorReadingTemplateFiles(t *testing.T) {
 	os.Args = make([]string, 5)
 	os.Args[0] = ""
 	os.Args[1] = "--template"
-	os.Args[2] = filepath.Join("testdata", "no_src")
+	os.Args[2] = filepath.Join("testdata", "invalid-folder")
 	os.Args[3] = "--output"
 	os.Args[4] = outDir
 
@@ -104,7 +105,7 @@ func Test_Run_Fail_ErrorReadingTemplateFiles(t *testing.T) {
 	assert.NotNil(t, handler.Err)
 }
 
-func Test_Run_Fail_ErrorWhileProcessingFile(t *testing.T) {
+func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
 	handler := &fatalHandler{}
 	fatal = handler.Fatal
 

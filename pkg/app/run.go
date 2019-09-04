@@ -21,9 +21,13 @@ func Run() {
 		return
 	}
 
-	// TODO: check if template path contains a template
+	provider, err := scaffold.NewFileSystemProvider(string(options.TemplatePath))
+	if err != nil {
+		fatal("Error while creating the file provider:", err)
+		return
+	}
 
-	prompts, err := prompt.ParsePrompts(filepath.Join(string(options.TemplatePath), "prompts.yaml"))
+	prompts, err := prompt.ParsePrompts(filepath.Join(string(options.TemplatePath), ".go-scaffold", "prompts.yaml"))
 	if err != nil {
 		fatal("Unable to parse prompts.yaml file:", err)
 		return
@@ -31,13 +35,9 @@ func Run() {
 
 	data := runPrompts(prompts)
 
-	provider, err := scaffold.NewFileSystemProvider(filepath.Join(string(options.TemplatePath), "src"))
-	if err != nil {
-		fatal("Error while creating the file provider:", err)
-		return
-	}
 
-	err = scaffold.ProcessFiles(provider, data, string(options.OutputPath), false)
+	processOnlyTemplates := options.TemplatePath == options.OutputPath
+	err = scaffold.ProcessFiles(provider, data, string(options.OutputPath), processOnlyTemplates)
 	if err != nil {
 		fatal("Error while processing files:", err)
 		return

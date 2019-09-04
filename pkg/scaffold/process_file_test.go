@@ -30,26 +30,6 @@ func Test_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 	testutils.FileDoesNotExist(t, filepath.Join(outDir, "template_file.tpl"))
 }
 
-func Test_ProcessFile_Fail_CantWriteOutputFile(t *testing.T) {
-	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
-
-	file, err := os.Open("testdata/template_file.tpl")
-	assert.Nil(t, err)
-	defer file.Close()
-
-	err = scaffold.ProcessFile(
-		file,
-		validData,
-		outDir,
-		"some-non-existent-folder/testdata/template_file.tpl",
-		false,
-	)
-
-	assert.NotNil(t, err)
-	testutils.FileDoesNotExist(t, filepath.Join(outDir, "testdata/template_file.tpl"))
-}
-
 func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
