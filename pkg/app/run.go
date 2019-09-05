@@ -21,7 +21,9 @@ func Run() {
 		return
 	}
 
-	provider, err := scaffold.NewFileSystemProvider(string(options.TemplatePath))
+	filter, _ := scaffold.NewPatternFilter(".go-scaffold(/.*)?")
+
+	provider, err := scaffold.NewFileSystemProvider(string(options.TemplatePath), filter)
 	if err != nil {
 		fatal("Error while creating the file provider:", err)
 		return

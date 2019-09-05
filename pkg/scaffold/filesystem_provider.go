@@ -1,6 +1,7 @@
 package scaffold
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -12,11 +13,13 @@ type fileSystemProvider struct {
 	filesPath   []string
 	filesInfo   []os.FileInfo
 	templateDir string
+	filter      Filter
 }
 
-func NewFileSystemProvider(templateDir string) (FileProvider, error) {
+func NewFileSystemProvider(templateDir string, filter Filter) (FileProvider, error) {
 	provider := &fileSystemProvider{
 		templateDir: formatPath(templateDir, ""),
+		filter:      filter,
 	}
 	err := provider.Reset()
 	if err != nil {
@@ -34,26 +37,33 @@ func (self *fileSystemProvider) HasMoreFiles() bool {
 }
 
 func (self *fileSystemProvider) NextFile() (string, io.ReadCloser, error) {
-	nextFilePath := self.filesPath[0]
-	nextFileInfo := self.filesInfo[0]
+	for i := 0; i < len(self.filesPath); i++ {
+		nextFilePath := self.filesPath[i]
 
-	listSize := len(self.filesPath)
-	if listSize > 1 {
-		self.filesPath = self.filesPath[1:len(self.filesPath)]
-		self.filesInfo = self.filesInfo[1:len(self.filesInfo)]
+		if self.filter == nil || self.filter.Accept(nextFilePath) {
+			nextFileInfo := self.filesInfo[i]
 
-	} else {
-		self.filesPath = nil
-		self.filesInfo = nil
+			listSize := len(self.filesPath)
+			if listSize > 1 {
+				self.filesPath = self.filesPath[i+1 : len(self.filesPath)]
+				self.filesInfo = self.filesInfo[i+1 : len(self.filesInfo)]
+
+			} else {
+				self.filesPath = nil
+				self.filesInfo = nil
+			}
+
+			if nextFileInfo.IsDir() {
+				self.indexDir(nextFilePath)
+				return self.NextFile()
+			}
+
+			reader, err := os.Open(nextFilePath)
+			return strings.TrimPrefix(nextFilePath, self.templateDir), reader, err
+		}
 	}
 
-	if nextFileInfo.IsDir() {
-		self.indexDir(nextFilePath)
-		return self.NextFile()
-	}
-
-	reader, err := os.Open(nextFilePath)
-	return strings.TrimPrefix(nextFilePath, self.templateDir), reader, err
+	return "", nil, errors.New("No more files")
 }
 
 func (self *fileSystemProvider) indexDir(dirPath string) error {

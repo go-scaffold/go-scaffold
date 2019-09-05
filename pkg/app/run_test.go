@@ -43,6 +43,7 @@ func Test_Run_Success_ValidTemplate(t *testing.T) {
 
 	testutils.FileExists(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
 	testutils.FileExists(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
 }
 
 func Test_Run_Fail_InvalidCliOptions(t *testing.T) {
