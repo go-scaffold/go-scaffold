@@ -1,46 +1,50 @@
 package scaffold
 
 import (
-	"errors"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type fileSystemProvider struct {
 	filesPath   []string
 	filesInfo   []os.FileInfo
 	templateDir string
-	filter      Filter
 }
 
-func NewFileSystemProvider(templateDir string, filter Filter) (FileProvider, error) {
-	provider := &fileSystemProvider{
+func NewFileSystemProvider(templateDir string) FileProvider {
+	return &fileSystemProvider{
 		templateDir: templateDir,
-		filter:      filter,
 	}
-	err := provider.Reset()
+}
+
+func (self *fileSystemProvider) ProvideFiles(filesFilter Filter, processor FileProcessor) error {
+	err := self.indexDir(self.templateDir, filesFilter)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return provider, nil
+
+	for len(self.filesPath) > 0 {
+		filePath, reader := self.nextFile(filesFilter)
+		defer reader.Close()
+
+		err = processor.ProcessFile(filePath, reader)
+		if err != nil {
+			// TODO: clean output folder
+			return err
+		}
+	}
+	return nil
 }
 
-func (self *fileSystemProvider) Reset() error {
-	return self.indexDir(self.templateDir)
-}
-
-func (self *fileSystemProvider) HasMoreFiles() bool {
-	return len(self.filesPath) > 0
-}
-
-func (self *fileSystemProvider) NextFile() (string, io.ReadCloser, error) {
+func (self *fileSystemProvider) nextFile(filter Filter) (string, io.ReadCloser) {
+	var nextFilePath string
+	var reader io.ReadCloser
 	for i := 0; i < len(self.filesPath); i++ {
-		nextFilePath := self.filesPath[i]
+		nextFilePath = self.filesPath[i]
 
-		if self.filter == nil || self.filter.Accept(nextFilePath) {
+		if filter == nil || filter.Accept(nextFilePath) {
 			nextFileInfo := self.filesInfo[i]
 
 			listSize := len(self.filesPath)
@@ -54,32 +58,35 @@ func (self *fileSystemProvider) NextFile() (string, io.ReadCloser, error) {
 			}
 
 			if nextFileInfo.IsDir() {
-				self.indexDir(nextFilePath)
-				return self.NextFile()
+				self.indexDir(nextFilePath, filter)
+				return self.nextFile(filter)
 			}
 
-			reader, err := os.Open(nextFilePath)
-			return strings.TrimPrefix(nextFilePath, self.templateDir), reader, err
+			reader, _ = os.Open(nextFilePath)
+			nextFilePath, _ = filepath.Rel(self.templateDir, nextFilePath)
+			break
 		}
 	}
-
-	return "", nil, errors.New("No more files")
+	return nextFilePath, reader
 }
 
-func (self *fileSystemProvider) indexDir(dirPath string) error {
+func (self *fileSystemProvider) indexDir(dirPath string, filter Filter) error {
 	filesInfo, err := ioutil.ReadDir(dirPath)
 	if err != nil {
 		return err
 	}
 
-	filesPaths := make([]string, len(filesInfo))
+	acceptedInfo := make([]os.FileInfo, 0, len(filesInfo))
+	acceptedPaths := make([]string, 0, len(filesInfo))
 	for i := 0; i < len(filesInfo); i++ {
-		filesPaths[i] = filepath.Join(dirPath, filesInfo[i].Name())
+		filePath := filepath.Join(dirPath, filesInfo[i].Name())
+		if filter == nil || filter.Accept(filePath) {
+			acceptedInfo = append(acceptedInfo, filesInfo[i])
+			acceptedPaths = append(acceptedPaths, filePath)
+		}
 	}
-
-	// prepend slices
-	self.filesInfo = append(filesInfo, self.filesInfo...)
-	self.filesPath = append(filesPaths, self.filesPath...)
+	self.filesInfo = append(acceptedInfo, self.filesInfo...)
+	self.filesPath = append(acceptedPaths, self.filesPath...)
 
 	return nil
 }

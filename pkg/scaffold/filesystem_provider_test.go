@@ -1,8 +1,12 @@
 package scaffold_test
 
 import (
+	"errors"
+	"io"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/mock"
 
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
@@ -10,79 +14,99 @@ import (
 )
 
 func Test_NewFileSystemProvider_Fail_FolderDoesNotExist(t *testing.T) {
-	provider, err := scaffold.NewFileSystemProvider("some-non-existing-folder", nil)
+	var filter scaffold.Filter
+	processor := newMockFileProcessor()
 
-	assert.NotNil(t, err)
-	assert.Nil(t, provider)
+	provider := scaffold.NewFileSystemProvider("some-non-existing-folder")
+	err := provider.ProvideFiles(filter, processor)
+	assert.Equal(t, "open some-non-existing-folder: no such file or directory", err.Error())
 }
 
-func Test_NewFileSystemProvider_Succeed_FolderExist(t *testing.T) {
-	provider, err := scaffold.NewFileSystemProvider(".", nil)
+func TestFileSystemProvider_ProvideFiles_Fail_ShouldProcessAllFileIfNoFilterIsSpecified(t *testing.T) {
+	var filter scaffold.Filter
+	processor := newMockFileProcessor()
+	expectedErr := errors.New("some-error")
+	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(expectedErr)
 
+	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	actualErr := provider.ProvideFiles(filter, processor)
+
+	assert.Equal(t, expectedErr, actualErr)
+	assert.Equal(t, 1, len(processor.ReadersMap))
+}
+
+func TestFileSystemProvider_ProvideFiles_Success_ShouldProcessAllFileIfNoFilterIsSpecified(t *testing.T) {
+	var filter scaffold.Filter
+	processor := newMockFileProcessor()
+	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
+
+	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	err := provider.ProvideFiles(filter, processor)
 	assert.Nil(t, err)
-	assert.NotNil(t, provider)
+
+	verifyProcessedFile(t, processor, "file0", "file0-content\n")
+	verifyProcessedFile(t, processor, "file1", "file1-content\n")
+	verifyProcessedFile(t, processor, "test_folder/fileA", "fileA-content\n")
+	assert.Equal(t, 0, len(processor.ReadersMap))
 }
 
-func Test_Reset_Succeed_ResetBeforeFirstRead(t *testing.T) {
-	provider, err := scaffold.NewFileSystemProvider("./testdata/file_system_provider", nil)
+func TestFileSystemProvider_ProvideFiles_Success_ShouldProcessAllFileIfFilterAcceptsAll(t *testing.T) {
+	filter := &mockFilter{File: "no-file-will-match"}
+	processor := newMockFileProcessor()
+	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
+
+	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	err := provider.ProvideFiles(filter, processor)
 	assert.Nil(t, err)
-	assert.True(t, provider.HasMoreFiles())
 
-	provider.Reset()
-
-	verifyNextFile(t, provider, "file0", "file0-content\n", true)
+	verifyProcessedFile(t, processor, "file0", "file0-content\n")
+	verifyProcessedFile(t, processor, "file1", "file1-content\n")
+	verifyProcessedFile(t, processor, "test_folder/fileA", "fileA-content\n")
+	assert.Equal(t, 0, len(processor.ReadersMap))
 }
 
-func Test_Reset_Succeed_ResetAfterFirstRead(t *testing.T) {
-	provider, _ := scaffold.NewFileSystemProvider("./testdata/file_system_provider", nil)
+func TestFileSystemProvider_ProvideFiles_Success_ShouldNotProcessFilesIgnoredByTheFilter(t *testing.T) {
+	filter := &mockFilter{File: "file0"}
+	processor := newMockFileProcessor()
+	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
 
-	verifyNextFile(t, provider, "file0", "file0-content\n", true)
-
-	provider.Reset()
-
-	verifyNextFile(t, provider, "file0", "file0-content\n", true)
-}
-
-func Test_Reset_Succeed_ResetAfterReadSubfolder(t *testing.T) {
-	provider, _ := scaffold.NewFileSystemProvider("./testdata/file_system_provider", nil)
-
-	verifyNextFile(t, provider, "file0", "file0-content\n", true)
-	verifyNextFile(t, provider, "file1", "file1-content\n", true)
-	verifyNextFile(t, provider, "test_folder/fileA", "fileA-content\n", false)
-	verifyNoMoreFile(t, provider)
-
-	provider.Reset()
-
-	verifyNextFile(t, provider, "file0", "file0-content\n", true)
-}
-
-func Test_NextFile_Succeed_ShouldFilterFile(t *testing.T) {
-	provider, _ := scaffold.NewFileSystemProvider("./testdata/file_system_provider", &mockFilter{})
-
-	verifyNextFile(t, provider, "file1", "file1-content\n", true)
-	verifyNextFile(t, provider, "test_folder/fileA", "fileA-content\n", false)
-	verifyNoMoreFile(t, provider)
-}
-
-func verifyNextFile(t *testing.T, provider scaffold.FileProvider, filePath string, content string, hasMoreFiles bool) {
-	filePath, reader, err := provider.NextFile()
+	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	err := provider.ProvideFiles(filter, processor)
 	assert.Nil(t, err)
-	assert.Equal(t, filePath, filePath)
-	assert.Equal(t, content, iohelpers.Read(reader))
-	assert.Equal(t, hasMoreFiles, provider.HasMoreFiles())
+
+	verifyProcessedFile(t, processor, "file1", "file1-content\n")
+	verifyProcessedFile(t, processor, "test_folder/fileA", "fileA-content\n")
+	assert.Equal(t, 0, len(processor.ReadersMap))
 }
 
-func verifyNoMoreFile(t *testing.T, provider scaffold.FileProvider) {
-	filePath, reader, err := provider.NextFile()
-	assert.Equal(t, "No more files", err.Error())
-	assert.Empty(t, filePath)
-	assert.Nil(t, reader)
-	assert.Equal(t, filePath, filePath)
-	assert.False(t, provider.HasMoreFiles())
+func verifyProcessedFile(t *testing.T, processor *mockFileProcessor, filePath string, content string) {
+	processor.AssertCalled(t, "ProcessFile", filePath, mock.Anything)
+	assert.Equal(t, content, processor.ReadersMap[filePath])
+	delete(processor.ReadersMap, filePath)
 }
 
-type mockFilter struct{}
+type mockFilter struct {
+	File string
+}
 
 func (m *mockFilter) Accept(filePath string) bool {
-	return !strings.HasSuffix(filePath, "file0")
+	return !strings.HasSuffix(filePath, m.File)
+}
+
+type mockFileProcessor struct {
+	mock.Mock
+
+	ReadersMap map[string]string
+}
+
+func newMockFileProcessor() *mockFileProcessor {
+	return &mockFileProcessor{
+		ReadersMap: make(map[string]string),
+	}
+}
+
+func (self *mockFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
+	self.ReadersMap[filePath] = iohelpers.Read(reader)
+	args := self.Called(filePath, reader)
+	return args.Error(0)
 }

@@ -7,15 +7,15 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 )
 
-type FileProcessor struct {
+type OutputFileProcessor struct {
 	config         interface{}
 	outDir         string
 	templatesOnly  bool
 	templateHelper *TemplateHelper
 }
 
-func NewFileProcessor(config interface{}, outDir string, templateHelper *TemplateHelper, templatesOnly bool) *FileProcessor {
-	return &FileProcessor{
+func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *TemplateHelper, templatesOnly bool) FileProcessor {
+	return &OutputFileProcessor{
 		config:         config,
 		outDir:         outDir,
 		templatesOnly:  templatesOnly,
@@ -23,7 +23,7 @@ func NewFileProcessor(config interface{}, outDir string, templateHelper *Templat
 	}
 }
 
-func (self *FileProcessor) ProcessFile(filePath string, reader io.Reader) error {
+func (self *OutputFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
 	var err error
 	if self.templateHelper.Accept(filePath) {
 		reader, err = ProcessTemplate(reader, self.config)

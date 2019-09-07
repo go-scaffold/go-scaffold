@@ -102,7 +102,7 @@ func Test_Run_Fail_NotExistingFolder(t *testing.T) {
 
 	Run()
 
-	assert.Equal(t, "Error while creating the file provider:", handler.Message)
+	assert.Equal(t, "Unable to parse prompts.yaml file:", handler.Message)
 	assert.NotNil(t, handler.Err)
 }
 
