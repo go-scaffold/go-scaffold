@@ -31,12 +31,14 @@ func Run() {
 	data := runPrompts(prompts)
 
 	processOnlyTemplates := options.TemplatePath == options.OutputPath
-	fileProcessor := scaffold.NewOutputFileProcessor(data, string(options.OutputPath), &scaffold.TemplateHelper{}, processOnlyTemplates)
+	templateHelper := &scaffold.TemplateHelper{}
 
-	filter, _ := filter.NewPatternFilter(".go-scaffold(/.*)?")
+	fileProcessor := scaffold.NewOutputFileProcessor(data, string(options.OutputPath), templateHelper, processOnlyTemplates)
+
+	configFolderfilter, _ := filter.NewPatternFilter(false, ".go-scaffold(/.*)?")
 
 	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath), nil)
-	err = provider.ProvideFiles(filter, fileProcessor)
+	err = provider.ProvideFiles(configFolderfilter, fileProcessor)
 	if err != nil {
 		fatal("Error while processing files:", err)
 		return

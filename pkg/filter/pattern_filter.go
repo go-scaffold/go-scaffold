@@ -5,10 +5,11 @@ import (
 )
 
 type patternFilter struct {
-	patterns []*regexp.Regexp
+	patterns  []*regexp.Regexp
+	inclusive bool
 }
 
-func NewPatternFilter(patterns ...string) (Filter, error) {
+func NewPatternFilter(inclusive bool, patterns ...string) (Filter, error) {
 	regExps := make([]*regexp.Regexp, len(patterns))
 
 	for i := 0; i < len(patterns); i++ {
@@ -20,15 +21,25 @@ func NewPatternFilter(patterns ...string) (Filter, error) {
 	}
 
 	return &patternFilter{
-		patterns: regExps,
+		patterns:  regExps,
+		inclusive: inclusive,
 	}, nil
 }
 
 func (f *patternFilter) Accept(filePath string) bool {
+	var valueWhenFound bool
+	if f.inclusive {
+		valueWhenFound = true
+
+	} else {
+		valueWhenFound = false
+	}
+
 	for _, pattern := range f.patterns {
 		if pattern.MatchString(filePath) {
-			return false
+			// the filter is exclusive but the name matches
+			return valueWhenFound
 		}
 	}
-	return true
+	return !valueWhenFound
 }
