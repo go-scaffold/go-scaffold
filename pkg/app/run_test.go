@@ -21,23 +21,13 @@ func (h *fatalHandler) Fatal(args ...interface{}) {
 }
 
 func Test_Run_Success_ValidTemplate(t *testing.T) {
-	runPrompts = func(prompts []*prompt.PromptConfig) map[string]interface{} {
-		data := make(map[string]interface{})
-		data["text"] = "test!"
-		return data
-	}
+	mockPrompt()
 
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	oldArgs := os.Args
+	oldArgs := mockArguments(filepath.Join("testdata", "valid_template"), outDir, false)
 	defer func() { os.Args = oldArgs }()
-	os.Args = make([]string, 5)
-	os.Args[0] = ""
-	os.Args[1] = "--template"
-	os.Args[2] = filepath.Join("testdata", "valid_template")
-	os.Args[3] = "--output"
-	os.Args[4] = outDir
 
 	Run()
 
@@ -69,14 +59,8 @@ func Test_Run_Fail_ErrorParsingPromptFile(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	oldArgs := os.Args
+	oldArgs := mockArguments(filepath.Join("testdata", "valid_template", ".go-scaffold"), outDir, false)
 	defer func() { os.Args = oldArgs }()
-	os.Args = make([]string, 5)
-	os.Args[0] = ""
-	os.Args[1] = "--template"
-	os.Args[2] = filepath.Join("testdata", "valid_template", ".go-scaffold")
-	os.Args[3] = "--output"
-	os.Args[4] = outDir
 
 	Run()
 
@@ -91,14 +75,8 @@ func Test_Run_Fail_NotExistingFolder(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	oldArgs := os.Args
+	oldArgs := mockArguments(filepath.Join("testdata", "invalid-folder"), outDir, false)
 	defer func() { os.Args = oldArgs }()
-	os.Args = make([]string, 5)
-	os.Args[0] = ""
-	os.Args[1] = "--template"
-	os.Args[2] = filepath.Join("testdata", "invalid-folder")
-	os.Args[3] = "--output"
-	os.Args[4] = outDir
 
 	Run()
 
@@ -113,17 +91,36 @@ func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
-	oldArgs := os.Args
+	oldArgs := mockArguments(filepath.Join("testdata", "invalid_template"), outDir, false)
 	defer func() { os.Args = oldArgs }()
-	os.Args = make([]string, 5)
-	os.Args[0] = ""
-	os.Args[1] = "--template"
-	os.Args[2] = filepath.Join("testdata", "invalid_template")
-	os.Args[3] = "--output"
-	os.Args[4] = outDir
 
 	Run()
 
 	assert.Equal(t, "Error while processing files:", handler.Message)
 	assert.NotNil(t, handler.Err)
+}
+
+func mockPrompt() {
+	runPrompts = func(prompts []*prompt.PromptConfig) map[string]interface{} {
+		data := make(map[string]interface{})
+		data["text"] = "test!"
+		return data
+	}
+}
+
+func mockArguments(templateDir string, outDir string, withRemoveSource bool) []string {
+	oldArgs := os.Args
+
+	os.Args = make([]string, 7)
+	os.Args[0] = ""
+	os.Args[1] = "--template"
+	os.Args[2] = templateDir
+	os.Args[3] = "--output"
+	os.Args[4] = outDir
+	if withRemoveSource {
+		os.Args[5] = "--remove-source"
+		os.Args[6] = outDir
+	}
+
+	return oldArgs
 }
