@@ -90,18 +90,21 @@ func TestFileSystemProvider_ProvideFiles_Success_ShouldCleanSourceFiles(t *testi
 	copy.Copy(filepath.Join("testdata", "file_system_provider"), outDir)
 	testutils.FileExists(t, filepath.Join(outDir, "file0"), "file0-content\n")
 
-	filter := &mockFilter{
+	fileToCleanFilter := &mockFilter{
 		File:    "file0",
 		Include: true,
+	}
+	fileToIgnoreFilter := &mockFilter{
+		File:    "file0",
+		Include: false,
 	}
 	processor := newMockFileProcessor()
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
 
-	provider := scaffold.NewFileSystemProvider(outDir, filter)
-	err := provider.ProvideFiles(nil, processor)
+	provider := scaffold.NewFileSystemProvider(outDir, fileToCleanFilter)
+	err := provider.ProvideFiles(fileToIgnoreFilter, processor)
 	assert.Nil(t, err)
 
-	verifyProcessedFile(t, processor, "file0", "file0-content\n")
 	verifyProcessedFile(t, processor, "file1", "file1-content\n")
 	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
 	assert.Equal(t, 0, len(processor.ReadersMap))
