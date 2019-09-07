@@ -4,12 +4,12 @@ import (
 	"regexp"
 )
 
-type patternFilter struct {
+type PatternFilter struct {
 	patterns  []*regexp.Regexp
 	inclusive bool
 }
 
-func NewPatternFilter(inclusive bool, patterns ...string) (Filter, error) {
+func NewPatternFilter(inclusive bool, patterns ...string) (*PatternFilter, error) {
 	regExps := make([]*regexp.Regexp, len(patterns))
 
 	for i := 0; i < len(patterns); i++ {
@@ -20,13 +20,13 @@ func NewPatternFilter(inclusive bool, patterns ...string) (Filter, error) {
 		regExps[i] = regex
 	}
 
-	return &patternFilter{
+	return &PatternFilter{
 		patterns:  regExps,
 		inclusive: inclusive,
 	}, nil
 }
 
-func (f *patternFilter) Accept(filePath string) bool {
+func (f *PatternFilter) Accept(filePath string) bool {
 	var valueWhenFound bool
 	if f.inclusive {
 		valueWhenFound = true
@@ -42,4 +42,11 @@ func (f *patternFilter) Accept(filePath string) bool {
 		}
 	}
 	return !valueWhenFound
+}
+
+func (f *PatternFilter) NewInstance(inclusive bool) Filter {
+	return &PatternFilter{
+		patterns:  f.patterns,
+		inclusive: inclusive,
+	}
 }

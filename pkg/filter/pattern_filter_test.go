@@ -54,3 +54,28 @@ func Test_PatternFilter_Accept_ShouldReturnFalseIfItIsInclusiveAndTheFileNameDoe
 
 	assert.False(t, filter.Accept("file-to-match"))
 }
+
+func Test_PatternFilter_NewInstance_ShouldOverwriteConfig(t *testing.T) {
+	tests := []struct {
+		name string
+		inclusive bool
+		shouldAccept bool
+		fileName string
+	}{
+		{ "0", false, true, "not-matching" },
+		{ "1", false, false, "expression-to-match-1" },
+		{ "2", true, false, "not-matching" },
+		{ "3", true, true, "expression-to-match-1" },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			filter, err := filter.NewPatternFilter(false, "expression-to-match-1", "expression-to-match-2")
+			assert.Nil(t, err)
+			assert.NotNil(t, filter)
+
+			copyFilter := filter.NewInstance(tt.inclusive)
+
+			assert.Equal(t, tt.shouldAccept, copyFilter.Accept(tt.fileName))
+		})
+	}
+}
