@@ -7,6 +7,7 @@ require (
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/knadh/koanf v0.4.4
 	github.com/manifoldco/promptui v0.3.2
+	github.com/otiai10/copy v1.0.1
 	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.3.0
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect

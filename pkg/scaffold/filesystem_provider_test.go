@@ -3,22 +3,25 @@ package scaffold_test
 import (
 	"errors"
 	"io"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/mock"
-
+	"github.com/otiai10/copy"
 	"github.com/pasdam/go-scaffold/pkg/filter"
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
+	"github.com/pasdam/go-scaffold/pkg/testutils"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func Test_NewFileSystemProvider_Fail_FolderDoesNotExist(t *testing.T) {
 	var filter filter.Filter
 	processor := newMockFileProcessor()
 
-	provider := scaffold.NewFileSystemProvider("some-non-existing-folder")
+	provider := scaffold.NewFileSystemProvider("some-non-existing-folder", nil)
 	err := provider.ProvideFiles(filter, processor)
 	assert.Equal(t, "open some-non-existing-folder: no such file or directory", err.Error())
 }
@@ -29,7 +32,7 @@ func TestFileSystemProvider_ProvideFiles_Fail_ShouldProcessAllFileIfNoFilterIsSp
 	expectedErr := errors.New("some-error")
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(expectedErr)
 
-	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	provider := scaffold.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"), nil)
 	actualErr := provider.ProvideFiles(filter, processor)
 
 	assert.Equal(t, expectedErr, actualErr)
@@ -41,13 +44,13 @@ func TestFileSystemProvider_ProvideFiles_Success_ShouldProcessAllFileIfNoFilterI
 	processor := newMockFileProcessor()
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
 
-	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	provider := scaffold.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"), nil)
 	err := provider.ProvideFiles(filter, processor)
 	assert.Nil(t, err)
 
 	verifyProcessedFile(t, processor, "file0", "file0-content\n")
 	verifyProcessedFile(t, processor, "file1", "file1-content\n")
-	verifyProcessedFile(t, processor, "test_folder/fileA", "fileA-content\n")
+	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
 	assert.Equal(t, 0, len(processor.ReadersMap))
 }
 
@@ -56,13 +59,13 @@ func TestFileSystemProvider_ProvideFiles_Success_ShouldProcessAllFileIfFilterAcc
 	processor := newMockFileProcessor()
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
 
-	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	provider := scaffold.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"), nil)
 	err := provider.ProvideFiles(filter, processor)
 	assert.Nil(t, err)
 
 	verifyProcessedFile(t, processor, "file0", "file0-content\n")
 	verifyProcessedFile(t, processor, "file1", "file1-content\n")
-	verifyProcessedFile(t, processor, "test_folder/fileA", "fileA-content\n")
+	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
 	assert.Equal(t, 0, len(processor.ReadersMap))
 }
 
@@ -71,13 +74,41 @@ func TestFileSystemProvider_ProvideFiles_Success_ShouldNotProcessFilesIgnoredByT
 	processor := newMockFileProcessor()
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
 
-	provider := scaffold.NewFileSystemProvider("./testdata/file_system_provider")
+	provider := scaffold.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"), nil)
 	err := provider.ProvideFiles(filter, processor)
 	assert.Nil(t, err)
 
 	verifyProcessedFile(t, processor, "file1", "file1-content\n")
-	verifyProcessedFile(t, processor, "test_folder/fileA", "fileA-content\n")
+	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
 	assert.Equal(t, 0, len(processor.ReadersMap))
+}
+
+func TestFileSystemProvider_ProvideFiles_Success_ShouldCleanSourceFiles(t *testing.T) {
+	outDir := testutils.TempDir(t)
+	defer os.RemoveAll(outDir)
+
+	copy.Copy(filepath.Join("testdata", "file_system_provider"), outDir)
+	testutils.FileExists(t, filepath.Join(outDir, "file0"), "file0-content\n")
+
+	filter := &mockFilter{
+		File:    "file0",
+		Include: true,
+	}
+	processor := newMockFileProcessor()
+	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
+
+	provider := scaffold.NewFileSystemProvider(outDir, filter)
+	err := provider.ProvideFiles(nil, processor)
+	assert.Nil(t, err)
+
+	verifyProcessedFile(t, processor, "file0", "file0-content\n")
+	verifyProcessedFile(t, processor, "file1", "file1-content\n")
+	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
+	assert.Equal(t, 0, len(processor.ReadersMap))
+
+	testutils.FileExists(t, filepath.Join(outDir, "file1"), "file1-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "test_folder", "fileA"), "fileA-content\n")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "file0"))
 }
 
 func verifyProcessedFile(t *testing.T, processor *mockFileProcessor, filePath string, content string) {
@@ -87,11 +118,17 @@ func verifyProcessedFile(t *testing.T, processor *mockFileProcessor, filePath st
 }
 
 type mockFilter struct {
-	File string
+	File    string
+	Include bool
 }
 
 func (m *mockFilter) Accept(filePath string) bool {
-	return !strings.HasSuffix(filePath, m.File)
+	if m.Include {
+		return strings.HasSuffix(filePath, m.File)
+
+	} else {
+		return !strings.HasSuffix(filePath, m.File)
+	}
 }
 
 type mockFileProcessor struct {

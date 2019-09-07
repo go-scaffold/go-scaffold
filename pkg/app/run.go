@@ -35,7 +35,7 @@ func Run() {
 
 	filter, _ := filter.NewPatternFilter(".go-scaffold(/.*)?")
 
-	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath))
+	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath), nil)
 	err = provider.ProvideFiles(filter, fileProcessor)
 	if err != nil {
 		fatal("Error while processing files:", err)

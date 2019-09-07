@@ -10,13 +10,15 @@ import (
 )
 
 type fileSystemProvider struct {
+	cleanFilter filter.Filter
 	filesPath   []string
 	filesInfo   []os.FileInfo
 	templateDir string
 }
 
-func NewFileSystemProvider(templateDir string) FileProvider {
+func NewFileSystemProvider(templateDir string, cleanFilter filter.Filter) FileProvider {
 	return &fileSystemProvider{
+		cleanFilter: cleanFilter,
 		templateDir: templateDir,
 	}
 }
@@ -31,10 +33,15 @@ func (self *fileSystemProvider) ProvideFiles(filesFilter filter.Filter, processo
 		filePath, reader := self.nextFile(filesFilter)
 		defer reader.Close()
 
-		err = processor.ProcessFile(filePath, reader)
+		relativePath, _ := filepath.Rel(self.templateDir, filePath)
+		err = processor.ProcessFile(relativePath, reader)
 		if err != nil {
 			// TODO: clean output folder
 			return err
+		}
+
+		if self.cleanFilter != nil && self.cleanFilter.Accept(filePath) {
+			os.RemoveAll(filePath)
 		}
 	}
 	return nil
@@ -65,7 +72,6 @@ func (self *fileSystemProvider) nextFile(filter filter.Filter) (string, io.ReadC
 			}
 
 			reader, _ = os.Open(nextFilePath)
-			nextFilePath, _ = filepath.Rel(self.templateDir, nextFilePath)
 			break
 		}
 	}
