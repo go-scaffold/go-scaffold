@@ -10,7 +10,8 @@ import (
 
 func Test_ParseCLIOption_fail_shouldReturnErrorIfAnInvalidParameterIsSpecifiedSpecified(t *testing.T) {
 	templateDir := "some-template-dir"
-	mockArguments(false, templateDir, "", true)
+	oldArgs := mockArguments(false, templateDir, "", true)
+	defer func() { os.Args = oldArgs }()
 	os.Args = append(os.Args, "--invalid-param")
 
 	options, err := config.ParseCLIOption()
@@ -22,7 +23,8 @@ func Test_ParseCLIOption_fail_shouldReturnErrorIfAnInvalidParameterIsSpecifiedSp
 
 func Test_ParseCLIOption_success_shouldUseDefaultOutputPath(t *testing.T) {
 	templateDir := "some-template-dir"
-	mockArguments(false, templateDir, "", true)
+	oldArgs := mockArguments(false, templateDir, "", true)
+	defer func() { os.Args = oldArgs }()
 
 	options, err := config.ParseCLIOption()
 
@@ -36,7 +38,8 @@ func Test_ParseCLIOption_success_shouldUseDefaultOutputPath(t *testing.T) {
 func Test_ParseCLIOption_success_shouldUseDefaultRemoveSource(t *testing.T) {
 	outDir := "some-output-dir"
 	templateDir := "some-template-dir"
-	mockArguments(false, templateDir, outDir, false)
+	oldArgs := mockArguments(false, templateDir, outDir, false)
+	defer func() { os.Args = oldArgs }()
 
 	options, err := config.ParseCLIOption()
 
@@ -49,7 +52,8 @@ func Test_ParseCLIOption_success_shouldUseDefaultRemoveSource(t *testing.T) {
 
 func Test_ParseCLIOption_success_shouldUseDefaultTemplatePath(t *testing.T) {
 	outDir := "some-output-dir"
-	mockArguments(false, "", outDir, true)
+	oldArgs := mockArguments(false, "", outDir, true)
+	defer func() { os.Args = oldArgs }()
 
 	options, err := config.ParseCLIOption()
 
@@ -63,7 +67,8 @@ func Test_ParseCLIOption_success_shouldUseDefaultTemplatePath(t *testing.T) {
 func Test_ParseCLIOption_success_shouldParseOptionsWithLongFlags(t *testing.T) {
 	templateDir := "some-template-dir"
 	outDir := "some-output-dir"
-	mockArguments(true, templateDir, outDir, true)
+	oldArgs := mockArguments(true, templateDir, outDir, true)
+	defer func() { os.Args = oldArgs }()
 
 	options, err := config.ParseCLIOption()
 
@@ -77,7 +82,8 @@ func Test_ParseCLIOption_success_shouldParseOptionsWithLongFlags(t *testing.T) {
 func Test_ParseCLIOption_success_shouldParseOptionsWithShortFlags(t *testing.T) {
 	templateDir := "some-template-dir"
 	outDir := "some-output-dir"
-	mockArguments(false, templateDir, outDir, true)
+	oldArgs := mockArguments(false, templateDir, outDir, true)
+	defer func() { os.Args = oldArgs }()
 
 	options, err := config.ParseCLIOption()
 
@@ -88,7 +94,9 @@ func Test_ParseCLIOption_success_shouldParseOptionsWithShortFlags(t *testing.T) 
 	assert.True(t, options.RemoveSource)
 }
 
-func mockArguments(useLongFlags bool, templateDir string, outDir string, withRemoveSource bool) {
+func mockArguments(useLongFlags bool, templateDir string, outDir string, withRemoveSource bool) []string {
+	oldArgs := os.Args
+
 	os.Args = make([]string, 7)
 	os.Args[0] = ""
 	if templateDir != "" {
@@ -115,4 +123,6 @@ func mockArguments(useLongFlags bool, templateDir string, outDir string, withRem
 		}
 		os.Args[6] = outDir
 	}
+
+	return oldArgs
 }
