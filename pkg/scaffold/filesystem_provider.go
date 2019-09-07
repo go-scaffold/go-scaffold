@@ -2,10 +2,10 @@ package scaffold
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -18,7 +18,7 @@ type fileSystemProvider struct {
 
 func NewFileSystemProvider(templateDir string, filter Filter) (FileProvider, error) {
 	provider := &fileSystemProvider{
-		templateDir: formatPath(templateDir, ""),
+		templateDir: templateDir,
 		filter:      filter,
 	}
 	err := provider.Reset()
@@ -72,22 +72,14 @@ func (self *fileSystemProvider) indexDir(dirPath string) error {
 		return err
 	}
 
-	filesPath := make([]string, len(filesInfo))
+	filesPaths := make([]string, len(filesInfo))
 	for i := 0; i < len(filesInfo); i++ {
-		filesPath[i] = formatPath(dirPath, filesInfo[i].Name())
+		filesPaths[i] = filepath.Join(dirPath, filesInfo[i].Name())
 	}
 
 	// prepend slices
 	self.filesInfo = append(filesInfo, self.filesInfo...)
-	self.filesPath = append(filesPath, self.filesPath...)
+	self.filesPath = append(filesPaths, self.filesPath...)
 
 	return nil
-}
-
-func formatPath(parent, child string) string {
-	var separator string
-	if !strings.HasSuffix(parent, "/") {
-		separator = "/"
-	}
-	return fmt.Sprintf("%s%s%s", parent, separator, child)
 }
