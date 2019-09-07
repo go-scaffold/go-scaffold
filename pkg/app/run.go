@@ -37,9 +37,8 @@ func Run() {
 
 	data := runPrompts(prompts)
 
-
 	processOnlyTemplates := options.TemplatePath == options.OutputPath
-	err = scaffold.ProcessFiles(provider, data, string(options.OutputPath), processOnlyTemplates)
+	err = scaffold.ProcessFiles(provider, data, string(options.OutputPath), processOnlyTemplates, &scaffold.TemplateHelper{})
 	if err != nil {
 		fatal("Error while processing files:", err)
 		return

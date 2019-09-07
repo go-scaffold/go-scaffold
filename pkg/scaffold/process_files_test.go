@@ -19,7 +19,7 @@ func Test_ProcessFiles_Fail_ShouldReturnErrorIfFileProviderReturnsError(t *testi
 	expectedError := errors.New("Expected error")
 	provider := &mockFileProvider{err: expectedError}
 
-	err := scaffold.ProcessFiles(provider, validData, outDir, false)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false, &scaffold.TemplateHelper{})
 
 	assert.Equal(t, expectedError, err)
 }
@@ -29,7 +29,7 @@ func Test_ProcessFiles_Fail_ShouldReturnErrorIfCannotProcessFile(t *testing.T) {
 	defer os.RemoveAll(outDir)
 	provider := &mockFileProvider{}
 
-	err := scaffold.ProcessFiles(provider, validData, outDir, false)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false, &scaffold.TemplateHelper{})
 
 	assert.NotNil(t, err)
 }
@@ -40,7 +40,7 @@ func Test_ProcessFiles_Success_ShouldCreateOutputFiles_DirWithoutSuffix(t *testi
 
 	provider, _ := scaffold.NewFileSystemProvider("testdata/", nil)
 
-	err := scaffold.ProcessFiles(provider, validData, outDir, false)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false, &scaffold.TemplateHelper{})
 
 	assert.Nil(t, err)
 	testutils.FileExists(t, filepath.Join(outDir, "regular_file.txt"), "regular-file-content\n")
@@ -56,7 +56,7 @@ func Test_ProcessFiles_Success_ShouldCreateOutputFiles_DirWithoutSuffixOnlyTempl
 
 	provider, _ := scaffold.NewFileSystemProvider("testdata/", nil)
 
-	err := scaffold.ProcessFiles(provider, validData, outDir, true)
+	err := scaffold.ProcessFiles(provider, validData, outDir, true, &scaffold.TemplateHelper{})
 
 	assert.Nil(t, err)
 
@@ -73,7 +73,7 @@ func Test_ProcessFiles_Success_ShouldCreateTheOutputFiles_DirWithSuffix(t *testi
 
 	provider, _ := scaffold.NewFileSystemProvider("testdata/", nil)
 
-	err := scaffold.ProcessFiles(provider, validData, outDir, false)
+	err := scaffold.ProcessFiles(provider, validData, outDir, false, &scaffold.TemplateHelper{})
 
 	assert.Nil(t, err)
 	testutils.FileExists(t, filepath.Join(outDir, "/regular_file.txt"), "regular-file-content\n")

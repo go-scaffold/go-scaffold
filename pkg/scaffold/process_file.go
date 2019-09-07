@@ -7,14 +7,14 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 )
 
-func ProcessFile(reader io.Reader, config interface{}, outDir string, filePath string, onlyTemplate bool) error {
+func ProcessFile(reader io.Reader, config interface{}, outDir string, filePath string, onlyTemplate bool, templateHelper *TemplateHelper) error {
 	var err error
-	if IsTemplate(filePath) {
+	if templateHelper.Accept(filePath) {
 		reader, err = ProcessTemplate(reader, config)
 		if err != nil {
 			return err
 		}
-		filePath = OutputFilePath(filePath)
+		filePath = templateHelper.OutputFilePath(filePath)
 
 	} else if onlyTemplate {
 		return nil

@@ -24,6 +24,7 @@ func Test_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 		outDir,
 		"template_file.tpl",
 		false,
+		&scaffold.TemplateHelper{},
 	)
 
 	assert.NotNil(t, err)
@@ -44,6 +45,7 @@ func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 		outDir,
 		"template_file.tpl",
 		false,
+		&scaffold.TemplateHelper{},
 	)
 
 	assert.Nil(t, err)
@@ -64,6 +66,7 @@ func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 		outDir,
 		"testdata/regular_file.txt",
 		false,
+		&scaffold.TemplateHelper{},
 	)
 
 	assert.Nil(t, err)
@@ -84,6 +87,7 @@ func Test_ProcessFile_Success_ShouldIgnoreFileIfItIsNotATemplateAndOnlyTemplates
 		outDir,
 		"testdata/regular_file.txt",
 		true,
+		&scaffold.TemplateHelper{},
 	)
 
 	assert.Nil(t, err)
