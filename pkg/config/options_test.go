@@ -30,10 +30,10 @@ func Test_ParseCLIOption_success_shouldUseDefaultOutputPath(t *testing.T) {
 	assert.NotNil(t, options)
 	assert.Equal(t, "./", string(options.OutputPath))
 	assert.Equal(t, templateDir, string(options.TemplatePath))
-	assert.True(t, options.RemoveConfig)
+	assert.True(t, options.RemoveSource)
 }
 
-func Test_ParseCLIOption_success_shouldUseDefaultRemoveConfig(t *testing.T) {
+func Test_ParseCLIOption_success_shouldUseDefaultRemoveSource(t *testing.T) {
 	outDir := "some-output-dir"
 	templateDir := "some-template-dir"
 	mockArguments(false, templateDir, outDir, false)
@@ -44,7 +44,7 @@ func Test_ParseCLIOption_success_shouldUseDefaultRemoveConfig(t *testing.T) {
 	assert.NotNil(t, options)
 	assert.Equal(t, outDir, string(options.OutputPath))
 	assert.Equal(t, templateDir, string(options.TemplatePath))
-	assert.False(t, options.RemoveConfig)
+	assert.False(t, options.RemoveSource)
 }
 
 func Test_ParseCLIOption_success_shouldUseDefaultTemplatePath(t *testing.T) {
@@ -57,7 +57,7 @@ func Test_ParseCLIOption_success_shouldUseDefaultTemplatePath(t *testing.T) {
 	assert.NotNil(t, options)
 	assert.Equal(t, outDir, string(options.OutputPath))
 	assert.Equal(t, "./", string(options.TemplatePath))
-	assert.True(t, options.RemoveConfig)
+	assert.True(t, options.RemoveSource)
 }
 
 func Test_ParseCLIOption_success_shouldParseOptionsWithLongFlags(t *testing.T) {
@@ -71,7 +71,7 @@ func Test_ParseCLIOption_success_shouldParseOptionsWithLongFlags(t *testing.T) {
 	assert.NotNil(t, options)
 	assert.Equal(t, templateDir, string(options.TemplatePath))
 	assert.Equal(t, outDir, string(options.OutputPath))
-	assert.True(t, options.RemoveConfig)
+	assert.True(t, options.RemoveSource)
 }
 
 func Test_ParseCLIOption_success_shouldParseOptionsWithShortFlags(t *testing.T) {
@@ -85,10 +85,10 @@ func Test_ParseCLIOption_success_shouldParseOptionsWithShortFlags(t *testing.T) 
 	assert.NotNil(t, options)
 	assert.Equal(t, templateDir, string(options.TemplatePath))
 	assert.Equal(t, outDir, string(options.OutputPath))
-	assert.True(t, options.RemoveConfig)
+	assert.True(t, options.RemoveSource)
 }
 
-func mockArguments(useLongFlags bool, templateDir string, outDir string, withRemoveConfig bool) {
+func mockArguments(useLongFlags bool, templateDir string, outDir string, withRemoveSource bool) {
 	os.Args = make([]string, 7)
 	os.Args[0] = ""
 	if templateDir != "" {
@@ -107,9 +107,9 @@ func mockArguments(useLongFlags bool, templateDir string, outDir string, withRem
 		}
 		os.Args[4] = outDir
 	}
-	if withRemoveConfig {
+	if withRemoveSource {
 		if useLongFlags {
-			os.Args[5] = "--remove-config"
+			os.Args[5] = "--remove-source"
 		} else {
 			os.Args[5] = "-r"
 		}
