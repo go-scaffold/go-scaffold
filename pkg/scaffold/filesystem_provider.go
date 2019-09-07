@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/pasdam/go-scaffold/pkg/filter"
 )
 
 type fileSystemProvider struct {
@@ -19,7 +21,7 @@ func NewFileSystemProvider(templateDir string) FileProvider {
 	}
 }
 
-func (self *fileSystemProvider) ProvideFiles(filesFilter Filter, processor FileProcessor) error {
+func (self *fileSystemProvider) ProvideFiles(filesFilter filter.Filter, processor FileProcessor) error {
 	err := self.indexDir(self.templateDir, filesFilter)
 	if err != nil {
 		return err
@@ -38,7 +40,7 @@ func (self *fileSystemProvider) ProvideFiles(filesFilter Filter, processor FileP
 	return nil
 }
 
-func (self *fileSystemProvider) nextFile(filter Filter) (string, io.ReadCloser) {
+func (self *fileSystemProvider) nextFile(filter filter.Filter) (string, io.ReadCloser) {
 	var nextFilePath string
 	var reader io.ReadCloser
 	for i := 0; i < len(self.filesPath); i++ {
@@ -70,7 +72,7 @@ func (self *fileSystemProvider) nextFile(filter Filter) (string, io.ReadCloser) 
 	return nextFilePath, reader
 }
 
-func (self *fileSystemProvider) indexDir(dirPath string, filter Filter) error {
+func (self *fileSystemProvider) indexDir(dirPath string, filter filter.Filter) error {
 	filesInfo, err := ioutil.ReadDir(dirPath)
 	if err != nil {
 		return err

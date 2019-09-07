@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/pasdam/go-scaffold/pkg/config"
+	"github.com/pasdam/go-scaffold/pkg/filter"
 	"github.com/pasdam/go-scaffold/pkg/prompt"
 	"github.com/pasdam/go-scaffold/pkg/promptcli"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
@@ -32,7 +33,7 @@ func Run() {
 	processOnlyTemplates := options.TemplatePath == options.OutputPath
 	fileProcessor := scaffold.NewOutputFileProcessor(data, string(options.OutputPath), &scaffold.TemplateHelper{}, processOnlyTemplates)
 
-	filter, _ := scaffold.NewPatternFilter(".go-scaffold(/.*)?")
+	filter, _ := filter.NewPatternFilter(".go-scaffold(/.*)?")
 
 	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath))
 	err = provider.ProvideFiles(filter, fileProcessor)
