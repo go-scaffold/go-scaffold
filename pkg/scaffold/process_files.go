@@ -1,6 +1,6 @@
 package scaffold
 
-func ProcessFiles(fileProvider FileProvider, config interface{}, outDir string, onlyTemplates bool, templateHelper *TemplateHelper) error {
+func ProcessFiles(fileProvider FileProvider, fileProcessor *FileProcessor) error {
 	for fileProvider.HasMoreFiles() {
 		filePath, reader, err := fileProvider.NextFile()
 		if err != nil {
@@ -9,7 +9,7 @@ func ProcessFiles(fileProvider FileProvider, config interface{}, outDir string, 
 		}
 		defer reader.Close()
 
-		err = ProcessFile(reader, config, outDir, filePath, onlyTemplates, templateHelper)
+		err = fileProcessor.ProcessFile(filePath, reader)
 		if err != nil {
 			// TODO: clean output folder
 			return err

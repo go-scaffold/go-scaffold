@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
+func TestFileProcessor_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
@@ -18,20 +18,19 @@ func Test_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 	assert.Nil(t, err)
 	defer file.Close()
 
-	err = scaffold.ProcessFile(
-		file,
+	processor := scaffold.NewFileProcessor(
 		"invalid-data",
 		outDir,
-		"template_file.tpl",
-		false,
 		&scaffold.TemplateHelper{},
+		false,
 	)
+	err = processor.ProcessFile("template_file.tpl", file)
 
 	assert.NotNil(t, err)
 	testutils.FileDoesNotExist(t, filepath.Join(outDir, "template_file.tpl"))
 }
 
-func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
+func TestFileProcessor_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
@@ -39,20 +38,19 @@ func Test_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 	assert.Nil(t, err)
 	defer file.Close()
 
-	err = scaffold.ProcessFile(
-		file,
+	processor := scaffold.NewFileProcessor(
 		validData,
 		outDir,
-		"template_file.tpl",
-		false,
 		&scaffold.TemplateHelper{},
+		false,
 	)
+	err = processor.ProcessFile("template_file.tpl", file)
 
 	assert.Nil(t, err)
 	testutils.FileExists(t, filepath.Join(outDir, "template_file"), "This is a *test*\n")
 }
 
-func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
+func TestFileProcessor_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
@@ -60,20 +58,19 @@ func Test_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 	assert.Nil(t, err)
 	defer file.Close()
 
-	err = scaffold.ProcessFile(
-		file,
+	processor := scaffold.NewFileProcessor(
 		nil,
 		outDir,
-		"testdata/regular_file.txt",
-		false,
 		&scaffold.TemplateHelper{},
+		false,
 	)
+	err = processor.ProcessFile("regular_file.txt", file)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, filepath.Join(outDir, "testdata/regular_file.txt"), "regular-file-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "regular_file.txt"), "regular-file-content\n")
 }
 
-func Test_ProcessFile_Success_ShouldIgnoreFileIfItIsNotATemplateAndOnlyTemplatesIsTrue(t *testing.T) {
+func TestFileProcessor_ProcessFile_Success_ShouldIgnoreFileIfItIsNotATemplateAndOnlyTemplatesIsTrue(t *testing.T) {
 	outDir := testutils.TempDir(t)
 	defer os.RemoveAll(outDir)
 
@@ -81,15 +78,14 @@ func Test_ProcessFile_Success_ShouldIgnoreFileIfItIsNotATemplateAndOnlyTemplates
 	assert.Nil(t, err)
 	defer file.Close()
 
-	err = scaffold.ProcessFile(
-		file,
+	processor := scaffold.NewFileProcessor(
 		nil,
 		outDir,
-		"testdata/regular_file.txt",
-		true,
 		&scaffold.TemplateHelper{},
+		true,
 	)
+	err = processor.ProcessFile("regular_file.txt", file)
 
 	assert.Nil(t, err)
-	testutils.FileDoesNotExist(t, filepath.Join(outDir, "testdata/regular_file.txt"))
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "regular_file.txt"))
 }
