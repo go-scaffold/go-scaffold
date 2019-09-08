@@ -30,6 +30,20 @@ func Test_MkParents_Success_ShouldCreateFolders(t *testing.T) {
 	verifyDirExist(t, outDir)
 }
 
+func Test_MkParents_Success_ShouldDoNothingIfThereAreNoParents(t *testing.T) {
+	outDir := testutils.TempDir(t)
+	defer os.RemoveAll(outDir)
+
+	os.Chdir(outDir)
+
+	filePath := "some_file"
+
+	err := iohelpers.MkParents(filePath)
+
+	assert.Nil(t, err)
+	verifyDirExist(t, outDir)
+}
+
 func verifyDirExist(t *testing.T, outDir string) {
 	dir, err := os.Stat(outDir)
 	assert.Nil(t, err)

@@ -2,14 +2,9 @@ package iohelpers
 
 import (
 	"os"
-	"strings"
+	"path/filepath"
 )
 
 func MkParents(filePath string) error {
-	// TODO: improve this
-	parts := strings.Split(filePath, "/")
-	parts = parts[:len(parts)-1]
-	filePath = strings.Join(parts, "/")
-
-	return os.MkdirAll(filePath, os.ModePerm)
+	return os.MkdirAll(filepath.Dir(filePath), os.ModePerm)
 }
