@@ -139,7 +139,7 @@ func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
 
 	Run()
 
-	assert.Equal(t, "Error while processing files:", handler.Message)
+	assert.Equal(t, "Error while processing files. ", handler.Message)
 	assert.NotNil(t, handler.Err)
 }
 
