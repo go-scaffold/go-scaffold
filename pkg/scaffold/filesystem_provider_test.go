@@ -114,6 +114,37 @@ func TestFileSystemProvider_ProvideFiles_Success_ShouldCleanSourceFiles(t *testi
 	testutils.FileDoesNotExist(t, filepath.Join(outDir, "file0"))
 }
 
+func TestFileSystemProvider_ProvideFiles_Success_ShouldCleanSourceFolder(t *testing.T) {
+	outDir := testutils.TempDir(t)
+	defer os.RemoveAll(outDir)
+
+	copy.Copy(filepath.Join("testdata", "file_system_provider"), outDir)
+	testutils.FileExists(t, filepath.Join(outDir, "file0"), "file0-content\n")
+
+	fileToCleanFilter := &mockFilter{
+		File:    "test_folder",
+		Include: true,
+	}
+	fileToIgnoreFilter := &mockFilter{
+		File:    "test_folder",
+		Include: false,
+	}
+	processor := newMockFileProcessor()
+	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
+
+	provider := scaffold.NewFileSystemProvider(outDir, fileToCleanFilter)
+	err := provider.ProvideFiles(fileToIgnoreFilter, processor)
+	assert.Nil(t, err)
+
+	verifyProcessedFile(t, processor, "file0", "file0-content\n")
+	verifyProcessedFile(t, processor, "file1", "file1-content\n")
+	assert.Equal(t, 0, len(processor.ReadersMap))
+
+	testutils.FileExists(t, filepath.Join(outDir, "file0"), "file0-content\n")
+	testutils.FileExists(t, filepath.Join(outDir, "file1"), "file1-content\n")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "test_folder"))
+}
+
 func verifyProcessedFile(t *testing.T, processor *mockFileProcessor, filePath string, content string) {
 	processor.AssertCalled(t, "ProcessFile", filePath, mock.Anything)
 	assert.Equal(t, content, processor.ReadersMap[filePath])
@@ -127,10 +158,10 @@ type mockFilter struct {
 
 func (m *mockFilter) Accept(filePath string) bool {
 	if m.Include {
-		return strings.HasSuffix(filePath, m.File)
+		return strings.Contains(filePath, m.File)
 
 	} else {
-		return !strings.HasSuffix(filePath, m.File)
+		return !strings.Contains(filePath, m.File)
 	}
 }
 

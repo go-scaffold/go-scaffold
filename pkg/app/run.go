@@ -30,15 +30,20 @@ func Run() {
 
 	data := runPrompts(prompts)
 
-	processOnlyTemplates := options.TemplatePath == options.OutputPath
+	processInPlace := options.TemplatePath == options.OutputPath
 	templateHelper := &scaffold.TemplateHelper{}
 
-	fileProcessor := scaffold.NewOutputFileProcessor(data, string(options.OutputPath), templateHelper, processOnlyTemplates)
+	fileProcessor := scaffold.NewOutputFileProcessor(data, string(options.OutputPath), templateHelper, processInPlace)
 
-	configFolderfilter, _ := filter.NewPatternFilter(false, ".go-scaffold(/.*)?")
+	configFolderExcludeFilter, _ := filter.NewPatternFilter(false, "\\.go-scaffold(/.*)?")
 
-	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath), nil)
-	err = provider.ProvideFiles(configFolderfilter, fileProcessor)
+	var fileToRemoveFilter filter.Filter
+	if processInPlace && options.RemoveSource {
+		fileToRemoveFilter = filter.NewMultiFilter(configFolderExcludeFilter.NewInstance(true), templateHelper)
+	}
+
+	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath), fileToRemoveFilter)
+	err = provider.ProvideFiles(configFolderExcludeFilter, fileProcessor)
 	if err != nil {
 		fatal("Error while processing files:", err)
 		return

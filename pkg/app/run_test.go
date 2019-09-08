@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/otiai10/copy"
+
 	"github.com/pasdam/go-scaffold/pkg/prompt"
 	"github.com/pasdam/go-scaffold/pkg/testutils"
 	"github.com/stretchr/testify/assert"
@@ -31,9 +33,50 @@ func Test_Run_Success_ValidTemplate(t *testing.T) {
 
 	Run()
 
+	testutils.FileExists(t, filepath.Join("testdata", "valid_template", "file.txt.tpl"), "This is a {{ .text }}\n")
+	testutils.FileExists(t, filepath.Join("testdata", "valid_template", "normal_file.txt"), "normal-file-content\n")
+	testutils.FileExists(t, filepath.Join("testdata", "valid_template", ".go-scaffold", "prompts.yaml"), "prompts:\n  - name: text\n    type: string\n    default: default-text\n    message: Enter text value\n")
 	testutils.FileExists(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
 	testutils.FileExists(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
 	testutils.FileDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
+}
+
+func Test_Run_Success_ShouldNotRemoveSourceIfOptionIsSetButProcessIsNotInPlace(t *testing.T) {
+	outDir := testutils.TempDir(t)
+	defer os.RemoveAll(outDir)
+
+	mockPrompt()
+
+	oldArgs := mockArguments(filepath.Join("testdata", "valid_template"), outDir, true)
+	defer func() { os.Args = oldArgs }()
+
+	Run()
+
+	testutils.FileExists(t, filepath.Join("testdata", "valid_template", "file.txt.tpl"), "This is a {{ .text }}\n")
+	testutils.FileExists(t, filepath.Join("testdata", "valid_template", "normal_file.txt"), "normal-file-content\n")
+	testutils.FileExists(t, filepath.Join("testdata", "valid_template", ".go-scaffold", "prompts.yaml"), "prompts:\n  - name: text\n    type: string\n    default: default-text\n    message: Enter text value\n")
+	testutils.FileExists(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
+	testutils.FileExists(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
+}
+
+func Test_Run_Success_ShouldRemoveSourceIfOptionIsSetAndProcessIsInPlace(t *testing.T) {
+	outDir := testutils.TempDir(t)
+	defer os.RemoveAll(outDir)
+
+	mockPrompt()
+
+	oldArgs := mockArguments(outDir, outDir, true)
+	defer func() { os.Args = oldArgs }()
+
+	copy.Copy(filepath.Join("testdata", "valid_template"), outDir)
+
+	Run()
+
+	testutils.FileExists(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
+	testutils.FileExists(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
+	testutils.FileDoesNotExist(t, filepath.Join(outDir, "file.txt.tpl"))
 }
 
 func Test_Run_Fail_InvalidCliOptions(t *testing.T) {

@@ -31,10 +31,12 @@ func (self *fileSystemProvider) ProvideFiles(filesFilter filter.Filter, processo
 
 	for len(self.filesPath) > 0 {
 		filePath, reader := self.nextFile()
-		defer reader.Close()
+		if reader != nil {
+			defer reader.Close()
+		}
 
 		relativePath, _ := filepath.Rel(self.templateDir, filePath)
-		if filesFilter == nil || filesFilter.Accept(relativePath) {
+		if reader != nil && (filesFilter == nil || filesFilter.Accept(relativePath)) {
 			err = processor.ProcessFile(relativePath, reader)
 			if err != nil {
 				// TODO: clean output folder
@@ -63,12 +65,14 @@ func (self *fileSystemProvider) nextFile() (string, io.ReadCloser) {
 		self.filesInfo = nil
 	}
 
+	var reader io.ReadCloser
+
 	if nextFileInfo.IsDir() {
 		self.indexDir(nextFilePath)
-		return self.nextFile()
+		return nextFilePath, nil
 	}
 
-	reader, _ := os.Open(nextFilePath)
+	reader, _ = os.Open(nextFilePath)
 	return nextFilePath, reader
 }
 
