@@ -45,7 +45,7 @@ func Run() {
 	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath), fileToRemoveFilter)
 	err = provider.ProvideFiles(configFolderExcludeFilter, fileProcessor)
 	if err != nil {
-		fatal("Error while processing files:", err)
+		fatal("Error while processing files. ", err)
 		return
 	}
 }

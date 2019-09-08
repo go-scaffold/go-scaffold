@@ -2,6 +2,7 @@ package scaffold
 
 import (
 	"io"
+	"log"
 	"path/filepath"
 
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
@@ -36,6 +37,8 @@ func (self *OutputFileProcessor) ProcessFile(filePath string, reader io.Reader) 
 		// ingore normal files
 		return nil
 	}
+
+	log.Printf("Writing file %s\n", filepath.Join(self.outDir, filePath))
 
 	return iohelpers.WriteFile(reader, filepath.Join(self.outDir, filePath))
 }

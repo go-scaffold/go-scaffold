@@ -2,12 +2,14 @@ package iohelpers
 
 import (
 	"io"
+	"log"
 	"os"
 )
 
 func WriteFile(reader io.Reader, dst string) error {
 	err := MkParents(dst)
 	if err != nil {
+		log.Printf("Error while creating parents folder of %s\n", dst)
 		return err
 	}
 

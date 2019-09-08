@@ -2,6 +2,7 @@ package scaffold
 
 import (
 	"io"
+	"log"
 	"strings"
 
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
@@ -10,6 +11,7 @@ import (
 func ProcessTemplate(reader io.Reader, config interface{}) (io.Reader, error) {
 	content, err := ApplyTemplate(iohelpers.Read(reader), config)
 	if err != nil {
+		log.Println("Error while generating output file from template")
 		return nil, err
 	}
 

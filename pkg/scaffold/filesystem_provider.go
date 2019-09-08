@@ -3,6 +3,7 @@ package scaffold
 import (
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -40,6 +41,7 @@ func (self *fileSystemProvider) ProvideFiles(filesFilter filter.Filter, processo
 			err = processor.ProcessFile(relativePath, reader)
 			if err != nil {
 				// TODO: clean output folder
+				log.Printf("Error while processing file %s\n", relativePath)
 				return err
 			}
 		}
