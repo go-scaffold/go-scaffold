@@ -1,5 +1,12 @@
 .build
+.git
+.github
+.gitignore
 .gitmodules
+.vscode
 LICENSE
 Makefile
-README
+pkg/**_test.go
+pkg/**/testdata/**
+README.md
+scripts/
