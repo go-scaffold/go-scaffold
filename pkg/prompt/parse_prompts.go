@@ -6,14 +6,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func ParsePrompts(path string) ([]*PromptConfig, error) {
+// ParsePrompts parses the yaml file with the prompts definitions
+func ParsePrompts(path string) ([]*Entry, error) {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
 	var prompts struct {
-		Prompts []*PromptConfig `yaml:"prompts,omitempty"`
+		Prompts []*Entry `yaml:"prompts,omitempty"`
 	}
 	yaml.Unmarshal(content, &prompts)
 

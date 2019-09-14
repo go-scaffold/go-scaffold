@@ -39,7 +39,7 @@ func TestOutputFileProcessor_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 	defer file.Close()
 
 	processor := scaffold.NewOutputFileProcessor(
-		validData,
+		struct{ Text string }{Text: "*test*"},
 		outDir,
 		&scaffold.TemplateHelper{},
 		false,

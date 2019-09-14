@@ -12,11 +12,11 @@ import (
 )
 
 var fatal = log.Fatal
-var runPrompts func(prompts []*prompt.PromptConfig) map[string]interface{} = promptcli.RunPrompts
+var runPrompts func(prompts []*prompt.Entry) map[string]interface{} = promptcli.RunPrompts
 
 // Run starts the app
 func Run() {
-	options, err := config.ParseCLIOption()
+	options, err := config.ParseCLIOptions()
 	if err != nil {
 		fatal("Command line options error:", err)
 		return

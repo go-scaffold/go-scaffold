@@ -177,8 +177,8 @@ func newMockFileProcessor() *mockFileProcessor {
 	}
 }
 
-func (self *mockFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
-	self.ReadersMap[filePath] = iohelpers.Read(reader)
-	args := self.Called(filePath, reader)
+func (p *mockFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
+	p.ReadersMap[filePath] = iohelpers.Read(reader)
+	args := p.Called(filePath, reader)
 	return args.Error(0)
 }

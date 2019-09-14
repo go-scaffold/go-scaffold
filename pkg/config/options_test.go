@@ -8,25 +8,25 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ParseCLIOption_fail_shouldReturnErrorIfAnInvalidParameterIsSpecifiedSpecified(t *testing.T) {
+func Test_ParseCLIOptions_fail_shouldReturnErrorIfAnInvalidParameterIsSpecifiedSpecified(t *testing.T) {
 	templateDir := "some-template-dir"
 	oldArgs := mockArguments(false, templateDir, "", true)
 	defer func() { os.Args = oldArgs }()
 	os.Args = append(os.Args, "--invalid-param")
 
-	options, err := config.ParseCLIOption()
+	options, err := config.ParseCLIOptions()
 
 	assert.NotNil(t, err)
 	assert.Equal(t, "unknown flag `invalid-param'", err.Error())
 	assert.Nil(t, options)
 }
 
-func Test_ParseCLIOption_success_shouldUseDefaultOutputPath(t *testing.T) {
+func Test_ParseCLIOptions_success_shouldUseDefaultOutputPath(t *testing.T) {
 	templateDir := "some-template-dir"
 	oldArgs := mockArguments(false, templateDir, "", true)
 	defer func() { os.Args = oldArgs }()
 
-	options, err := config.ParseCLIOption()
+	options, err := config.ParseCLIOptions()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, options)
@@ -35,13 +35,13 @@ func Test_ParseCLIOption_success_shouldUseDefaultOutputPath(t *testing.T) {
 	assert.True(t, options.RemoveSource)
 }
 
-func Test_ParseCLIOption_success_shouldUseDefaultRemoveSource(t *testing.T) {
+func Test_ParseCLIOptions_success_shouldUseDefaultRemoveSource(t *testing.T) {
 	outDir := "some-output-dir"
 	templateDir := "some-template-dir"
 	oldArgs := mockArguments(false, templateDir, outDir, false)
 	defer func() { os.Args = oldArgs }()
 
-	options, err := config.ParseCLIOption()
+	options, err := config.ParseCLIOptions()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, options)
@@ -50,12 +50,12 @@ func Test_ParseCLIOption_success_shouldUseDefaultRemoveSource(t *testing.T) {
 	assert.False(t, options.RemoveSource)
 }
 
-func Test_ParseCLIOption_success_shouldUseDefaultTemplatePath(t *testing.T) {
+func Test_ParseCLIOptions_success_shouldUseDefaultTemplatePath(t *testing.T) {
 	outDir := "some-output-dir"
 	oldArgs := mockArguments(false, "", outDir, true)
 	defer func() { os.Args = oldArgs }()
 
-	options, err := config.ParseCLIOption()
+	options, err := config.ParseCLIOptions()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, options)
@@ -64,13 +64,13 @@ func Test_ParseCLIOption_success_shouldUseDefaultTemplatePath(t *testing.T) {
 	assert.True(t, options.RemoveSource)
 }
 
-func Test_ParseCLIOption_success_shouldParseOptionsWithLongFlags(t *testing.T) {
+func Test_ParseCLIOptions_success_shouldParseOptionsWithLongFlags(t *testing.T) {
 	templateDir := "some-template-dir"
 	outDir := "some-output-dir"
 	oldArgs := mockArguments(true, templateDir, outDir, true)
 	defer func() { os.Args = oldArgs }()
 
-	options, err := config.ParseCLIOption()
+	options, err := config.ParseCLIOptions()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, options)
@@ -79,13 +79,13 @@ func Test_ParseCLIOption_success_shouldParseOptionsWithLongFlags(t *testing.T) {
 	assert.True(t, options.RemoveSource)
 }
 
-func Test_ParseCLIOption_success_shouldParseOptionsWithShortFlags(t *testing.T) {
+func Test_ParseCLIOptions_success_shouldParseOptionsWithShortFlags(t *testing.T) {
 	templateDir := "some-template-dir"
 	outDir := "some-output-dir"
 	oldArgs := mockArguments(false, templateDir, outDir, true)
 	defer func() { os.Args = oldArgs }()
 
-	options, err := config.ParseCLIOption()
+	options, err := config.ParseCLIOptions()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, options)

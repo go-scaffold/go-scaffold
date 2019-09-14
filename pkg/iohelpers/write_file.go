@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// WriteFile writes the content of Reader to the specified destination file
 func WriteFile(reader io.Reader, dst string) error {
 	err := MkParents(dst)
 	if err != nil {

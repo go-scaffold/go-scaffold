@@ -1,5 +1,8 @@
 package filter
 
+// Filter is an interface used to filter strings
 type Filter interface {
-	Accept(filePath string) bool
+
+	// Accept returns true if the input string should be accepted, false otherwise
+	Accept(value string) bool
 }

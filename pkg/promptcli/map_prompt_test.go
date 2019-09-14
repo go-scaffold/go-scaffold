@@ -10,7 +10,7 @@ import (
 
 func Test_mapPrompt(t *testing.T) {
 	type args struct {
-		in *prompt.PromptConfig
+		in *prompt.Entry
 	}
 	tests := []struct {
 		name string
@@ -19,7 +19,7 @@ func Test_mapPrompt(t *testing.T) {
 	}{
 		{
 			args: args{
-				in: &prompt.PromptConfig{
+				in: &prompt.Entry{
 					Name:    "p1",
 					Default: "dp1",
 					Type:    "string",
@@ -36,7 +36,7 @@ func Test_mapPrompt(t *testing.T) {
 		},
 		{
 			args: args{
-				in: &prompt.PromptConfig{
+				in: &prompt.Entry{
 					Name:    "p2",
 					Default: "33",
 					Type:    "int",
@@ -54,7 +54,7 @@ func Test_mapPrompt(t *testing.T) {
 		},
 		{
 			args: args{
-				in: &prompt.PromptConfig{
+				in: &prompt.Entry{
 					Name:    "p3",
 					Default: "y",
 					Type:    "bool",

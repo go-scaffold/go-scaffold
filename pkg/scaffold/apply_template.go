@@ -6,7 +6,7 @@ import (
 	"text/template"
 )
 
-func ApplyTemplate(templateContent string, config interface{}) (string, error) {
+func applyTemplate(templateContent string, config interface{}) (string, error) {
 	template, err := template.New("").Parse(templateContent)
 	if err != nil {
 		log.Println("Error while parsing template")

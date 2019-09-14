@@ -1,11 +1,10 @@
-package scaffold_test
+package scaffold
 
 import (
 	"io/ioutil"
 	"os"
 	"testing"
 
-	"github.com/pasdam/go-scaffold/pkg/scaffold"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,7 +13,7 @@ func Test_ProcessTemplate_fail_shouldReturnErrorIfApplyingTheTemplateFailed(t *t
 	assert.Nil(t, err)
 	defer file.Close()
 
-	reader, err := scaffold.ProcessTemplate(file, "invalid-data")
+	reader, err := processTemplate(file, "invalid-data")
 
 	assert.NotNil(t, err)
 	assert.Nil(t, reader)
@@ -25,7 +24,7 @@ func Test_ProcessTemplate_success_shouldCreateAReaderForTheGeneratedContent(t *t
 	assert.Nil(t, err)
 	defer file.Close()
 
-	reader, err := scaffold.ProcessTemplate(file, validData)
+	reader, err := processTemplate(file, struct{ Text string }{Text: "*test*"})
 
 	assert.Nil(t, err)
 	readContent, err := ioutil.ReadAll(reader)

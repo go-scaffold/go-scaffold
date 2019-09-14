@@ -5,7 +5,7 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/prompt"
 )
 
-func mapPrompt(in *prompt.PromptConfig) *promptData {
+func mapPrompt(in *prompt.Entry) *promptData {
 	return &promptData{
 		Prompt: &promptui.Prompt{
 			Label:     in.Message,

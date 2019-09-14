@@ -144,7 +144,7 @@ func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
 }
 
 func mockPrompt() {
-	runPrompts = func(prompts []*prompt.PromptConfig) map[string]interface{} {
+	runPrompts = func(prompts []*prompt.Entry) map[string]interface{} {
 		data := make(map[string]interface{})
 		data["text"] = "test!"
 		return data

@@ -16,7 +16,7 @@ func (m *mockPrompt) Run() (string, error) {
 	return m.val, nil
 }
 
-func mockMapper(in *prompt.PromptConfig) *promptData {
+func mockMapper(in *prompt.Entry) *promptData {
 	return &promptData{
 		Name:   in.Name,
 		Prompt: &mockPrompt{val: in.Name + "-val"},
@@ -26,20 +26,20 @@ func mockMapper(in *prompt.PromptConfig) *promptData {
 func TestRunPrompts(t *testing.T) {
 	promptConfigToPromptUIMapper = mockMapper
 
-	prompts := make([]*prompt.PromptConfig, 3)
-	prompts[0] = &prompt.PromptConfig{
+	prompts := make([]*prompt.Entry, 3)
+	prompts[0] = &prompt.Entry{
 		Default: "dp0",
 		Type:    "string",
 		Message: "mp0",
 		Name:    "p0",
 	}
-	prompts[1] = &prompt.PromptConfig{
+	prompts[1] = &prompt.Entry{
 		Default: "dp1",
 		Type:    "int",
 		Message: "mp1",
 		Name:    "p1",
 	}
-	prompts[2] = &prompt.PromptConfig{
+	prompts[2] = &prompt.Entry{
 		Default: "f",
 		Type:    "bool",
 		Message: "mp2",

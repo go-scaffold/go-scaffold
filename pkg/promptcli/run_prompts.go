@@ -4,9 +4,10 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/prompt"
 )
 
-var promptConfigToPromptUIMapper func(in *prompt.PromptConfig) *promptData = mapPrompt
+var promptConfigToPromptUIMapper func(in *prompt.Entry) *promptData = mapPrompt
 
-func RunPrompts(prompts []*prompt.PromptConfig) map[string]interface{} {
+// RunPrompts executes the specified prompts
+func RunPrompts(prompts []*prompt.Entry) map[string]interface{} {
 	result := make(map[string]interface{})
 	for _, config := range prompts {
 		prompt := promptConfigToPromptUIMapper(config)

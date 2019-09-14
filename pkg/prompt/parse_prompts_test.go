@@ -12,19 +12,19 @@ func Test_ParsePrompts_Success_ShouldParsePromptsIfFileExists(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(prompts))
-	assert.Equal(t, &prompt.PromptConfig{
+	assert.Equal(t, &prompt.Entry{
 		Name:    "prompt1",
 		Type:    "string",
 		Default: "prompt1-default-val",
 		Message: "Enter prompt1 value",
 	}, prompts[0])
-	assert.Equal(t, &prompt.PromptConfig{
+	assert.Equal(t, &prompt.Entry{
 		Name:    "prompt2",
 		Type:    "bool",
 		Default: "true",
 		Message: "Enter prompt2 value",
 	}, prompts[1])
-	assert.Equal(t, &prompt.PromptConfig{
+	assert.Equal(t, &prompt.Entry{
 		Name:    "prompt3",
 		Type:    "int",
 		Default: "prompt3-default-val",

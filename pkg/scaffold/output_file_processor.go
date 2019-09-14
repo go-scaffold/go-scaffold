@@ -8,15 +8,17 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 )
 
-type OutputFileProcessor struct {
+type outputFileProcessor struct {
 	config         interface{}
 	outDir         string
 	templatesOnly  bool
 	templateHelper *TemplateHelper
 }
 
+// NewOutputFileProcessor creates a new instance of a FileProcessor that process templates and creates the output files.
+// THe variables to use for the template are in config. It can be used to process template files only.
 func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *TemplateHelper, templatesOnly bool) FileProcessor {
-	return &OutputFileProcessor{
+	return &outputFileProcessor{
 		config:         config,
 		outDir:         outDir,
 		templatesOnly:  templatesOnly,
@@ -24,21 +26,21 @@ func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *T
 	}
 }
 
-func (self *OutputFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
+func (p *outputFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
 	var err error
-	if self.templateHelper.Accept(filePath) {
-		reader, err = ProcessTemplate(reader, self.config)
+	if p.templateHelper.Accept(filePath) {
+		reader, err = processTemplate(reader, p.config)
 		if err != nil {
 			return err
 		}
-		filePath = self.templateHelper.OutputFilePath(filePath)
+		filePath = p.templateHelper.OutputFilePath(filePath)
 
-	} else if self.templatesOnly {
+	} else if p.templatesOnly {
 		// ingore normal files
 		return nil
 	}
 
-	log.Printf("Writing file %s\n", filepath.Join(self.outDir, filePath))
+	log.Printf("Writing file %s\n", filepath.Join(p.outDir, filePath))
 
-	return iohelpers.WriteFile(reader, filepath.Join(self.outDir, filePath))
+	return iohelpers.WriteFile(reader, filepath.Join(p.outDir, filePath))
 }
