@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
 
-  test:
+  checks:
     name: Unit test
     runs-on: ubuntu-latest
     steps:
@@ -14,7 +14,11 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: '1.13'
-      - run: make go-test
+      - run: make go-coverage
+      - uses: actions/upload-artifact@v1
+        with:
+          name: coverage.html
+          path: /tmp/coverage.html
 
   docker-build:
     name: Build docker image
