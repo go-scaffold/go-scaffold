@@ -16,9 +16,9 @@ func Test_validateFuncForType(t *testing.T) {
 		args args
 		want promptui.ValidateFunc
 	}{
-		{ args: args{ promptType:"int" }, want: validateInteger},
-		{ args: args{ promptType:"string" }, want: nil},
-		{ args: args{ promptType:"bool" }, want: nil},
+		{args: args{promptType: "int"}, want: validateInteger},
+		{args: args{promptType: "string"}, want: nil},
+		{args: args{promptType: "bool"}, want: nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

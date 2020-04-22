@@ -57,15 +57,15 @@ func Test_PatternFilter_Accept_ShouldReturnFalseIfItIsInclusiveAndTheFileNameDoe
 
 func Test_PatternFilter_NewInstance_ShouldOverwriteConfig(t *testing.T) {
 	tests := []struct {
-		name string
-		inclusive bool
+		name         string
+		inclusive    bool
 		shouldAccept bool
-		fileName string
+		fileName     string
 	}{
-		{ "0", false, true, "not-matching" },
-		{ "1", false, false, "expression-to-match-1" },
-		{ "2", true, false, "not-matching" },
-		{ "3", true, true, "expression-to-match-1" },
+		{"0", false, true, "not-matching"},
+		{"1", false, false, "expression-to-match-1"},
+		{"2", true, false, "not-matching"},
+		{"3", true, true, "expression-to-match-1"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

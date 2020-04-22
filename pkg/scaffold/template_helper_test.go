@@ -9,9 +9,9 @@ import (
 
 func Test_Accept_Success_ShouldCorrectlyDetectIfFileIsTemplateOrNot(t *testing.T) {
 	helper := scaffold.TemplateHelper{}
-	
+
 	assert.True(t, helper.Accept("some-file.tpl"))
-	
+
 	assert.False(t, helper.Accept("some-file.0tpl"))
 	assert.False(t, helper.Accept("some-file.tpl0"))
 	assert.False(t, helper.Accept("some-file.aaa"))

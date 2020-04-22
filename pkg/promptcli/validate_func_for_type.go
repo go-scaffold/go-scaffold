@@ -6,9 +6,9 @@ import (
 
 func validateFuncForType(promptType string) promptui.ValidateFunc {
 	switch promptType {
-		case "int":
-			return validateInteger
-		default:
-			return nil
+	case "int":
+		return validateInteger
+	default:
+		return nil
 	}
 }
