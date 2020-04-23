@@ -156,6 +156,33 @@ func TestOptions_ConfigDirPath(t *testing.T) {
 	}
 }
 
+func TestOptions_InitScriptPath(t *testing.T) {
+	type fields struct {
+		TemplatePath flags.Filename
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name:   "Should return expected value",
+			fields: fields{TemplatePath: "some-path-1"},
+			want:   filepath.Join("some-path-1", ".go-scaffold", "initScript"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &config.Options{
+				TemplatePath: tt.fields.TemplatePath,
+			}
+			if got := o.InitScriptPath(); got != tt.want {
+				t.Errorf("Options.InitScriptPath() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestOptions_PromptsConfigPath(t *testing.T) {
 	type fields struct {
 		TemplatePath flags.Filename

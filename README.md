@@ -113,3 +113,14 @@ go-scaffold -t ./ -o /tmp/test-go-template
 
 This will use the template in the current folder and generate the files in
 `/tmp/test-go-template`.
+
+## Experimental features
+
+### Init script
+
+After executing a template it's possible to run a script to initialize the newly
+created project, for instance to checkout git submodules or run some other
+custom commands.
+
+The app will automatically execute the file
+`<template_dir>/.go-scaffold/initScript`.

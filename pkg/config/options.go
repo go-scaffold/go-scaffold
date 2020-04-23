@@ -28,6 +28,11 @@ func (o *Options) ConfigDirPath() string {
 	return filepath.Join(string(o.TemplatePath), ".go-scaffold")
 }
 
+// InitScriptPath returns the path of the template's init script
+func (o *Options) InitScriptPath() string {
+	return filepath.Join(o.ConfigDirPath(), "initScript")
+}
+
 // PromptsConfigPath returns the path of the template's  prompts configuration
 func (o *Options) PromptsConfigPath() string {
 	return filepath.Join(o.ConfigDirPath(), "prompts.yaml")

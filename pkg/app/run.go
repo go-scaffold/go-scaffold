@@ -47,4 +47,10 @@ func Run() {
 		fatal("Error while processing files. ", err)
 		return
 	}
+
+	err = runInitScript(options.InitScriptPath(), string(options.OutputPath))
+	if err != nil {
+		fatal("Error while executing init script. ", err)
+		return
+	}
 }
