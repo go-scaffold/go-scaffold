@@ -2,7 +2,6 @@ package app
 
 import (
 	"log"
-	"path/filepath"
 
 	"github.com/pasdam/go-scaffold/pkg/config"
 	"github.com/pasdam/go-scaffold/pkg/filter"
@@ -22,7 +21,7 @@ func Run() {
 		return
 	}
 
-	prompts, err := prompt.ParsePrompts(filepath.Join(string(options.TemplatePath), ".go-scaffold", "prompts.yaml"))
+	prompts, err := prompt.ParsePrompts(options.PromptsConfigPath())
 	if err != nil {
 		fatal("Unable to parse prompts.yaml file:", err)
 		return

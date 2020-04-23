@@ -2,8 +2,10 @@ package config_test
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
+	"github.com/jessevdk/go-flags"
 	"github.com/pasdam/go-scaffold/pkg/config"
 	"github.com/stretchr/testify/assert"
 )
@@ -125,4 +127,58 @@ func mockArguments(useLongFlags bool, templateDir string, outDir string, withRem
 	}
 
 	return oldArgs
+}
+
+func TestOptions_ConfigDirPath(t *testing.T) {
+	type fields struct {
+		TemplatePath flags.Filename
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name:   "Should return expected value",
+			fields: fields{TemplatePath: "some-path-1"},
+			want:   filepath.Join("some-path-1", ".go-scaffold"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &config.Options{
+				TemplatePath: tt.fields.TemplatePath,
+			}
+			if got := o.ConfigDirPath(); got != tt.want {
+				t.Errorf("Options.ConfigDirPath() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestOptions_PromptsConfigPath(t *testing.T) {
+	type fields struct {
+		TemplatePath flags.Filename
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name:   "Should return expected value",
+			fields: fields{TemplatePath: "some-path-1"},
+			want:   filepath.Join("some-path-1", ".go-scaffold", "prompts.yaml"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &config.Options{
+				TemplatePath: tt.fields.TemplatePath,
+			}
+			if got := o.PromptsConfigPath(); got != tt.want {
+				t.Errorf("Options.PromptsConfigPath() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

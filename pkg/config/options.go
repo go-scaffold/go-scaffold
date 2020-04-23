@@ -1,10 +1,12 @@
 package config
 
 import (
+	"path/filepath"
+
 	"github.com/jessevdk/go-flags"
 )
 
-// Options contains the app configuration to set from the CLI
+// Options contains the app run configuration
 type Options struct {
 	OutputPath   flags.Filename `short:"o" long:"output" description:"Path of the output dir, if not specified the template will be generated in place" default:"./"`
 	RemoveSource bool           `short:"r" long:"remove-source" description:"Flag to indicate whether remove the template and config files, or not. This has effect only if the input and output folder are the same"`
@@ -19,4 +21,14 @@ func ParseCLIOptions() (*Options, error) {
 		return nil, err
 	}
 	return &options, nil
+}
+
+// ConfigDirPath returns the path of the template's configuration dir
+func (o *Options) ConfigDirPath() string {
+	return filepath.Join(string(o.TemplatePath), ".go-scaffold")
+}
+
+// PromptsConfigPath returns the path of the template's  prompts configuration
+func (o *Options) PromptsConfigPath() string {
+	return filepath.Join(o.ConfigDirPath(), "prompts.yaml")
 }
