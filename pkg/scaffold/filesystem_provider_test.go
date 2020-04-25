@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/otiai10/copy"
-	"github.com/pasdam/go-scaffold/pkg/filter"
+	"github.com/pasdam/go-scaffold/pkg/filters"
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
 	"github.com/pasdam/go-scaffold/pkg/testutils"
@@ -18,7 +18,7 @@ import (
 )
 
 func Test_NewFileSystemProvider_Fail_FolderDoesNotExist(t *testing.T) {
-	var filter filter.Filter
+	var filter filters.Filter
 	processor := newMockFileProcessor()
 
 	provider := scaffold.NewFileSystemProvider("some-non-existing-folder", nil)
@@ -27,7 +27,7 @@ func Test_NewFileSystemProvider_Fail_FolderDoesNotExist(t *testing.T) {
 }
 
 func TestFileSystemProvider_ProvideFiles_Fail_ShouldProcessAllFileIfNoFilterIsSpecified(t *testing.T) {
-	var filter filter.Filter
+	var filter filters.Filter
 	processor := newMockFileProcessor()
 	expectedErr := errors.New("some-error")
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(expectedErr)
@@ -40,7 +40,7 @@ func TestFileSystemProvider_ProvideFiles_Fail_ShouldProcessAllFileIfNoFilterIsSp
 }
 
 func TestFileSystemProvider_ProvideFiles_Success_ShouldProcessAllFileIfNoFilterIsSpecified(t *testing.T) {
-	var filter filter.Filter
+	var filter filters.Filter
 	processor := newMockFileProcessor()
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
 

@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/pasdam/go-scaffold/pkg/config"
-	"github.com/pasdam/go-scaffold/pkg/filter"
+	"github.com/pasdam/go-scaffold/pkg/filters"
 	"github.com/pasdam/go-scaffold/pkg/prompt"
 	"github.com/pasdam/go-scaffold/pkg/promptcli"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
@@ -34,11 +34,11 @@ func Run() {
 
 	fileProcessor := scaffold.NewOutputFileProcessor(data, string(options.OutputPath), templateHelper, processInPlace)
 
-	configFolderExcludeFilter, _ := filter.NewPatternFilter(false, "\\.go-scaffold(/.*)?")
+	configFolderExcludeFilter, _ := filters.NewPatternFilter(false, "\\.go-scaffold(/.*)?")
 
-	var fileToRemoveFilter filter.Filter
+	var fileToRemoveFilter filters.Filter
 	if processInPlace && options.RemoveSource {
-		fileToRemoveFilter = filter.Or(filter.NewPatternFilterFromInstance(configFolderExcludeFilter, true), templateHelper)
+		fileToRemoveFilter = filters.Or(filters.NewPatternFilterFromInstance(configFolderExcludeFilter, true), templateHelper)
 	}
 
 	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath), fileToRemoveFilter)

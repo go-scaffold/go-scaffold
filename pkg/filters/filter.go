@@ -1,4 +1,4 @@
-package filter
+package filters
 
 // Filter is an interface used to filter strings
 type Filter interface {

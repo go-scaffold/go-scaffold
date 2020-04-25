@@ -7,11 +7,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/pasdam/go-scaffold/pkg/filter"
+	"github.com/pasdam/go-scaffold/pkg/filters"
 )
 
 type fileSystemProvider struct {
-	cleanFilter filter.Filter
+	cleanFilter filters.Filter
 	filesPath   []string
 	filesInfo   []os.FileInfo
 	inputDir    string
@@ -19,14 +19,14 @@ type fileSystemProvider struct {
 
 // NewFileSystemProvider creates a new instance of a FileProvider that reads file from the filesystem.
 // If cleanFilter is specified it will be used to remove all the inpout files that it matches.
-func NewFileSystemProvider(inputDir string, cleanFilter filter.Filter) FileProvider {
+func NewFileSystemProvider(inputDir string, cleanFilter filters.Filter) FileProvider {
 	return &fileSystemProvider{
 		cleanFilter: cleanFilter,
 		inputDir:    inputDir,
 	}
 }
 
-func (p *fileSystemProvider) ProvideFiles(filesFilter filter.Filter, processor FileProcessor) error {
+func (p *fileSystemProvider) ProvideFiles(filesFilter filters.Filter, processor FileProcessor) error {
 	err := p.indexDir(p.inputDir)
 	if err != nil {
 		return err
