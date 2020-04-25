@@ -2,6 +2,7 @@ package app
 
 import (
 	"errors"
+	"os"
 	"os/exec"
 	"reflect"
 	"testing"
@@ -21,10 +22,18 @@ func Test_runInitScript(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "Should return error raised by cmd.Run",
+			name: "Should return nil if the script does not exist",
 			args: args{
 				path:    "some-path",
 				workDir: "some-work-dir",
+			},
+			wantErr: nil,
+		},
+		{
+			name: "Should return error raised by cmd.Run",
+			args: args{
+				path:    "run_init_script_test.go",
+				workDir: "./",
 			},
 			wantErr: errors.New("some-error"),
 		},
@@ -34,6 +43,8 @@ func Test_runInitScript(t *testing.T) {
 			guard := monkey.PatchInstanceMethod(reflect.TypeOf(&exec.Cmd{}), "Run", func(c *exec.Cmd) error {
 				assert.Equal(t, tt.args.workDir, c.Dir)
 				assert.Equal(t, tt.args.path, c.Path)
+				assert.Equal(t, os.Stderr, c.Stderr)
+				assert.Equal(t, os.Stdout, c.Stdout)
 				return tt.wantErr
 			})
 			defer guard.Unpatch()
