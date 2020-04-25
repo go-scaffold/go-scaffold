@@ -38,7 +38,7 @@ func Run() {
 
 	var fileToRemoveFilter filter.Filter
 	if processInPlace && options.RemoveSource {
-		fileToRemoveFilter = filter.NewMultiFilter(configFolderExcludeFilter.NewInstance(true), templateHelper)
+		fileToRemoveFilter = filter.NewMultiFilter(filter.NewPatternFilterFromInstance(configFolderExcludeFilter, true), templateHelper)
 	}
 
 	provider := scaffold.NewFileSystemProvider(string(options.TemplatePath), fileToRemoveFilter)

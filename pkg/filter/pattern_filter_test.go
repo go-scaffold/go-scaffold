@@ -69,11 +69,11 @@ func Test_PatternFilter_NewInstance_ShouldOverwriteConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			filter, err := filter.NewPatternFilter(false, "expression-to-match-1", "expression-to-match-2")
+			f, err := filter.NewPatternFilter(false, "expression-to-match-1", "expression-to-match-2")
 			assert.Nil(t, err)
-			assert.NotNil(t, filter)
+			assert.NotNil(t, f)
 
-			copyFilter := filter.NewInstance(tt.inclusive)
+			copyFilter := filter.NewPatternFilterFromInstance(f, tt.inclusive)
 
 			assert.Equal(t, tt.shouldAccept, copyFilter.Accept(tt.fileName))
 		})

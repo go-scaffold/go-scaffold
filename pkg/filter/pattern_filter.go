@@ -4,17 +4,17 @@ import (
 	"regexp"
 )
 
-// PatternFilter if a Filter that accept a string if it matches one or more regEx (at least one)
-type PatternFilter struct {
+type patternFilter struct {
 	patterns  []*regexp.Regexp
 	inclusive bool
 }
 
-// NewPatternFilter returns a new instance of PatternFilter configured with the specified regExp
-// or an error if one of them is invalid.
-// The filter accept a string if it is inclusive and the value matches one of the regexp, of if
-// it is exclusive (inclusive=false) and the value doesn't match any of the patterns.
-func NewPatternFilter(inclusive bool, patterns ...string) (*PatternFilter, error) {
+// NewPatternFilter returns a new instance of Filter configured with the
+// specified regExp or an error if one of them is invalid.
+// The filter accept a string if it is inclusive and the value matches one of
+// the regexp, of if it is exclusive (inclusive=false) and the value doesn't
+// match any of the patterns.
+func NewPatternFilter(inclusive bool, patterns ...string) (Filter, error) {
 	regExps := make([]*regexp.Regexp, len(patterns))
 
 	for i := 0; i < len(patterns); i++ {
@@ -25,15 +25,25 @@ func NewPatternFilter(inclusive bool, patterns ...string) (*PatternFilter, error
 		regExps[i] = regex
 	}
 
-	return &PatternFilter{
+	return &patternFilter{
 		patterns:  regExps,
 		inclusive: inclusive,
 	}, nil
 }
 
-// Accept returns true if it is inclusive and the value matches one of the regexp, of if
-// it is exclusive (inclusive=false) and the value doesn't match any of the patterns.
-func (f *PatternFilter) Accept(value string) bool {
+// NewPatternFilterFromInstance duplicates the filter, using the same pattern(s)
+// and the specified inclusive flag
+func NewPatternFilterFromInstance(f Filter, inclusive bool) Filter {
+	return &patternFilter{
+		patterns:  f.(*patternFilter).patterns,
+		inclusive: inclusive,
+	}
+}
+
+// Accept returns true if it is inclusive and the value matches one of the
+// regexp, of if it is exclusive (inclusive=false) and the value doesn't match
+// any of the patterns.
+func (f *patternFilter) Accept(value string) bool {
 	var valueWhenFound bool
 	if f.inclusive {
 		valueWhenFound = true
@@ -49,12 +59,4 @@ func (f *PatternFilter) Accept(value string) bool {
 		}
 	}
 	return !valueWhenFound
-}
-
-// NewInstance creates a new instance of the filter
-func (f *PatternFilter) NewInstance(inclusive bool) Filter {
-	return &PatternFilter{
-		patterns:  f.patterns,
-		inclusive: inclusive,
-	}
 }
