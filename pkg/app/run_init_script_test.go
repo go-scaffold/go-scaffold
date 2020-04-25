@@ -40,6 +40,13 @@ func Test_runInitScript(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			called := false
+			errHandler := func(v ...interface{}) {
+				called = true
+				assert.Equal(t, 2, len(v))
+				assert.Equal(t, "Error while executing init script. ", v[0])
+				assert.Equal(t, tt.wantErr, v[1])
+			}
 			guard := monkey.PatchInstanceMethod(reflect.TypeOf(&exec.Cmd{}), "Run", func(c *exec.Cmd) error {
 				assert.Equal(t, tt.args.workDir, c.Dir)
 				assert.Equal(t, tt.args.path, c.Path)
@@ -49,9 +56,9 @@ func Test_runInitScript(t *testing.T) {
 			})
 			defer guard.Unpatch()
 
-			if err := runInitScript(tt.args.path, tt.args.workDir); err != tt.wantErr {
-				t.Errorf("runInitScript() error = %v, wantErr %v", err, tt.wantErr)
-			}
+			runInitScript(tt.args.path, tt.args.workDir, errHandler)
+
+			assert.Equal(t, tt.wantErr != nil, called)
 		})
 	}
 }

@@ -5,9 +5,9 @@ import (
 	"os/exec"
 )
 
-func runInitScript(path string, workDir string) error {
+func runInitScript(path string, workDir string, errHandler func(v ...interface{})) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return nil
+		return
 	}
 	cmd := &exec.Cmd{
 		Dir:    workDir,
@@ -15,5 +15,9 @@ func runInitScript(path string, workDir string) error {
 		Stderr: os.Stderr,
 		Stdout: os.Stdout,
 	}
-	return cmd.Run()
+	err := cmd.Run()
+	if err != nil {
+		errHandler("Error while executing init script. ", err)
+		return
+	}
 }
