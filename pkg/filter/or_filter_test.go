@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_multiFilter_Accept_ShouldReturnsFalseIfAllFiltersDoNotAcceptTheFile(t *testing.T) {
-	filter := filter.NewMultiFilter(
+func Test_orFilter_Accept_ShouldReturnsFalseIfAllFiltersDoNotAcceptTheFile(t *testing.T) {
+	filter := filter.Or(
 		&mockFilter{"file-to-exclude-0"},
 		&mockFilter{"file-to-exclude-1"},
 		&mockFilter{"file-to-exclude-2"},
@@ -17,8 +17,8 @@ func Test_multiFilter_Accept_ShouldReturnsFalseIfAllFiltersDoNotAcceptTheFile(t 
 	assert.False(t, filter.Accept("file"))
 }
 
-func Test_multiFilter_Accept_ShouldReturnsTrueIfAFilterAcceptsTheFile(t *testing.T) {
-	filter := filter.NewMultiFilter(
+func Test_orFilter_Accept_ShouldReturnsTrueIfAFilterAcceptsTheFile(t *testing.T) {
+	filter := filter.Or(
 		&mockFilter{"file-to-exclude-0"},
 		&mockFilter{"file-to-exclude-1"},
 		&mockFilter{"file-to-exclude-2"},
