@@ -1,4 +1,4 @@
-package scaffold
+package templates
 
 import (
 	"io/ioutil"
@@ -13,7 +13,7 @@ func Test_ProcessTemplate_fail_shouldReturnErrorIfApplyingTheTemplateFailed(t *t
 	assert.Nil(t, err)
 	defer file.Close()
 
-	reader, err := processTemplate(file, "invalid-data")
+	reader, err := ProcessTemplate(file, "invalid-data")
 
 	assert.NotNil(t, err)
 	assert.Nil(t, reader)
@@ -24,7 +24,7 @@ func Test_ProcessTemplate_success_shouldCreateAReaderForTheGeneratedContent(t *t
 	assert.Nil(t, err)
 	defer file.Close()
 
-	reader, err := processTemplate(file, struct{ Text string }{Text: "*test*"})
+	reader, err := ProcessTemplate(file, struct{ Text string }{Text: "*test*"})
 
 	assert.Nil(t, err)
 	readContent, err := ioutil.ReadAll(reader)

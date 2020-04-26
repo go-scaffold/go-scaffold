@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
+	"github.com/pasdam/go-scaffold/pkg/templates"
 )
 
 type outputFileProcessor struct {
@@ -29,7 +30,7 @@ func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *T
 func (p *outputFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
 	var err error
 	if p.templateHelper.Accept(filePath) {
-		reader, err = processTemplate(reader, p.config)
+		reader, err = templates.ProcessTemplate(reader, p.config)
 		if err != nil {
 			return err
 		}

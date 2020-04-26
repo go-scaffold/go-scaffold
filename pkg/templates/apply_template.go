@@ -1,22 +1,19 @@
-package scaffold
+package templates
 
 import (
 	"bytes"
-	"log"
 	"text/template"
 )
 
 func applyTemplate(templateContent string, config interface{}) (string, error) {
 	template, err := template.New("").Parse(templateContent)
 	if err != nil {
-		log.Println("Error while parsing template")
 		return "", err
 	}
 
 	var result bytes.Buffer
 	err = template.Execute(&result, config)
 	if err != nil {
-		log.Println("Error generating content from template")
 		return "", err
 	}
 

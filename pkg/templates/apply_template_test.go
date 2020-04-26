@@ -1,4 +1,4 @@
-package scaffold
+package templates
 
 import (
 	"testing"
@@ -6,14 +6,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ApplyTemplate_Fail_ShouldReturnErrorIfItFailsToExecuteTheTemplate(t *testing.T) {
+func Test_applyTemplate_Fail_ShouldReturnErrorIfItFailsToExecuteTheTemplate(t *testing.T) {
 	result, err := applyTemplate("This is a {{ .NotExistingProperty }}", "invalid_config")
 
 	assert.NotNil(t, err)
 	assert.Empty(t, result)
 }
 
-func Test_ApplyTemplate_Fail_ShouldReturnErrorIfTemplateIsInvalid(t *testing.T) {
+func Test_applyTemplate_Fail_ShouldReturnErrorIfTemplateIsInvalid(t *testing.T) {
 	data := struct{ CustomProperty string }{CustomProperty: "*test*"}
 	result, err := applyTemplate("This is a {{ .CustomProperty } with invalid template", data)
 
@@ -21,7 +21,7 @@ func Test_ApplyTemplate_Fail_ShouldReturnErrorIfTemplateIsInvalid(t *testing.T) 
 	assert.Empty(t, result)
 }
 
-func Test_ApplyTemplate_Success_ShouldCorrectlyGenerateOutputContentFromTemplate(t *testing.T) {
+func Test_applyTemplate_Success_ShouldCorrectlyGenerateOutputContentFromTemplate(t *testing.T) {
 	data := struct{ CustomProperty string }{CustomProperty: "*test*"}
 	result, err := applyTemplate("This is a {{ .CustomProperty }}", data)
 

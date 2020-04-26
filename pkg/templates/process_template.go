@@ -1,4 +1,4 @@
-package scaffold
+package templates
 
 import (
 	"io"
@@ -8,8 +8,9 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 )
 
-func processTemplate(reader io.Reader, config interface{}) (io.Reader, error) {
-	content, err := applyTemplate(iohelpers.Read(reader), config)
+// ProcessTemplate processes the template using the specified data
+func ProcessTemplate(reader io.Reader, data interface{}) (io.Reader, error) {
+	content, err := applyTemplate(iohelpers.Read(reader), data)
 	if err != nil {
 		log.Println("Error while generating output file from template")
 		return nil, err
