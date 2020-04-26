@@ -10,6 +10,7 @@ import (
 // FileExistsWithContent is a test helper function used to assert that the
 // specified file exists and has the expected content
 func FileExistsWithContent(t *testing.T, filePath string, expectedContent string) {
-	actualContent, _ := ioutil.ReadFile(filePath)
+	actualContent, err := ioutil.ReadFile(filePath)
+	assert.Nil(t, err)
 	assert.Equal(t, expectedContent, string(actualContent))
 }
