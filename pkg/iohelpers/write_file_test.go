@@ -41,5 +41,5 @@ func Test_WriteFile_Success_ShouldCopyFile(t *testing.T) {
 	err := iohelpers.WriteFile(reader, dstPath)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, dstPath, expectedContent)
+	testutils.FileExistsWithContent(t, dstPath, expectedContent)
 }

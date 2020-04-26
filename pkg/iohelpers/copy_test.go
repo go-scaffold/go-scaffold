@@ -26,5 +26,5 @@ func Test_Copy_Success_ShouldCopyExistingFile(t *testing.T) {
 	err := iohelpers.Copy(filePath, outFile)
 
 	assert.Nil(t, err)
-	testutils.FileExists(t, outFile, "file-to-read-content\n")
+	testutils.FileExistsWithContent(t, outFile, "file-to-read-content\n")
 }
