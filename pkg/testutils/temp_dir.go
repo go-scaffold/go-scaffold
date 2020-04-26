@@ -13,5 +13,9 @@ func TempDir(t *testing.T) string {
 		t.FailNow()
 	}
 
+	t.Cleanup(func() {
+		defer os.RemoveAll(dir)
+	})
+
 	return dir
 }

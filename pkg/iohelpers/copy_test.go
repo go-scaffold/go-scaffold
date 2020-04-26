@@ -1,7 +1,6 @@
 package iohelpers_test
 
 import (
-	"os"
 	"path/filepath"
 	"testing"
 
@@ -12,7 +11,6 @@ import (
 
 func Test_Copy_Fail_ShouldReturnErrorIfFileDoesNotExist(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	filePath := "non-exsisting-file"
 	err := iohelpers.Copy(filePath, filepath.Join(outDir, filePath))
@@ -22,7 +20,6 @@ func Test_Copy_Fail_ShouldReturnErrorIfFileDoesNotExist(t *testing.T) {
 
 func Test_Copy_Success_ShouldCopyExistingFile(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	filePath := filepath.Join("testdata", "file_to_read.txt")
 	outFile := filepath.Join(outDir, filePath)

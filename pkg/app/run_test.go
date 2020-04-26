@@ -16,7 +16,6 @@ import (
 
 func Test_Run_Success_ValidTemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	mockPrompt(t)
 	oldArgs := mockArguments(filepath.Join("testdata", "valid_template"), outDir, false)
@@ -36,7 +35,6 @@ func Test_Run_Success_ValidTemplate(t *testing.T) {
 
 func Test_Run_Success_ShouldNotRemoveSourceIfOptionIsSetButProcessIsNotInPlace(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	mockPrompt(t)
 	oldArgs := mockArguments(filepath.Join("testdata", "valid_template"), outDir, true)
@@ -56,7 +54,6 @@ func Test_Run_Success_ShouldNotRemoveSourceIfOptionIsSetButProcessIsNotInPlace(t
 
 func Test_Run_Success_ShouldRemoveSourceIfOptionIsSetAndProcessIsInPlace(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	mockPrompt(t)
 	oldArgs := mockArguments(outDir, outDir, true)
@@ -83,7 +80,6 @@ func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
 	}
 
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	oldArgs := mockArguments(filepath.Join("testdata", "invalid_template"), outDir, false)
 	defer func() { os.Args = oldArgs }()

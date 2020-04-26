@@ -32,7 +32,6 @@ func Test_MkParents_Success_ShouldCreateFolders(t *testing.T) {
 
 func Test_MkParents_Success_ShouldDoNothingIfThereAreNoParents(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	oldDir, _ := os.Getwd()
 	defer os.Chdir(oldDir)

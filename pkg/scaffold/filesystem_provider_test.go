@@ -3,7 +3,6 @@ package scaffold_test
 import (
 	"errors"
 	"io"
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -85,7 +84,6 @@ func TestFileSystemProvider_ProvideFiles_Success_ShouldNotProcessFilesIgnoredByT
 
 func TestFileSystemProvider_ProvideFiles_Success_ShouldCleanSourceFiles(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	copy.Copy(filepath.Join("testdata", "file_system_provider"), outDir)
 	testutils.FileExists(t, filepath.Join(outDir, "file0"), "file0-content\n")
@@ -116,7 +114,6 @@ func TestFileSystemProvider_ProvideFiles_Success_ShouldCleanSourceFiles(t *testi
 
 func TestFileSystemProvider_ProvideFiles_Success_ShouldCleanSourceFolder(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	copy.Copy(filepath.Join("testdata", "file_system_provider"), outDir)
 	testutils.FileExists(t, filepath.Join(outDir, "file0"), "file0-content\n")

@@ -12,7 +12,6 @@ import (
 
 func TestOutputFileProcessor_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	file, err := os.Open("testdata/template_file.tpl")
 	assert.Nil(t, err)
@@ -32,7 +31,6 @@ func TestOutputFileProcessor_ProcessFile_Fail_ApplyTemplateFails(t *testing.T) {
 
 func TestOutputFileProcessor_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	file, err := os.Open("testdata/template_file.tpl")
 	assert.Nil(t, err)
@@ -52,7 +50,6 @@ func TestOutputFileProcessor_ProcessFile_Success_FileIsATemplate(t *testing.T) {
 
 func TestOutputFileProcessor_ProcessFile_Success_FileIsNotATemplate(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	file, err := os.Open("testdata/regular_file.txt")
 	assert.Nil(t, err)
@@ -72,7 +69,6 @@ func TestOutputFileProcessor_ProcessFile_Success_FileIsNotATemplate(t *testing.T
 
 func TestOutputFileProcessor_ProcessFile_Success_ShouldIgnoreFileIfItIsNotATemplateAndOnlyTemplatesIsTrue(t *testing.T) {
 	outDir := testutils.TempDir(t)
-	defer os.RemoveAll(outDir)
 
 	file, err := os.Open("testdata/regular_file.txt")
 	assert.Nil(t, err)
