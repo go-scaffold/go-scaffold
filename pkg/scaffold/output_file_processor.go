@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
+	"github.com/pasdam/go-scaffold/pkg/processors"
 	"github.com/pasdam/go-scaffold/pkg/templates"
 )
 
@@ -18,7 +19,7 @@ type outputFileProcessor struct {
 
 // NewOutputFileProcessor creates a new instance of a FileProcessor that process templates and creates the output files.
 // THe variables to use for the template are in config. It can be used to process template files only.
-func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *TemplateHelper, templatesOnly bool) FileProcessor {
+func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *TemplateHelper, templatesOnly bool) processors.Processor {
 	return &outputFileProcessor{
 		config:         config,
 		outDir:         outDir,
