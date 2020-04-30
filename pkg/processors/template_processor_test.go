@@ -87,7 +87,7 @@ func Test_templateProcessor_ProcessFile(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &templateProcessor{
 				data:          tt.name,
-				nextProcessor: &mockProcessor{tt.mocks.nextProcessorErr},
+				nextProcessor: &mockProcessor{err: tt.mocks.nextProcessorErr},
 			}
 			var wantErr error
 			processedReader := strings.NewReader(tt.name)
@@ -107,12 +107,4 @@ func Test_templateProcessor_ProcessFile(t *testing.T) {
 			assert.Equal(t, wantErr, err)
 		})
 	}
-}
-
-type mockProcessor struct {
-	err error
-}
-
-func (p *mockProcessor) ProcessFile(_ string, _ io.Reader) error {
-	return p.err
 }

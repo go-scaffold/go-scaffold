@@ -9,21 +9,20 @@ import (
 
 type outputFileProcessor struct {
 	outDir             string
-	templatesOnly      bool
 	templateHelper     *TemplateHelper
 	tempplateProcessor processors.Processor
 	writeProcessor     processors.Processor
 }
 
-// NewOutputFileProcessor creates a new instance of a FileProcessor that process templates and creates the output files.
-// THe variables to use for the template are in config. It can be used to process template files only.
-func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *TemplateHelper, templatesOnly bool) processors.Processor {
+// NewOutputFileProcessor creates a new instance of a FileProcessor that process
+// templates and creates the output files.
+// THe variables to use for the template are in config.
+func NewOutputFileProcessor(config interface{}, outDir string, templateHelper *TemplateHelper) processors.Processor {
 	writeProcessor := processors.NewWriteProcessor()
 	templateProcessor := processors.NewTemplateProcessor(config, writeProcessor)
 
 	return &outputFileProcessor{
 		outDir:             outDir,
-		templatesOnly:      templatesOnly,
 		templateHelper:     templateHelper,
 		tempplateProcessor: templateProcessor,
 		writeProcessor:     writeProcessor,
@@ -35,11 +34,6 @@ func (p *outputFileProcessor) ProcessFile(filePath string, reader io.Reader) err
 
 	if p.templateHelper.Accept(filePath) {
 		return p.tempplateProcessor.ProcessFile(outPath, reader)
-
-	} else if p.templatesOnly {
-		// ingore normal files
-		return nil
 	}
-
 	return p.writeProcessor.ProcessFile(outPath, reader)
 }

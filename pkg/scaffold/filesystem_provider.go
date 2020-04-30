@@ -12,18 +12,16 @@ import (
 )
 
 type fileSystemProvider struct {
-	cleanFilter filters.Filter
-	filesPath   []string
-	filesInfo   []os.FileInfo
-	inputDir    string
+	filesPath []string
+	filesInfo []os.FileInfo
+	inputDir  string
 }
 
-// NewFileSystemProvider creates a new instance of a FileProvider that reads file from the filesystem.
-// If cleanFilter is specified it will be used to remove all the inpout files that it matches.
-func NewFileSystemProvider(inputDir string, cleanFilter filters.Filter) FileProvider {
+// NewFileSystemProvider creates a new instance of a FileProvider that reads
+// file from the filesystem.
+func NewFileSystemProvider(inputDir string) FileProvider {
 	return &fileSystemProvider{
-		cleanFilter: cleanFilter,
-		inputDir:    inputDir,
+		inputDir: inputDir,
 	}
 }
 
@@ -47,10 +45,6 @@ func (p *fileSystemProvider) ProvideFiles(filesFilter filters.Filter, processor 
 				log.Printf("Error while processing file %s\n", relativePath)
 				return err
 			}
-		}
-
-		if p.cleanFilter != nil && p.cleanFilter.Accept(filePath) {
-			os.RemoveAll(filePath)
 		}
 	}
 	return nil

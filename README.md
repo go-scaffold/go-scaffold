@@ -114,6 +114,9 @@ go-scaffold -t ./ -o /tmp/test-go-template
 This will use the template in the current folder and generate the files in
 `/tmp/test-go-template`.
 
+Note that the application will not copy to the output directory the
+`.go-scaffold` and `.git` folders.
+
 ## Experimental features
 
 ### Init script
