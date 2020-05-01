@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/otiai10/copy"
+	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
-	"github.com/pasdam/go-scaffold/pkg/testutils"
 	"github.com/pasdam/mockit/mockit"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +16,7 @@ import (
 func Test_newProcessPipeline_ShouldNotIncludeCleanupPipelineIfProcessIsNotInPlace(t *testing.T) {
 	data := make(map[string]interface{})
 	data["text"] = "test!!"
-	outDir := testutils.TempDir(t)
+	outDir := filestest.TempDir(t)
 	errHandler := func(v ...interface{}) {
 		t.Fail() // errors should not occur
 	}
@@ -26,14 +26,14 @@ func Test_newProcessPipeline_ShouldNotIncludeCleanupPipelineIfProcessIsNotInPlac
 	path := "file.txt.tpl"
 	got.ProcessFile(path, strings.NewReader("This is a {{ .text }}\n"))
 
-	testutils.FileExistsWithContent(t, filepath.Join(srcDir, path), "This is a {{ .text }}\n")
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!!\n")
+	filestest.FileExistsWithContent(t, filepath.Join(srcDir, path), "This is a {{ .text }}\n")
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!!\n")
 }
 
 func Test_newProcessPipeline_ShouldIncludeCleanupPipelineIfProcessIsInPlace(t *testing.T) {
 	data := make(map[string]interface{})
 	data["text"] = "test!!"
-	outDir := testutils.TempDir(t)
+	outDir := filestest.TempDir(t)
 	errHandler := func(v ...interface{}) {
 		t.Fail() // errors should not occur
 	}
@@ -44,8 +44,8 @@ func Test_newProcessPipeline_ShouldIncludeCleanupPipelineIfProcessIsInPlace(t *t
 	path := "file.txt.tpl"
 	got.ProcessFile(path, strings.NewReader("This is a {{ .text }}\n"))
 
-	testutils.PathDoesNotExist(t, filepath.Join(outDir, path))
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!!\n")
+	filestest.PathDoesNotExist(t, filepath.Join(outDir, path))
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!!\n")
 }
 
 func Test_newProcessPipeline_ShouldReturnErrorIfOneOccurWhileCreatingThePipelines(t *testing.T) {

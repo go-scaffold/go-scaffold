@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/go-scaffold/pkg/filters"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
-	"github.com/pasdam/go-scaffold/pkg/testutils"
 	"github.com/pasdam/mockit/mockit"
 	"github.com/stretchr/testify/assert"
 )
@@ -69,7 +69,7 @@ func Test_newOutputPipeline_ShouldReturnErrorIfOneOccursWhenCreatingTheFilter(t 
 func Test_newOutputPipeline_ShouldProcessFileAsExpected(t *testing.T) {
 	data := make(map[string]interface{})
 	data["text"] = "test!"
-	outDir := testutils.TempDir(t)
+	outDir := filestest.TempDir(t)
 	type args struct {
 		inPlace bool
 		path    string
@@ -171,9 +171,9 @@ func Test_newOutputPipeline_ShouldProcessFileAsExpected(t *testing.T) {
 
 			outPath := filepath.Join(outDir, tt.expect.path)
 			if tt.expect.shouldExist {
-				testutils.FileExistsWithContent(t, outPath, tt.args.content)
+				filestest.FileExistsWithContent(t, outPath, tt.args.content)
 			} else {
-				testutils.PathDoesNotExist(t, outPath)
+				filestest.PathDoesNotExist(t, outPath)
 			}
 		})
 	}

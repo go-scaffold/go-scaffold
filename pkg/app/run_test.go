@@ -8,14 +8,14 @@ import (
 
 	"github.com/otiai10/copy"
 
-	"github.com/pasdam/go-scaffold/pkg/testutils"
+	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/mockit/matchers/argument"
 	"github.com/pasdam/mockit/mockit"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_Run_Success_ValidTemplate(t *testing.T) {
-	outDir := testutils.TempDir(t)
+	outDir := filestest.TempDir(t)
 
 	mockPrompt(t)
 	oldArgs := mockArguments(filepath.Join("testdata", "valid_template"), outDir, false)
@@ -25,16 +25,16 @@ func Test_Run_Success_ValidTemplate(t *testing.T) {
 
 	Run()
 
-	testutils.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "file.txt.tpl"), "This is a {{ .text }}\n")
-	testutils.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "normal_file.txt"), "normal-file-content\n")
-	testutils.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", ".go-scaffold", "prompts.yaml"), "prompts:\n  - name: text\n    type: string\n    default: default-text\n    message: Enter text value\n")
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
-	testutils.PathDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "file.txt.tpl"), "This is a {{ .text }}\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "normal_file.txt"), "normal-file-content\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", ".go-scaffold", "prompts.yaml"), "prompts:\n  - name: text\n    type: string\n    default: default-text\n    message: Enter text value\n")
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
+	filestest.PathDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
 }
 
 func Test_Run_Success_ShouldNotRemoveSourceIfOptionIsSetButProcessIsNotInPlace(t *testing.T) {
-	outDir := testutils.TempDir(t)
+	outDir := filestest.TempDir(t)
 
 	mockPrompt(t)
 	oldArgs := mockArguments(filepath.Join("testdata", "valid_template"), outDir, true)
@@ -44,16 +44,16 @@ func Test_Run_Success_ShouldNotRemoveSourceIfOptionIsSetButProcessIsNotInPlace(t
 
 	Run()
 
-	testutils.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "file.txt.tpl"), "This is a {{ .text }}\n")
-	testutils.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "normal_file.txt"), "normal-file-content\n")
-	testutils.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", ".go-scaffold", "prompts.yaml"), "prompts:\n  - name: text\n    type: string\n    default: default-text\n    message: Enter text value\n")
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
-	testutils.PathDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "file.txt.tpl"), "This is a {{ .text }}\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "normal_file.txt"), "normal-file-content\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", ".go-scaffold", "prompts.yaml"), "prompts:\n  - name: text\n    type: string\n    default: default-text\n    message: Enter text value\n")
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
+	filestest.PathDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
 }
 
 func Test_Run_Success_ShouldRemoveSourceIfOptionIsSetAndProcessIsInPlace(t *testing.T) {
-	outDir := testutils.TempDir(t)
+	outDir := filestest.TempDir(t)
 
 	mockPrompt(t)
 	oldArgs := mockArguments(outDir, outDir, true)
@@ -65,10 +65,10 @@ func Test_Run_Success_ShouldRemoveSourceIfOptionIsSetAndProcessIsInPlace(t *test
 
 	Run()
 
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
-	testutils.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
-	testutils.PathDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
-	testutils.PathDoesNotExist(t, filepath.Join(outDir, "file.txt.tpl"))
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
+	filestest.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
+	filestest.PathDoesNotExist(t, filepath.Join(outDir, ".go-scaffold"))
+	filestest.PathDoesNotExist(t, filepath.Join(outDir, "file.txt.tpl"))
 }
 
 func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
@@ -79,7 +79,7 @@ func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
 		assert.NotNil(t, args[1])
 	}
 
-	outDir := testutils.TempDir(t)
+	outDir := filestest.TempDir(t)
 
 	oldArgs := mockArguments(filepath.Join("testdata", "invalid_template"), outDir, false)
 	defer func() { os.Args = oldArgs }()

@@ -4,11 +4,12 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 // WriteFile writes the content of Reader to the specified destination file
 func WriteFile(reader io.Reader, dst string) error {
-	err := MkParents(dst)
+	err := os.MkdirAll(filepath.Dir(dst), os.ModePerm)
 	if err != nil {
 		log.Printf("Error while creating parents folder of %s\n", dst)
 		return err

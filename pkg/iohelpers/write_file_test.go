@@ -5,13 +5,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/go-scaffold/pkg/iohelpers"
-	"github.com/pasdam/go-scaffold/pkg/testutils"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_WriteFile_Fail_ShouldReturnErrorIfItCannotCreateParents(t *testing.T) {
-	dstPath := "mkparents_test.go/parent_is_a_file"
+	dstPath := "write_file_test.go/parent_is_a_file"
 	reader := strings.NewReader("reader-string")
 
 	err := iohelpers.WriteFile(reader, dstPath)
@@ -20,7 +20,7 @@ func Test_WriteFile_Fail_ShouldReturnErrorIfItCannotCreateParents(t *testing.T) 
 }
 
 func Test_WriteFile_Fail_ShouldReturnErrorIfItCannotCreateFile(t *testing.T) {
-	tmpDir := testutils.TempDir(t)
+	tmpDir := filestest.TempDir(t)
 	defer os.RemoveAll(tmpDir)
 	dstPath := tmpDir + ""
 	expectedContent := "reader-string"
@@ -32,7 +32,7 @@ func Test_WriteFile_Fail_ShouldReturnErrorIfItCannotCreateFile(t *testing.T) {
 }
 
 func Test_WriteFile_Success_ShouldCopyFile(t *testing.T) {
-	tmpDir := testutils.TempDir(t)
+	tmpDir := filestest.TempDir(t)
 	defer os.RemoveAll(tmpDir)
 	dstPath := tmpDir + "out_file"
 	expectedContent := "reader-string"
@@ -41,5 +41,5 @@ func Test_WriteFile_Success_ShouldCopyFile(t *testing.T) {
 	err := iohelpers.WriteFile(reader, dstPath)
 
 	assert.Nil(t, err)
-	testutils.FileExistsWithContent(t, dstPath, expectedContent)
+	filestest.FileExistsWithContent(t, dstPath, expectedContent)
 }

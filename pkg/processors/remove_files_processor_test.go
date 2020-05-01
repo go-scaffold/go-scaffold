@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pasdam/go-scaffold/pkg/testutils"
+	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,16 +17,16 @@ func TestNewRemoveFilesProcessor(t *testing.T) {
 }
 
 func Test_removeFilesProcessor_ProcessFile_ShouldDeleteParentFolderWhenEmpty(t *testing.T) {
-	path := testutils.TempFile(t, "some-test-file")
+	path := filestest.TempFile(t, "some-test-file")
 	p := NewRemoveFilesProcessor("")
 
 	err := p.ProcessFile(path, nil)
 	assert.Nil(t, err)
-	testutils.PathDoesNotExist(t, filepath.Dir(path))
+	filestest.PathDoesNotExist(t, filepath.Dir(path))
 }
 
 func Test_removeFilesProcessor_ProcessFile_ShouldNotDeleteParentFolderWhenNotEmpty(t *testing.T) {
-	path0 := testutils.TempFile(t, "some-test-file-0")
+	path0 := filestest.TempFile(t, "some-test-file-0")
 	dir := filepath.Dir(path0)
 
 	p := NewRemoveFilesProcessor("")
@@ -38,18 +38,18 @@ func Test_removeFilesProcessor_ProcessFile_ShouldNotDeleteParentFolderWhenNotEmp
 
 	err = p.ProcessFile(path0, nil)
 	assert.Nil(t, err)
-	testutils.PathDoesNotExist(t, path0)
-	testutils.PathExist(t, dir)
+	filestest.PathDoesNotExist(t, path0)
+	filestest.PathExist(t, dir)
 }
 
 func Test_removeFilesProcessor_ProcessFile_ShouldUseRootDirForRelativePaths(t *testing.T) {
-	path := testutils.TempFile(t, "some-test-file")
+	path := filestest.TempFile(t, "some-test-file")
 	dir := filepath.Dir(path)
 	p := NewRemoveFilesProcessor(dir)
 
 	err := p.ProcessFile("some-test-file", nil)
 	assert.Nil(t, err)
-	testutils.PathDoesNotExist(t, filepath.Dir(path))
+	filestest.PathDoesNotExist(t, filepath.Dir(path))
 }
 
 func Test_removeFilesProcessor_ProcessFile_ShouldReturnErrorIfTheFileDoesNotExist(t *testing.T) {

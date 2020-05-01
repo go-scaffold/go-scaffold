@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pasdam/go-scaffold/pkg/testutils"
+	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/mockit/mockit"
 	"github.com/stretchr/testify/assert"
 )
@@ -66,9 +66,9 @@ func TestRemoveDirIfEmpty(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			path := "not-existing-dir"
 			if tt.mocks.createFile {
-				path = filepath.Dir(testutils.TempFile(t, "some-file"))
+				path = filepath.Dir(filestest.TempFile(t, "some-file"))
 			} else if tt.mocks.createDir {
-				path = testutils.TempDir(t)
+				path = filestest.TempDir(t)
 			}
 			var wantErr error
 			if tt.mocks.readDirErr != nil {
@@ -84,9 +84,9 @@ func TestRemoveDirIfEmpty(t *testing.T) {
 
 			assert.Equal(t, wantErr, err)
 			if tt.shouldExist {
-				testutils.PathExist(t, path)
+				filestest.PathExist(t, path)
 			} else {
-				testutils.PathDoesNotExist(t, path)
+				filestest.PathDoesNotExist(t, path)
 			}
 		})
 	}
