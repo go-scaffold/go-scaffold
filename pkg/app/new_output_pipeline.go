@@ -1,12 +1,14 @@
 package app
 
 import (
-	"path/filepath"
+	"os"
 
 	"github.com/pasdam/go-scaffold/pkg/filters"
 	"github.com/pasdam/go-scaffold/pkg/processors"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
 )
+
+const ignorePattern = "\\.(go-scaffold|git)(" + string(os.PathSeparator) + ".*)?$"
 
 func newOutputPipeline(inPlace bool, config interface{}, outDir string, templateHelper *scaffold.TemplateHelper) (processors.Processor, error) {
 	var filter filters.Filter
@@ -14,7 +16,7 @@ func newOutputPipeline(inPlace bool, config interface{}, outDir string, template
 	if inPlace {
 		filter, err = filters.NewPatternFilter(true, "\\.*\\.tpl")
 	} else {
-		filter, err = filters.NewPatternFilter(false, "\\.(go-scaffold|git)("+filepath.FromSlash("/")+".*)?")
+		filter, err = filters.NewPatternFilter(false, ignorePattern)
 	}
 
 	if err != nil {
