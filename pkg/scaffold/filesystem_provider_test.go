@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/pasdam/go-io-utilx/pkg/ioutilx"
 	"github.com/pasdam/go-scaffold/pkg/filters"
-	"github.com/pasdam/go-scaffold/pkg/iohelpers"
 	"github.com/pasdam/go-scaffold/pkg/scaffold"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -113,7 +113,7 @@ func newMockFileProcessor() *mockFileProcessor {
 }
 
 func (p *mockFileProcessor) ProcessFile(filePath string, reader io.Reader) error {
-	p.ReadersMap[filePath] = iohelpers.Read(reader)
+	p.ReadersMap[filePath] = ioutilx.ReaderToString(reader)
 	args := p.Called(filePath, reader)
 	return args.Error(0)
 }

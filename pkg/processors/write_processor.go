@@ -3,7 +3,7 @@ package processors
 import (
 	"io"
 
-	"github.com/pasdam/go-scaffold/pkg/iohelpers"
+	"github.com/pasdam/go-io-utilx/pkg/ioutilx"
 )
 
 type writeProcessor struct{}
@@ -15,5 +15,5 @@ func NewWriteProcessor() Processor {
 }
 
 func (p *writeProcessor) ProcessFile(filePath string, reader io.Reader) error {
-	return iohelpers.WriteFile(reader, filePath)
+	return ioutilx.ReaderToFile(reader, filePath)
 }

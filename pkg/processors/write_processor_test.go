@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pasdam/go-scaffold/pkg/iohelpers"
+	"github.com/pasdam/go-io-utilx/pkg/ioutilx"
 	"github.com/pasdam/mockit/mockit"
 	"github.com/stretchr/testify/assert"
 )
@@ -45,7 +45,7 @@ func Test_writeProcessor_ProcessFile(t *testing.T) {
 		args  args
 	}{
 		{
-			name: "Should return error if iohelpers.WriteFile raises it",
+			name: "Should return error if ioutilx.ReaderToFile raises it",
 			mocks: mocks{
 				writeErr: errors.New("some-write-error"),
 			},
@@ -55,7 +55,7 @@ func Test_writeProcessor_ProcessFile(t *testing.T) {
 			},
 		},
 		{
-			name: "Should not return error if iohelpers.WriteFile succeed",
+			name: "Should not return error if ioutilx.ReaderToFile succeed",
 			args: args{
 				filePath: "some-success-path",
 				reader:   strings.NewReader("some-success-reader"),
@@ -65,7 +65,7 @@ func Test_writeProcessor_ProcessFile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			wantErr := tt.mocks.writeErr
-			mockit.MockFunc(t, iohelpers.WriteFile).With(tt.args.reader, tt.args.filePath).Return(wantErr)
+			mockit.MockFunc(t, ioutilx.ReaderToFile).With(tt.args.reader, tt.args.filePath).Return(wantErr)
 			p := &writeProcessor{}
 
 			err := p.ProcessFile(tt.args.filePath, tt.args.reader)
