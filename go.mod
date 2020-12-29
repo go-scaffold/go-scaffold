@@ -11,7 +11,7 @@ require (
 	github.com/pasdam/go-io-utilx v0.0.0-20200501101607-9ba8f33bc5d9
 	github.com/pasdam/mockit v0.0.0-20200426095748-c5169a16a8b6
 	github.com/stretchr/objx v0.2.0 // indirect
-	github.com/stretchr/testify v1.5.1
+	github.com/stretchr/testify v1.6.1
 	golang.org/x/sys v0.0.0-20200430202703-d923437fa56d // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )
