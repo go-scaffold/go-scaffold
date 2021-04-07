@@ -15,7 +15,7 @@ jobs:
         with:
           go-version: '1.14'
       - run: make go-coverage
-      - uses: actions/upload-artifact@v2.2.2
+      - uses: actions/upload-artifact@v2.2.3
         with:
           name: coverage.html
           path: /tmp/coverage.html
