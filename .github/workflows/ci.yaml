@@ -8,7 +8,7 @@ jobs:
     name: Unit test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
         with:
           submodules: true
       - uses: actions/setup-go@v2.1.3
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [checks]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
         with:
           submodules: true
       - name: Build the Docker image
