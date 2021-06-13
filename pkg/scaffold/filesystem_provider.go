@@ -34,17 +34,19 @@ func (p *fileSystemProvider) ProvideFiles(filesFilter filters.Filter, processor 
 	for len(p.filesPath) > 0 {
 		filePath, reader := p.nextFile()
 		if reader != nil {
-			defer reader.Close()
-		}
 
-		relativePath, _ := filepath.Rel(p.inputDir, filePath)
-		if reader != nil && (filesFilter == nil || filesFilter.Accept(relativePath)) {
-			err = processor.ProcessFile(relativePath, reader)
-			if err != nil {
-				// TODO: clean output folder
-				log.Printf("Error while processing file %s\n", relativePath)
-				return err
+			relativePath, _ := filepath.Rel(p.inputDir, filePath)
+			if filesFilter == nil || filesFilter.Accept(relativePath) {
+				err = processor.ProcessFile(relativePath, reader)
+				if err != nil {
+					// TODO: clean output folder
+					reader.Close()
+					log.Printf("Error while processing file %s\n", relativePath)
+					return err
+				}
 			}
+
+			reader.Close()
 		}
 	}
 	return nil
