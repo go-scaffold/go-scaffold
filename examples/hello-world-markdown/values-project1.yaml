@@ -1,0 +1,7 @@
+project: example-project-1
+intro: Example project 1
+links:
+  - name: github
+    url: https://www.github.com
+  - name: google
+    url: https://www.google.com

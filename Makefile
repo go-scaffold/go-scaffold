@@ -10,9 +10,17 @@ include scripts/makefiles/third_party/pasdam/makefiles/help.mk
 
 GO_MAIN_DIR := ./cmd/cli
 
-## clean: Remove all artifacts
+## build: Build all artifacts (binary and docker image)
+.PHONY: build
+build: | go-build docker-build
+
+## clean: Remove all artifacts (binary and docker image)
 .PHONY: clean
-clean: go-clean docker-clean
+clean: | go-clean docker-clean
+
+## install: Install all artifacts
+.PHONY: install
+install: | go-install
 
 ## gitlab-ci-test: Run the stages locally to verify that they execute correctly
 .PHONY: gitlab-ci-test

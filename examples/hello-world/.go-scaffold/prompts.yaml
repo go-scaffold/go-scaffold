@@ -1,5 +1,0 @@
-prompts:
-  - name: name
-    type: string
-    default: My name.
-    message: Enter the name

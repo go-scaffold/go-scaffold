@@ -1,0 +1,5 @@
+project: hello-world-markdown
+intro: This is a sample template to generate a markdown file
+links:
+  - name: github
+    url: https://github.com/pasdam/go-scaffold
