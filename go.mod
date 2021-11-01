@@ -6,9 +6,7 @@ require (
 	bou.ke/monkey v1.0.2
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/kr/text v0.2.0 // indirect
-	github.com/lunixbochs/vtclean v1.0.0 // indirect
-	github.com/manifoldco/promptui v0.8.0
-	github.com/mattn/go-colorable v0.1.8 // indirect
+	github.com/manifoldco/promptui v0.9.0
 	github.com/otiai10/copy v1.6.0
 	github.com/pasdam/go-files-test v0.0.0-20210125082053-e1c8203c662c
 	github.com/pasdam/go-io-utilx v0.0.0-20210125081100-08a73663a45e
