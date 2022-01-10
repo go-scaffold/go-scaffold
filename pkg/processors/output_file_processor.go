@@ -1,9 +1,9 @@
 package processors
 
 import (
+	"html/template"
 	"io"
 	"path/filepath"
-	"text/template"
 
 	"github.com/pasdam/go-scaffold/pkg/core"
 )

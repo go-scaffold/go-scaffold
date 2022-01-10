@@ -2,10 +2,10 @@ package processors
 
 import (
 	"errors"
+	"html/template"
 	"io"
 	"strings"
 	"testing"
-	"text/template"
 
 	"github.com/pasdam/go-scaffold/pkg/core"
 	"github.com/pasdam/go-scaffold/pkg/templates"

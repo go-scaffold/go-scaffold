@@ -2,7 +2,7 @@ package templates
 
 import (
 	"bytes"
-	"text/template"
+	"html/template"
 )
 
 func applyTemplate(templateContent string, config interface{}, funcMap template.FuncMap) (string, error) {

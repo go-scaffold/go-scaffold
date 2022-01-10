@@ -2,8 +2,8 @@ package templates
 
 import (
 	"fmt"
+	"html/template"
 	"testing"
-	"text/template"
 
 	"github.com/stretchr/testify/assert"
 )
