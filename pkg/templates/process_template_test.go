@@ -3,10 +3,10 @@ package templates
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"os"
 	"testing"
+	"text/template"
 
 	"github.com/pasdam/mockit/matchers/argument"
 	"github.com/pasdam/mockit/mockit"

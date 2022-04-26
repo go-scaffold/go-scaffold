@@ -10,7 +10,7 @@ import (
 
 func newOutputPipeline(config interface{}, outDir string) (core.Processor, error) {
 	filter := filters.NewNoOpFilter()
-	funcMap := sprig.FuncMap()
+	funcMap := sprig.TxtFuncMap()
 	funcMap["sequence"] = collections.Sequence
 	outProcessor := processors.NewOutputFileProcessor(config, outDir, funcMap)
 	return processors.NewFilterProcessor(filter, outProcessor), nil

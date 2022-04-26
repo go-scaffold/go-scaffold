@@ -2,10 +2,10 @@ package processors_test
 
 import (
 	"fmt"
-	"html/template"
 	"os"
 	"path/filepath"
 	"testing"
+	"text/template"
 
 	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/go-scaffold/pkg/processors"

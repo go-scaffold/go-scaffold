@@ -1,10 +1,10 @@
 package templates
 
 import (
-	"html/template"
 	"io"
 	"log"
 	"strings"
+	"text/template"
 )
 
 // ProcessTemplate processes the template using the specified data
