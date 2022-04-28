@@ -1,5 +1,5 @@
 BUILD_DIR ?= .build
-PROJECT_NAME ?= "app"
+PROJECT_NAME ?= $(shell basename $(dir $(abspath $(firstword $(MAKEFILE_LIST)))))
 
 include scripts/makefiles/third_party/pasdam/makefiles/docker.mk
 include scripts/makefiles/third_party/pasdam/makefiles/go.mk

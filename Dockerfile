@@ -1,19 +1,19 @@
 # Build image
 ########################
-FROM golang:1.14beta1-alpine3.10 as builder
+FROM golang:1.16.5-alpine3.12 as builder
 
 WORKDIR /var/tmp/app
 
 RUN apk add git
 
 # copy artifacts into the container
-ADD ./main.go ./main.go
+ADD ./cmd ./cmd
 ADD ./go.mod ./go.mod
 ADD ./go.sum ./go.sum
 ADD ./pkg ./pkg
 
 # Build the app
-RUN go build -o .build/app .
+RUN go build -o .build/app ./cmd/cli
 
 # Final image
 ########################
