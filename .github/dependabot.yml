@@ -2,25 +2,20 @@ version: 2
 updates:
   - package-ecosystem: "docker"
     directory: "/"
-    reviewers:
-      - pasdam
     schedule:
       interval: "daily"
-  - package-ecosystem: "gitsubmodule"
+
+  - package-ecosystem: github-actions
     directory: "/"
-    reviewers:
-      - pasdam
     schedule:
-      interval: "daily"
-  - package-ecosystem: "github-actions"
+      interval: daily
+
+  - package-ecosystem: gitsubmodule
     directory: "/"
-    reviewers:
-      - pasdam
     schedule:
-      interval: "daily"
-  - package-ecosystem: "gomod"
+      interval: daily
+
+  - package-ecosystem: gomod
     directory: "/"
-    reviewers:
-      - pasdam
     schedule:
-      interval: "daily"
+      interval: daily
