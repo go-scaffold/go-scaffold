@@ -11,8 +11,7 @@ require (
 	github.com/pasdam/go-files-test v0.0.0-20210125082053-e1c8203c662c
 	github.com/pasdam/go-io-utilx v0.0.0-20210125081100-08a73663a45e
 	github.com/pasdam/mockit v0.0.0-20210125081107-43da07441f3d
-	github.com/stretchr/objx v0.3.0 // indirect
-	github.com/stretchr/testify v1.7.2
+	github.com/stretchr/testify v1.7.4
 	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0
