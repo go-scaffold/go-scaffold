@@ -2,6 +2,7 @@ package app
 
 import (
 	"log"
+	"text/template"
 
 	"github.com/pasdam/go-scaffold/pkg/config"
 	"github.com/pasdam/go-scaffold/pkg/providers"
@@ -11,7 +12,7 @@ import (
 var errHandler = log.Fatal
 
 // Run starts the app
-func Run(options *config.Options) {
+func Run(options *config.Options, funcMap template.FuncMap) {
 	if options.TemplateRootPath == options.OutputPath {
 		log.Fatal("Can't generate file in the input folder, please specify an output directory")
 		return
@@ -51,6 +52,7 @@ func Run(options *config.Options) {
 		string(options.TemplateRootPath),
 		string(options.OutputPath),
 		errHandler,
+		funcMap,
 	)
 
 	provider := providers.NewFileSystemProvider(string(options.TemplateDirPath()))

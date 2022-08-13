@@ -49,5 +49,5 @@ func generate(cmd *cobra.Command, args []string) {
 		Values:           values,
 	}
 
-	app.Run(options)
+	app.Run(options, nil)
 }

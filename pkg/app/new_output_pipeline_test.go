@@ -106,7 +106,7 @@ func Test_newOutputPipeline_ShouldProcessFileAsExpected(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := newOutputPipeline(data, outDir)
+			got, err := newOutputPipeline(data, outDir, nil)
 			assert.NotNil(t, got)
 			assert.Nil(t, err)
 

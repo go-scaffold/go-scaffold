@@ -19,7 +19,7 @@ func Test_newProcessPipeline_ShouldProcessFilesCorrectly(t *testing.T) {
 		t.Fail() // errors should not occur
 	}
 	srcDir := filepath.Join("testdata", "valid_template", "template")
-	got := newProcessPipeline(data, srcDir, outDir, errHandler)
+	got := newProcessPipeline(data, srcDir, outDir, errHandler, nil)
 
 	path := "file.txt"
 	got.ProcessFile(path, strings.NewReader("This is a {{ .text }}\n"))
@@ -66,12 +66,12 @@ func Test_newProcessPipeline_ShouldReturnErrorIfOneOccurWhileCreatingThePipeline
 				assert.Equal(t, wantErr, v[1])
 			}
 
-			mockit.MockFunc(t, newOutputPipeline).With(tt.args.config, tt.args.outDir).Return(nil, tt.mocks.outPipelineErr)
+			mockit.MockFunc(t, newOutputPipeline).With(tt.args.config, tt.args.outDir, nil).Return(nil, tt.mocks.outPipelineErr)
 			if tt.mocks.cleanPipelineErr != nil {
 				wantErr = tt.mocks.cleanPipelineErr
 			}
 
-			got := newProcessPipeline(tt.args.config, tt.args.srcDir, tt.args.outDir, errHandler)
+			got := newProcessPipeline(tt.args.config, tt.args.srcDir, tt.args.outDir, errHandler, nil)
 
 			assert.True(t, errorOccurred)
 			assert.Nil(t, got)
