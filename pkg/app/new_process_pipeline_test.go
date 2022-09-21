@@ -18,13 +18,11 @@ func Test_newProcessPipeline_ShouldProcessFilesCorrectly(t *testing.T) {
 	errHandler := func(v ...interface{}) {
 		t.Fail() // errors should not occur
 	}
-	srcDir := filepath.Join("testdata", "valid_template", "template")
-	got := newProcessPipeline(data, srcDir, outDir, errHandler, nil)
+	got := newProcessPipeline(data, outDir, errHandler, nil)
 
 	path := "file.txt"
 	got.ProcessFile(path, strings.NewReader("This is a {{ .text }}\n"))
 
-	filestest.FileExistsWithContent(t, filepath.Join(srcDir, path), "This is a {{ .Values.text }}\n")
 	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!!\n")
 }
 
@@ -35,7 +33,6 @@ func Test_newProcessPipeline_ShouldReturnErrorIfOneOccurWhileCreatingThePipeline
 	}
 	type args struct {
 		config interface{}
-		srcDir string
 		outDir string
 	}
 	tests := []struct {
@@ -50,7 +47,6 @@ func Test_newProcessPipeline_ShouldReturnErrorIfOneOccurWhileCreatingThePipeline
 			},
 			args: args{
 				config: "some-out-pipeline-error-data",
-				srcDir: "some-out-pipeline-error-source-dir",
 				outDir: "some-out-pipeline-error-output-dir",
 			},
 		},
@@ -71,7 +67,7 @@ func Test_newProcessPipeline_ShouldReturnErrorIfOneOccurWhileCreatingThePipeline
 				wantErr = tt.mocks.cleanPipelineErr
 			}
 
-			got := newProcessPipeline(tt.args.config, tt.args.srcDir, tt.args.outDir, errHandler, nil)
+			got := newProcessPipeline(tt.args.config, tt.args.outDir, errHandler, nil)
 
 			assert.True(t, errorOccurred)
 			assert.Nil(t, got)

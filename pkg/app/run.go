@@ -49,7 +49,6 @@ func Run(options *config.Options, funcMap template.FuncMap) {
 
 	fileProcessor := newProcessPipeline(
 		data,
-		string(options.TemplateRootPath),
 		string(options.OutputPath),
 		errHandler,
 		funcMap,
