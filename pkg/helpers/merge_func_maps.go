@@ -1,4 +1,4 @@
-package app
+package helpers
 
 import "text/template"
 

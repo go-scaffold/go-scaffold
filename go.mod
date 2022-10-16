@@ -3,7 +3,9 @@ module github.com/pasdam/go-scaffold
 replace github.com/pasdam/go-scaffold/pkg => ./pkg
 
 require (
-	github.com/Masterminds/sprig/v3 v3.2.2
+	github.com/Masterminds/goutils v1.1.1 // indirect
+	github.com/Masterminds/semver v1.5.0 // indirect
+	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/iancoleman/strcase v0.1.3
@@ -16,6 +18,7 @@ require (
 	github.com/pasdam/mockit v0.0.0-20210125081107-43da07441f3d
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
+	golang.org/x/crypto v0.0.0-20200414173820-0848c9571904 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
 
