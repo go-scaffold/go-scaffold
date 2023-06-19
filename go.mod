@@ -7,7 +7,7 @@ require (
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/kr/text v0.2.0 // indirect
 	github.com/manifoldco/promptui v0.9.0
-	github.com/otiai10/copy v1.11.0
+	github.com/otiai10/copy v1.12.0
 	github.com/pasdam/go-files-test v0.0.0-20210125082053-e1c8203c662c
 	github.com/pasdam/go-io-utilx v0.0.0-20210125081100-08a73663a45e
 	github.com/pasdam/mockit v0.0.0-20210125081107-43da07441f3d
