@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 )
 
+var readDir = ioutil.ReadDir
+
 type Indexer struct {
 	Dir string
 
@@ -13,7 +15,7 @@ type Indexer struct {
 }
 
 func (i *Indexer) index(abs, relative string) error {
-	filesInfo, err := ioutil.ReadDir(abs)
+	filesInfo, err := readDir(abs)
 	if err != nil {
 		return err
 	}

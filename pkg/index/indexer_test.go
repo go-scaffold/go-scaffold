@@ -3,19 +3,14 @@ package index
 import (
 	"errors"
 	"io"
-	"io/ioutil"
 	"path/filepath"
 	"reflect"
 	"testing"
 
 	"github.com/pasdam/go-utils/pkg/assertutils"
-	"github.com/pasdam/mockit/mockit"
 )
 
 func TestIndexer_NextFile(t *testing.T) {
-	type mocks struct {
-		readDir error
-	}
 	type fields struct {
 		Dir      string
 		children *index
@@ -23,7 +18,6 @@ func TestIndexer_NextFile(t *testing.T) {
 	tests := []struct {
 		name    string
 		fields  fields
-		mocks   mocks
 		want    []string
 		wantErr error
 	}{
@@ -32,9 +26,6 @@ func TestIndexer_NextFile(t *testing.T) {
 			fields: fields{
 				children: nil,
 				Dir:      "./testdata",
-			},
-			mocks: mocks{
-				readDir: nil,
 			},
 			want: []string{
 				"a.txt",
@@ -49,13 +40,10 @@ func TestIndexer_NextFile(t *testing.T) {
 			name: "Should propagate error if ReadDir raises it",
 			fields: fields{
 				children: nil,
-				Dir:      "./testdata",
-			},
-			mocks: mocks{
-				readDir: errors.New("some ReadDir error"),
+				Dir:      "",
 			},
 			want:    nil,
-			wantErr: errors.New("some ReadDir error"),
+			wantErr: errors.New("open : no such file or directory"),
 		},
 	}
 	for _, tt := range tests {
@@ -63,11 +51,6 @@ func TestIndexer_NextFile(t *testing.T) {
 			indexer := &Indexer{
 				Dir:      tt.fields.Dir,
 				children: tt.fields.children,
-			}
-
-			if tt.mocks.readDir != nil {
-				mockFunc := mockit.MockFunc(t, ioutil.ReadDir)
-				mockFunc.With(tt.fields.Dir).Return(nil, tt.mocks.readDir)
 			}
 
 			got, err := indexer.NextFile()
