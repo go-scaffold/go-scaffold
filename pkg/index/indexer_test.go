@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/pasdam/go-utils/pkg/assertutils"
 	"github.com/pasdam/mockit/mockit"
 )
 
@@ -79,7 +80,7 @@ func TestIndexer_NextFile(t *testing.T) {
 				got, err = indexer.NextFile()
 			}
 
-			assertEqualErrors(t, tt.wantErr, err)
+			assertutils.AssertEqualErrors(t, tt.wantErr, err)
 		})
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/pasdam/go-utils/pkg/assertutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -120,20 +121,10 @@ func Test_index_TakeFirst(t *testing.T) {
 
 			got, err := i.TakeFirst()
 
-			assertEqualErrors(t, tt.wantErr, err)
+			assertutils.AssertEqualErrors(t, tt.wantErr, err)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("index.TakeFirst() = %v, want %v", got, tt.want)
 			}
 		})
 	}
-}
-
-func assertEqualErrors(t *testing.T, want, got error) {
-	if want == nil {
-		assert.Nil(t, got)
-		return
-	}
-
-	assert.Error(t, got)
-	assert.Equal(t, want.Error(), got.Error())
 }
