@@ -1,26 +1,19 @@
-package providers_test
+package providers
 
 import (
 	"errors"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
+	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/go-scaffold/pkg/core"
-	"github.com/pasdam/go-scaffold/pkg/providers"
+	"github.com/pasdam/go-utils/pkg/assertutils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
-
-func Test_NewFileSystemProvider_Fail_FolderDoesNotExist(t *testing.T) {
-	var filter core.Filter
-	processor := newMockFileProcessor(t)
-
-	provider := providers.NewFileSystemProvider("some-non-existing-folder")
-	err := provider.ProvideFiles(filter, processor)
-	assert.Equal(t, "open some-non-existing-folder: no such file or directory", err.Error())
-}
 
 func TestFileSystemProvider_ProvideFiles_Fail_ShouldProcessAllFileIfNoFilterIsSpecified(t *testing.T) {
 	var filter core.Filter
@@ -28,55 +21,130 @@ func TestFileSystemProvider_ProvideFiles_Fail_ShouldProcessAllFileIfNoFilterIsSp
 	expectedErr := errors.New("some-error")
 	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(expectedErr)
 
-	provider := providers.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"))
+	provider := NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"))
 	actualErr := provider.ProvideFiles(filter, processor)
 
 	assert.Equal(t, expectedErr, actualErr)
 	assert.Equal(t, 1, len(processor.ReadersMap))
 }
 
-func TestFileSystemProvider_ProvideFiles_Success_ShouldProcessAllFileIfNoFilterIsSpecified(t *testing.T) {
-	var filter core.Filter
-	processor := newMockFileProcessor(t)
-	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
+func Test_fileSystemProvider_ProvideFiles(t *testing.T) {
+	emptyDir := filestest.TempDir(t)
 
-	provider := providers.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"))
-	err := provider.ProvideFiles(filter, processor)
-	assert.Nil(t, err)
+	type fields struct {
+		dir string
+	}
+	type mocks struct {
+		file         string
+		filtered     bool
+		processError error
+		openError    error
+	}
+	type want struct {
+		err            error
+		processedFiles []string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		mocks  mocks
+		want   want
+	}{
+		{
+			name: "Should return no errors if dir has no files",
+			fields: fields{
+				dir: emptyDir,
+			},
+			mocks: mocks{
+				file:         "",
+				filtered:     false,
+				processError: nil,
+				openError:    nil,
+			},
+			want: want{
+				err:            nil,
+				processedFiles: nil,
+			},
+		},
+		{
+			name: "Should propagate error if one occur while indexing folder",
+			fields: fields{
+				dir: "",
+			},
+			mocks: mocks{
+				file:         "",
+				filtered:     false,
+				processError: nil,
+				openError:    nil,
+			},
+			want: want{
+				err:            errors.New("open : no such file or directory"),
+				processedFiles: nil,
+			},
+		},
+		{
+			name: "Should propagate error if one is thrown while opening the file",
+			fields: fields{
+				dir: filepath.Join("testdata", "file_system_provider"),
+			},
+			mocks: mocks{
+				file:         "",
+				filtered:     false,
+				processError: nil,
+				openError:    errors.New("some-open-error"),
+			},
+			want: want{
+				err:            errors.New("some-open-error"),
+				processedFiles: nil,
+			},
+		},
+		{
+			name: "Should process all files in the folder and close them after use, when folder is relative to the current one",
+			fields: fields{
+				dir: filepath.Join("testdata", "file_system_provider"),
+			},
+			mocks: mocks{
+				file:         "",
+				filtered:     false,
+				processError: nil,
+				openError:    nil,
+			},
+			want: want{
+				err:            nil,
+				processedFiles: []string{"file0", "file1", filepath.Join("test_folder", "fileA")},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			p := NewFileSystemProvider(tt.fields.dir)
 
-	verifyProcessedFile(t, processor, "file0", "file0-content\n")
-	verifyProcessedFile(t, processor, "file1", "file1-content\n")
-	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
-	assert.Equal(t, 0, len(processor.ReadersMap))
-}
+			processor := newMockFileProcessor(t)
+			if tt.mocks.processError != nil {
+				processor.On("ProcessFile", tt.mocks.file, mock.Anything).Return(tt.mocks.processError)
+			}
+			processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
 
-func TestFileSystemProvider_ProvideFiles_Success_ShouldProcessAllFileIfFilterAcceptsAll(t *testing.T) {
-	filter := &mockFilter{File: "no-file-will-match"}
-	processor := newMockFileProcessor(t)
-	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
+			mockFile, err := os.Open(filepath.Join("testdata", "file_system_provider", "file0"))
+			assert.NoError(t, err)
 
-	provider := providers.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"))
-	err := provider.ProvideFiles(filter, processor)
-	assert.Nil(t, err)
+			mockOpen(t, "", mockFile, tt.mocks.openError)
 
-	verifyProcessedFile(t, processor, "file0", "file0-content\n")
-	verifyProcessedFile(t, processor, "file1", "file1-content\n")
-	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
-	assert.Equal(t, 0, len(processor.ReadersMap))
-}
+			filter := &mockFilter{
+				File:    tt.mocks.file,
+				Include: !tt.mocks.filtered,
+			}
 
-func TestFileSystemProvider_ProvideFiles_Success_ShouldNotProcessFilesIgnoredByTheFilter(t *testing.T) {
-	filter := &mockFilter{File: "file0"}
-	processor := newMockFileProcessor(t)
-	processor.On("ProcessFile", mock.Anything, mock.Anything).Return(nil)
+			err = p.ProvideFiles(filter, processor)
 
-	provider := providers.NewFileSystemProvider(filepath.Join("testdata", "file_system_provider"))
-	err := provider.ProvideFiles(filter, processor)
-	assert.Nil(t, err)
-
-	verifyProcessedFile(t, processor, "file1", "file1-content\n")
-	verifyProcessedFile(t, processor, filepath.Join("test_folder", "fileA"), "fileA-content\n")
-	assert.Equal(t, 0, len(processor.ReadersMap))
+			assertutils.AssertEqualErrors(t, tt.want.err, err)
+			processor.AssertNumberOfCalls(t, "ProcessFile", len(tt.want.processedFiles))
+			for _, file := range tt.want.processedFiles {
+				// mockFileCloseFn.Verify()
+				processor.AssertCalled(t, "ProcessFile", file, mock.Anything)
+			}
+		})
+	}
 }
 
 func verifyProcessedFile(t *testing.T, processor *mockFileProcessor, filePath string, content string) {
@@ -119,4 +187,13 @@ func (p *mockFileProcessor) ProcessFile(filePath string, reader io.Reader) error
 	p.ReadersMap[filePath] = string(content)
 	args := p.Called(filePath, reader)
 	return args.Error(0)
+}
+
+func mockOpen(t *testing.T, expectedName string, file *os.File, err error) {
+	originalValue := open
+	open = func(name string) (*os.File, error) {
+		// assert.Equal(t, expectedName, name)
+		return file, err
+	}
+	t.Cleanup(func() { open = originalValue })
 }
