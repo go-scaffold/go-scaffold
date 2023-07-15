@@ -5,6 +5,7 @@ import (
 	"text/template"
 
 	"github.com/pasdam/go-scaffold/pkg/config"
+	"github.com/pasdam/go-scaffold/pkg/core"
 	"github.com/pasdam/go-scaffold/pkg/providers"
 	"github.com/pasdam/go-template-map-loader/pkg/tm"
 )
@@ -13,6 +14,12 @@ var errHandler = log.Fatal
 
 // Run starts the app
 func Run(options *config.Options, funcMap template.FuncMap) {
+	fileProvider := providers.NewFileSystemProvider(string(options.TemplateDirPath()))
+	RunWithFileProvider(options, funcMap, fileProvider)
+}
+
+// Run starts the app
+func RunWithFileProvider(options *config.Options, funcMap template.FuncMap, fileProvider core.FileProvider) {
 	if options.TemplateRootPath == options.OutputPath {
 		log.Fatal("Can't generate file in the input folder, please specify an output directory")
 		return
@@ -54,8 +61,7 @@ func Run(options *config.Options, funcMap template.FuncMap) {
 		funcMap,
 	)
 
-	provider := providers.NewFileSystemProvider(string(options.TemplateDirPath()))
-	err = provider.ProvideFiles(nil, fileProcessor)
+	err = fileProvider.ProvideFiles(nil, fileProcessor)
 	if err != nil {
 		errHandler("Error while processing files. ", err)
 		return
