@@ -7,9 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pasdam/go-io-utilx/pkg/ioutilx"
 	"github.com/pasdam/go-scaffold/pkg/core"
-	"github.com/pasdam/mockit/mockit"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -66,7 +64,7 @@ func Test_writeProcessor_ProcessFile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			wantErr := tt.mocks.writeErr
-			mockit.MockFunc(t, ioutilx.ReaderToFile).With(tt.args.reader, tt.args.filePath).Return(wantErr)
+			mockIoutilxReaderToFile(t, tt.args.reader, tt.args.filePath, wantErr)
 			p := &writeProcessor{}
 
 			err := p.ProcessFile(tt.args.filePath, tt.args.reader)
@@ -74,4 +72,14 @@ func Test_writeProcessor_ProcessFile(t *testing.T) {
 			assert.Equal(t, wantErr, err)
 		})
 	}
+}
+
+func mockIoutilxReaderToFile(t *testing.T, reader io.Reader, dst string, err error) {
+	originalValue := ioutilxReaderToFile
+	ioutilxReaderToFile = func(expectedReader io.Reader, expectedDst string) error {
+		assert.Equal(t, expectedReader, reader)
+		assert.Equal(t, expectedDst, dst)
+		return err
+	}
+	t.Cleanup(func() { ioutilxReaderToFile = originalValue })
 }

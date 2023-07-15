@@ -8,8 +8,7 @@ import (
 	"text/template"
 
 	"github.com/pasdam/go-scaffold/pkg/core"
-	"github.com/pasdam/go-scaffold/pkg/templates"
-	"github.com/pasdam/mockit/mockit"
+	"github.com/pasdam/go-utils/pkg/assertutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -55,9 +54,10 @@ func Test_templateProcessor_ProcessFile(t *testing.T) {
 		reader   io.Reader
 	}
 	tests := []struct {
-		name  string
-		mocks mocks
-		args  args
+		name    string
+		mocks   mocks
+		args    args
+		wantErr error
 	}{
 		{
 			name: "Should propagate error if templates.ProcessTemplate raises it",
@@ -68,6 +68,7 @@ func Test_templateProcessor_ProcessFile(t *testing.T) {
 				filePath: "some-process-template-path",
 				reader:   strings.NewReader("some-process-template-reader"),
 			},
+			wantErr: errors.New("some-process-template-error"),
 		},
 		{
 			name: "Should propagate error if next processor raises it",
@@ -78,6 +79,7 @@ func Test_templateProcessor_ProcessFile(t *testing.T) {
 				filePath: "some-next-processor-path",
 				reader:   strings.NewReader("some-next-processor-reader"),
 			},
+			wantErr: errors.New("some-next-processor-error"),
 		},
 		{
 			name:  "Should not return error if the process succeed",
@@ -95,22 +97,23 @@ func Test_templateProcessor_ProcessFile(t *testing.T) {
 				funcMap:       template.FuncMap{},
 				nextProcessor: &mockProcessor{err: tt.mocks.nextProcessorErr},
 			}
-			var wantErr error
 			processedReader := strings.NewReader(tt.name)
-			stub := mockit.MockFunc(t, templates.ProcessTemplate).With(tt.args.reader, p.data, p.funcMap)
-			if tt.mocks.processTemplateErr != nil {
-				wantErr = tt.mocks.processTemplateErr
-				stub.Return(nil, wantErr)
-			} else {
-				stub.Return(processedReader, nil)
-			}
-			if tt.mocks.nextProcessorErr != nil {
-				wantErr = tt.mocks.nextProcessorErr
-			}
+			mockTemplatesProcessTemplate(t, tt.args.reader, p.data, p.funcMap, processedReader, tt.mocks.processTemplateErr)
 
 			err := p.ProcessFile(tt.args.filePath, tt.args.reader)
 
-			assert.Equal(t, wantErr, err)
+			assertutils.AssertEqualErrors(t, tt.wantErr, err)
 		})
 	}
+}
+
+func mockTemplatesProcessTemplate(t *testing.T, expectedReader io.Reader, expectedData interface{}, expectedFuncMap template.FuncMap, outReader io.Reader, err error) {
+	originalValue := templatesProcessTemplate
+	templatesProcessTemplate = func(reader io.Reader, data interface{}, funcMap template.FuncMap) (io.Reader, error) {
+		assert.Equal(t, expectedReader, reader)
+		assert.Equal(t, expectedData, data)
+		assert.Equal(t, expectedFuncMap, funcMap)
+		return outReader, err
+	}
+	t.Cleanup(func() { templatesProcessTemplate = originalValue })
 }

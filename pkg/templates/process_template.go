@@ -7,9 +7,11 @@ import (
 	"text/template"
 )
 
+var ioReadAll = io.ReadAll
+
 // ProcessTemplate processes the template using the specified data
 func ProcessTemplate(reader io.Reader, data interface{}, funcMap template.FuncMap) (io.Reader, error) {
-	byteContent, err := io.ReadAll(reader)
+	byteContent, err := ioReadAll(reader)
 	if err != nil {
 		return nil, err
 	}

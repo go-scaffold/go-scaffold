@@ -5,9 +5,10 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"text/template"
 
 	"github.com/pasdam/go-files-test/pkg/filestest"
-	"github.com/pasdam/mockit/mockit"
+	"github.com/pasdam/go-scaffold/pkg/core"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -62,7 +63,8 @@ func Test_newProcessPipeline_ShouldReturnErrorIfOneOccurWhileCreatingThePipeline
 				assert.Equal(t, wantErr, v[1])
 			}
 
-			mockit.MockFunc(t, newOutputPipeline).With(tt.args.config, tt.args.outDir, nil).Return(nil, tt.mocks.outPipelineErr)
+			mockNewOutputPipeline(t, tt.args.config, tt.args.outDir, nil, nil, tt.mocks.outPipelineErr)
+
 			if tt.mocks.cleanPipelineErr != nil {
 				wantErr = tt.mocks.cleanPipelineErr
 			}
@@ -73,4 +75,15 @@ func Test_newProcessPipeline_ShouldReturnErrorIfOneOccurWhileCreatingThePipeline
 			assert.Nil(t, got)
 		})
 	}
+}
+
+func mockNewOutputPipeline(t *testing.T, expectedConfig any, expectedOutDir string, expectedFuncMap template.FuncMap, processor core.Processor, err error) {
+	originalValue := _newOutputPipeline
+	_newOutputPipeline = func(config any, outDir string, funcMap template.FuncMap) (core.Processor, error) {
+		assert.Equal(t, expectedConfig, config)
+		assert.Equal(t, expectedOutDir, outDir)
+		assert.Equal(t, expectedFuncMap, funcMap)
+		return processor, err
+	}
+	t.Cleanup(func() { _newOutputPipeline = originalValue })
 }

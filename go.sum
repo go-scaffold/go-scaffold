@@ -1,5 +1,3 @@
-bou.ke/monkey v1.0.2 h1:kWcnsrCNUatbxncxR/ThdYqbytgOIArtYWqcQLQzKLI=
-bou.ke/monkey v1.0.2/go.mod h1:OqickVX3tNx6t33n1xvtTtu85YN5s6cKwVug+oHMaIA=
 github.com/Masterminds/goutils v1.1.1 h1:5nUrii3FMTL5diU80unEVvNevw1nH4+ZV4DSLVJLSYI=
 github.com/Masterminds/goutils v1.1.1/go.mod h1:8cTjp+g8YejhMuvIA5y2vz3BpJxksy863GQaJW2MFNU=
 github.com/Masterminds/semver v1.5.0 h1:H65muMkzWKEuNDnfl9d70GUjFniHKHRbFPGBuZ3QEww=
@@ -44,8 +42,6 @@ github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e/go.m
 github.com/pasdam/go-test-utils v0.0.0-20230710135805-45ec4e440661 h1:6Nr3eIGr64N/yyyzit4R5Cb5eskKL+XnoRPZ6iZX8hA=
 github.com/pasdam/go-utils v0.0.0-20230712123701-d4916bc6a231 h1:UhkMFVVFG8GhpGypcAFuVz/L9qH4SYX5CvcgVJSse84=
 github.com/pasdam/go-utils v0.0.0-20230712123701-d4916bc6a231/go.mod h1:9oFKiWQoSQnXulhn8V4DiWi/FkYKW1yPVE0/oUObCZg=
-github.com/pasdam/mockit v0.0.0-20210125081107-43da07441f3d h1:YGGYq6HUIwUTzzkSHq8VKMVNw5rkGfhfCH/RBTpAO/c=
-github.com/pasdam/mockit v0.0.0-20210125081107-43da07441f3d/go.mod h1:rBwhfbbaRIxSihS4QaNKhHymRDIDsnOZqKWmXUkzxxk=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

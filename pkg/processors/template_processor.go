@@ -8,6 +8,8 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/templates"
 )
 
+var templatesProcessTemplate = templates.ProcessTemplate
+
 type templateProcessor struct {
 	data          interface{}
 	funcMap       template.FuncMap
@@ -25,7 +27,7 @@ func NewTemplateProcessor(data interface{}, nextProcessor core.Processor, funcMa
 
 func (p *templateProcessor) ProcessFile(filePath string, reader io.Reader) error {
 	var err error
-	reader, err = templates.ProcessTemplate(reader, p.data, p.funcMap)
+	reader, err = templatesProcessTemplate(reader, p.data, p.funcMap)
 	if err != nil {
 		return err
 	}

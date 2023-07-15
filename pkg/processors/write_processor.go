@@ -7,6 +7,8 @@ import (
 	"github.com/pasdam/go-scaffold/pkg/core"
 )
 
+var ioutilxReaderToFile = ioutilx.ReaderToFile
+
 type writeProcessor struct{}
 
 // NewWriteProcessor creates a new instance of a Processor that write each the
@@ -16,5 +18,5 @@ func NewWriteProcessor() core.Processor {
 }
 
 func (p *writeProcessor) ProcessFile(filePath string, reader io.Reader) error {
-	return ioutilx.ReaderToFile(reader, filePath)
+	return ioutilxReaderToFile(reader, filePath)
 }

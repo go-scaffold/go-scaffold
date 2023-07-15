@@ -3,13 +3,12 @@ package templates
 import (
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"testing"
 	"text/template"
 
-	"github.com/pasdam/mockit/matchers/argument"
-	"github.com/pasdam/mockit/mockit"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +18,10 @@ func Test_ProcessTemplate_fail_shouldPropagateErrorIfReaderThrowsIt(t *testing.T
 	defer file.Close()
 	funcMap := template.FuncMap{}
 	expectedErr := errors.New("some-read-error")
-	mockit.MockMethod(t, file, file.Read).With(argument.Any).Return(0, expectedErr)
+	ioReadAll = func(r io.Reader) ([]byte, error) {
+		return nil, expectedErr
+	}
+	defer func() { ioReadAll = io.ReadAll }()
 
 	reader, err := ProcessTemplate(file, "invalid-data", funcMap)
 

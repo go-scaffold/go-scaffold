@@ -10,13 +10,11 @@ require (
 	github.com/pasdam/go-io-utilx v0.0.0-20210125081100-08a73663a45e
 	github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e
 	github.com/pasdam/go-utils v0.0.0-20230712123701-d4916bc6a231
-	github.com/pasdam/mockit v0.0.0-20210125081107-43da07441f3d
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
 )
 
 require (
-	bou.ke/monkey v1.0.2 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
