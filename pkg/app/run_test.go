@@ -13,7 +13,7 @@ func Test_Run_Success_ValidTemplate(t *testing.T) {
 	outDir := filestest.TempDir(t)
 	options := mockOptions(filepath.Join("testdata", "valid_template"), outDir)
 
-	Run(options, nil)
+	Run(options)
 
 	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "file.txt"), "This is a {{ .Values.text }}\n")
 	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "normal_file.txt"), "normal-file-content\n")
@@ -25,7 +25,7 @@ func Test_Run_Success_ShouldNotRemoveSourceIfOptionIsSetButProcessIsNotInPlace(t
 	outDir := filestest.TempDir(t)
 	options := mockOptions(filepath.Join("testdata", "valid_template"), outDir)
 
-	Run(options, nil)
+	Run(options)
 
 	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "file.txt"), "This is a {{ .Values.text }}\n")
 	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "normal_file.txt"), "normal-file-content\n")
@@ -46,7 +46,7 @@ func Test_Run_Fail_ErrorWhileProcessingFiles(t *testing.T) {
 
 	options := mockOptions(filepath.Join("testdata", "invalid_template"), outDir)
 
-	Run(options, nil)
+	Run(options)
 
 	assert.True(t, called)
 }

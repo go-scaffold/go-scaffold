@@ -4,16 +4,16 @@ replace github.com/pasdam/go-scaffold/pkg => ./pkg
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/go-scaffold/go-sdk v0.0.0-20230716013513-b836a4a581e1
+	github.com/go-scaffold/go-sdk v0.0.0-20230723140645-5908bbfcad2e
 	github.com/iancoleman/strcase v0.1.3
-	github.com/pasdam/files-index v0.0.0-20230710145629-e18136627ae6
-	github.com/pasdam/go-files-test v0.0.0-20210125082053-e1c8203c662c
-	github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f
-	github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e
-	github.com/pasdam/go-utils v0.0.0-20230712123701-d4916bc6a231
+	github.com/pasdam/files-index v0.0.0-20230710145629-e18136627ae6 // indirect
+	github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f // indirect
+	github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e // indirect
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
 )
+
+require github.com/pasdam/go-files-test v0.0.0-20200501091338-451ab9b14024
 
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
@@ -29,9 +29,9 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/objx v0.5.0 // indirect
 	golang.org/x/crypto v0.0.0-20200414173820-0848c9571904 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
