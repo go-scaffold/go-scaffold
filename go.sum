@@ -9,6 +9,8 @@ github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ3
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/go-scaffold/go-sdk v0.0.0-20230716013513-b836a4a581e1 h1:yAC175e4RZW2dVh5jyLANwHBYAyNhnjk0D+V9BemTMI=
+github.com/go-scaffold/go-sdk v0.0.0-20230716013513-b836a4a581e1/go.mod h1:7jXsuFLJHVwXDqHVtOFbYu5+L+/pDCFJ0cpntymhV90=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/huandu/xstrings v1.3.2 h1:L18LIDzqlW6xN2rEkpdV8+oL/IXWJ1APd+vsdYy4Wdw=
@@ -35,8 +37,8 @@ github.com/pasdam/files-index v0.0.0-20230710145629-e18136627ae6/go.mod h1:XC2cz
 github.com/pasdam/go-files-test v0.0.0-20200501091338-451ab9b14024/go.mod h1:k5uAfQsYzk+bE0uXLvnHRB4uFjMzPvkveMZCRio/plk=
 github.com/pasdam/go-files-test v0.0.0-20210125082053-e1c8203c662c h1:UWjGZW4QtKxc2NbCd8jg6oNagrmprVADQFF0FZudLN0=
 github.com/pasdam/go-files-test v0.0.0-20210125082053-e1c8203c662c/go.mod h1:k5uAfQsYzk+bE0uXLvnHRB4uFjMzPvkveMZCRio/plk=
-github.com/pasdam/go-io-utilx v0.0.0-20210125081100-08a73663a45e h1:S6E/MCw351KGVdIJm85qe/raaaTj3rj1FolJDS0+ASc=
-github.com/pasdam/go-io-utilx v0.0.0-20210125081100-08a73663a45e/go.mod h1:pHfuFmyeOGkQD1CllFWukyDyrvbD5qW7Gt4pMxzXQYc=
+github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f h1:Imfn3+lIWNFcxl5d1HW+PGUNHoM5wbhkPRpCHeUaEJE=
+github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f/go.mod h1:mngEm8P39lArnQL8pyRrSFTlQCIs7vj7++X+kjIyOE8=
 github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e h1:ePV4YqUFPG5c26jS3kIquTPLrn7GY2iteD9VgUNKVHk=
 github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e/go.mod h1:F6Ns/fVvaRYVNyRyErN+4odUyPCMnKv5z9Q4Td+BR0w=
 github.com/pasdam/go-test-utils v0.0.0-20230710135805-45ec4e440661 h1:6Nr3eIGr64N/yyyzit4R5Cb5eskKL+XnoRPZ6iZX8hA=
@@ -55,7 +57,6 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0 h1:1zr/of2m5FGMsad5YfcqgdqdWrIhu+EBEJRhR1U7z/c=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
-github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=

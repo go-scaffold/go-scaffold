@@ -4,10 +4,11 @@ replace github.com/pasdam/go-scaffold/pkg => ./pkg
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
+	github.com/go-scaffold/go-sdk v0.0.0-20230716013513-b836a4a581e1
 	github.com/iancoleman/strcase v0.1.3
 	github.com/pasdam/files-index v0.0.0-20230710145629-e18136627ae6
 	github.com/pasdam/go-files-test v0.0.0-20210125082053-e1c8203c662c
-	github.com/pasdam/go-io-utilx v0.0.0-20210125081100-08a73663a45e
+	github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f
 	github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e
 	github.com/pasdam/go-utils v0.0.0-20230712123701-d4916bc6a231
 	github.com/spf13/cobra v1.7.0

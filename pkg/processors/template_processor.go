@@ -4,8 +4,8 @@ import (
 	"io"
 	"text/template"
 
+	"github.com/go-scaffold/go-sdk/pkg/templates"
 	"github.com/pasdam/go-scaffold/pkg/core"
-	"github.com/pasdam/go-scaffold/pkg/templates"
 )
 
 var templatesProcessTemplate = templates.ProcessTemplate

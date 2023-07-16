@@ -3,8 +3,8 @@ package app
 import (
 	"text/template"
 
+	"github.com/go-scaffold/go-sdk/pkg/filters"
 	"github.com/pasdam/go-scaffold/pkg/core"
-	"github.com/pasdam/go-scaffold/pkg/filters"
 	"github.com/pasdam/go-scaffold/pkg/helpers"
 	"github.com/pasdam/go-scaffold/pkg/processors"
 )
