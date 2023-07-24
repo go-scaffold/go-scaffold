@@ -181,3 +181,20 @@ func TestRunWithCustomComponents_ShouldProcessValidTemplateWithCustomDataPreproc
 		filestest.FileExistsWithContent(t, filepath.Join(options.OutputPath, file.path), file.content)
 	}
 }
+
+func Test_real(t *testing.T) {
+	// Precondition(s)
+
+	templateRoot := filepath.Join("..", "..", "examples", "openresume")
+
+	// Operation
+	Run(&config.Options{
+		OutputPath: filepath.Join(templateRoot, "out"),
+		Values: []string{
+			filepath.Join("..", "..", "examples", "openresume", "values-pasquale.yaml"),
+		},
+		TemplateRootPath: templateRoot,
+	})
+
+	// Assertion(s)
+}

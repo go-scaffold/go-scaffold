@@ -1,0 +1,507 @@
+{{- define "iconFromType" }}{{ if eq . "email" }}fas fa-envelope{{ else if eq . "phone" }}fas fa-phone{{ else }}fab fa-{{ . }}{{ end }}{{ end }}
+{{- define "formatDate" }}{{ printf "%.7s" . }}{{ end }}
+{{- define "fromTo" }}{{ template "formatDate" .from }}{{ if .to }} - {{ if toString .to | eq "Present" }}{{ .to }}{{ else }}{{ template "formatDate" .to }}{{ end }}{{ end }}{{ end }}
+{{- define "locationCountry" }}{{ if .countryCode }} ({{.countryCode}}){{ end }}{{ end }}
+{{- define "SectionHeader" -}}
+	<div class="section-header">
+		<div class="container">
+			<div class="text">{{ printf "%s" . }}</div>
+		</div>
+	</div>
+{{- end -}}
+{{- define "langDot" -}}
+	{{ $fullCount := 0 }}
+	{{ if eq . "A1" -}}{{ $fullCount = 1 }}{{ else -}}
+	{{- if eq . "A2" -}}{{ $fullCount = 2 }}{{ else -}}
+	{{- if (or (eq . "B1") (eq . "B2")) -}}{{ $fullCount = 3 }}{{ else -}}
+	{{- if (or (eq . "C1") (eq . "C2")) -}}{{ $fullCount = 4 }}{{ else -}}
+	{{- if eq . "N" -}}{{ $fullCount = 5 }}{{- end }}{{- end }}{{- end }}{{- end }}{{- end }}
+	{{ $emptyCount := sub 5 $fullCount | int }}
+	{{- range sequence $fullCount }}<div class="dotContainer"><div class="dot full"></div></div>{{ end }}
+	{{- range sequence $emptyCount }}<div class="dotContainer"><div class="dot empty"></div></div>{{ end }}
+{{ end -}}
+<html>
+	<head>
+		<title>{{ .Values.person.firstName }}{{ with .Values.person.lastName }} {{.}}{{end}}'s CV</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" crossorigin="anonymous" />
+		<link rel="shortcut icon" type="image/png" href="/favicon.png" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@100&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Quattrocento+Sans&family=Work+Sans:wght@100&display=swap" rel="stylesheet">
+		<meta charset="UTF-8" />
+		<style>
+			li, p, ul {
+				margin-bottom : 0;
+			}
+
+			* {
+				font-family: 'Quattrocento Sans', sans-serif;
+			}
+
+			a, a:hover, a:active {
+				color: #00B400;
+				text-shadow: none;
+				text-decoration: none;
+			}
+
+			h1, h2, h3, h4, h5, h6 {
+				font-family: 'Work Sans', sans-serif;
+			}
+
+			.primaryColor {
+				color: #00B400;
+			}
+
+			.column {
+				float      : left;
+				min-height : 1px;
+			}
+
+			.cv {
+				display   : inline-block;
+				font-size : 15px;
+			}
+
+			.cvBody {
+				display : inline-block;
+			}
+
+			.leftColumn {
+				width         : 60%;
+			}
+
+			.printMsg {
+				margin-left: 10px;
+			}
+
+			.printWrapper {
+				display: inline-block;
+			}
+
+			.rightColumn {
+				width : 40%;
+			}
+
+			.skillsContainer {
+				border-radius : 5px;
+				border        : 1px solid transparent;
+				color         : #000;
+				padding       : 15px 15px 0;
+			}
+
+			.header .col {
+				box-sizing : border-box;
+				float      : left;
+			}
+
+			.header .colDetails {
+				min-height : 150px;
+				width      : 80%;
+			}
+
+			.header .colPhoto {
+				float : right;
+				width : 20%;
+			}
+
+			.header {
+				padding : 0 15px;
+			}
+
+			.header .icon {
+				text-align : center;
+				width      : 15px;
+			}
+
+			.header .infos {
+				box-sizing : border-box;
+				margin-top : 20px;
+			}
+
+			.header .infos .cell {
+				align-items    : center;
+				display        : inline-block;
+				padding-bottom : 7px;
+				width          : 33%;
+			}
+
+			.header .infos .cellValue {
+				font-size   : 12px;
+				font-weight : 700;
+				line-height : 16px;
+					margin-left : 5px;
+			}
+
+			.header .name {
+				font-size   : 42px;
+				font-weight : 600;
+			}
+
+			.header .photo {
+				background-image : url(./profile_pic.jpg);
+				background-size  : cover;
+				border-radius    : 50%;
+				height           : 150px;
+				width            : 150px;
+			}
+
+			.header .tagline {
+				font-size   : 21px;
+				font-weight : 600;
+			}
+
+			:global(.print) .header .cell {
+				width : 33%;
+			}
+
+			:global(.print) .header .colDetails {
+				width : 80%;
+			}
+
+			:global(.print) .header .colPhoto {
+				float : right;
+				width : 20%;
+			}
+
+			:global(.print) .header .name, :global(.print) .header .tagline {
+				line-height : initial;
+				text-align  : left;
+			}
+
+			.experience .cell,
+			.education .cell {
+				display        : inline-block;
+				align-items    : center;
+				padding-bottom : 0;
+				padding-right  : 15px;
+			}
+
+			.experience .icon,
+			.education .icon {
+				margin-right : 5px;
+			}
+
+			.experience .company {
+				float      : right;
+				height     : 20px;
+				margin-top : 3px;
+			}
+
+			.experience .companyText {
+				font-size        : 15px;
+				background-image : none;
+				font-weight      : 700;
+				text-shadow      : none;
+			}
+
+			.experience .description p, .description ul {
+				margin-top : 5px;
+			}
+
+			.experience .detailsContainer {
+				padding-top      : 0;
+				align-items      : center;
+				background-color : transparent;
+				border-color     : transparent;
+				border-radius    : 0;
+				color            : #333;
+				line-height      : normal;
+				margin           : 4px 0;
+				padding-bottom   : 0;
+				padding-left     : 0;
+				padding-right    : 15px;
+				text-align       : left;
+				white-space      : normal;
+			}
+
+			.experience {
+				padding       : 15px 15px 0;
+				border-radius : 5px;
+				border        : 1px solid transparent;
+				color         : #000;
+			}
+
+			.experience .innerContainer {
+				border-bottom  : 1px dashed #ccc;
+				padding-bottom : 15px;
+			}
+
+			.experience .title {
+				display   : inline-block;
+				font-size : 21px;
+			}
+
+			.section-header .container {
+				margin : 10px 15px 0;
+			}
+
+			.section-header .text {
+				border-bottom  : 3px solid #000;
+				display        : block;
+				font-size      : 28px;
+				font-weight    : 600;
+				line-height    : 28px;
+				margin         : 0;
+				padding-bottom : 5px;
+				text-transform : uppercase;
+			}
+
+			.education {
+				padding : 15px 15px 0;
+			}
+
+			.education .description {
+				display    : block;
+				margin-top : 0.5em;
+			}
+
+			.education .details {
+				align-items : center;
+				line-height : normal;
+				margin-top  : 0.5em;
+				padding     : 0 15px 0 0;
+				text-align  : left;
+			}
+
+			.education .inner {
+				border-bottom  : 1px dashed #ccc;
+				padding-bottom : 15px;
+			}
+
+			.education .institution {
+				font-size   : 15px;
+				font-weight : 700;
+				margin-top  : 3px;
+				height      : 20px;
+			}
+
+			.education .title {
+				font-size : 21px;
+			}
+
+			.lang .dot {
+				border-radius : 10px;
+				display       : inline-block;
+				height        : 16px;
+				margin        : 0 2px;
+				width         : 16px;
+			}
+
+			.lang .dotContainer {
+				float : left;
+			}
+
+			.lang .empty {
+				background-color : gray;
+			}
+
+			.lang .full {
+				background-color : #00B400;
+			}
+
+			.lang .inner {
+				align-items     : center;
+				border-bottom   : 1px dashed #ccc;
+				justify-content : space-between;
+				padding-bottom  : 15px;
+			}
+
+			.lang .row {
+				border-radius : 5px;
+				border        : 1px solid transparent;
+				color         : #000;
+				padding       : 15px 15px 0;
+			}
+
+			.lang .inner > div {
+				display     : inline-block;
+			}
+
+			.lang .level {
+				float: right;
+			}
+
+			.lang .text {
+				font-size   : 15px;
+				font-weight : 700;
+			}
+
+			.tag {
+				background  : transparent;
+				border      : 1px solid #a9a9a9;
+				display     : inline-block;
+				font-size   : 12px;
+				font-weight : 700;
+				margin      : 5px;
+				max-width   : 95%;
+				min-width   : 20px;
+				padding     : 5px 8px;
+				text-align  : center;
+			}
+
+			@media print {
+				header {
+					display: none !important;
+				}
+
+				body {
+					background-image : none;
+				}
+
+				.header .colDetails {
+					min-height : 150px;
+					width      : 80%;
+				}
+
+				.header .colPhoto {
+					float : right;
+					width : 20%;
+				}
+
+				.header .name, .header .tagline {
+					text-align  : initial;
+				}
+
+				.printBtn {
+					display: none !important;
+				}
+
+				.leftColumn {
+					width         : 60%;
+					float         : left;
+				}
+
+				.rightColumn {
+					width : 40%;
+				}
+			}
+
+			/* @media (max-width: 600px) {
+				.header .cell {
+					margin    : auto;
+					min-width : 180px;
+					width     : initial;
+				}
+			}
+
+			@media (max-width: 500px) {
+				.experience .company {
+					float : none;
+					margin-bottom: 0.8em;
+				}
+			}
+
+			@media (max-width: 750px) {
+				.leftColumn {
+					width         : 100%;
+					float         : none;
+				}
+
+				.rightColumn {
+					width : 100%;
+				}
+
+				.header .colDetails {
+					width : 100%;
+				}
+
+				.header .colPhoto {
+					float : none;
+					width : initial;
+				}
+
+				.header .photo {
+					margin : auto;
+				}
+
+				.header .name, .tagline {
+					line-height : normal;
+					text-align  : center;
+				}
+			} */
+		</style>
+	</head>
+	<body>
+		<div class="cv">
+			<div class="header">
+				<div class="col colPhoto">
+					<div class="photo"></div>
+				</div>
+				<div class="col colDetails">
+					<div class="name">{{ .Values.person.firstName }} {{ .Values.person.lastName }}</div>
+					<div class="tagline primaryColor">{{ .Values.tagline }}</div>
+					<div class="infos">
+						<div class="cell"><i class="icon primaryColor fas fa-map-marker"></i><span class="cellValue">{{ .Values.location.city }} ({{ .Values.location.countryCode }})</span></div>
+						{{ range .Values.contacts -}}
+						<div class="cell"><i class="icon primaryColor {{ template "iconFromType" .type }}"></i><span class="cellValue">{{ .value }}</span></div>
+						{{- end }}
+					</div>
+				</div>
+				<div style="clear: 'both'"></div>
+			</div>
+			<div class="cvBody">
+				<div class="column leftColumn">
+					{{ template "SectionHeader" "Relevant Experience" }}
+					{{ range .Values.experience }}{{ if .visible -}}
+					<div class="experience">
+						<div class="innerContainer">
+							<div class="title">{{ .role }}</div>
+							<div class="company">
+								{{ if .company.url }}<a href={{ .company.url }} target="_blank" rel="noreferrer" class="primaryColor">{{ end }}{{ .company.name }}{{ if .company.url }}</a>{{ end }}
+							</div>
+							<div class="detailsContainer">
+								<div class="cell"><i class="icon fas fa-calendar-alt"></i><span class="cellValue">{{ template "fromTo" . }}</span></div>
+								<div class="cell"><i class="icon fas fa-map-marker"></i><span class="cellValue">{{ .location.city }}{{ template "locationCountry" .location }}</span></div>
+							</div>
+							{{ if .description -}}
+							<div class="description">
+								{{ .description }}
+							</div>
+							{{- end }}
+						</div>
+					</div>
+					{{- end}}{{ end }}
+				</div>
+				<div class="column rightColumn">
+					{{ template "SectionHeader" "Education" }}
+					{{ range .Values.education }}{{ if .visible -}}
+					<div class="education">
+						<div class="inner">
+							<div class="title">{{ if .area }}{{ .area }}<br/>{{ end }}{{ .studyType }}</div>
+							<div class="institution primaryColor">{{ .institution }}</div>
+							<div class="details">
+								<div class="cell"><i class="icon fas fa-calendar-alt"></i><span class="cellValue">{{ template "fromTo" . }}</span></div>
+								{{ if .location }}<div class="cell"><i class="icon fa fa-map-marker"></i><span class="cellValue">{{ .location.city }} ({{ .location.countryCode }})</span></div>{{ end }}
+							</div>
+							<div class="description">
+								<p>{{ .description }}</p>
+							</div>
+						</div>
+					</div>
+					{{- end}}{{ end }}
+					{{ template "SectionHeader" "Languages" }}
+					{{ range .Values.languages }}
+					<div class="lang">
+						<div class="row">
+							<div class="inner">
+								<div class="text">{{ .name }}</div>
+								<div class="level">{{ template "langDot" .level }}</div>
+							</div>
+						</div>
+					</div>
+					{{- end}}
+					{{ template "SectionHeader" "Skills" }}
+					<div class="skillsContainer">
+						{{ range .Values.skills }}<div class="tag">{{.}}</div>{{end }}
+					</div>
+				</div>
+			</div>
+			<div class="printWrapper">
+				<button class="printBtn" onClick="window.print();">Print</button>
+				<span class="printMsg primaryColor">Please consider the environment before printing</span>
+			</div>
+		</div>
+	</body>
+</html>

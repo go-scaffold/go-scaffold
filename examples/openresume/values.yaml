@@ -1,0 +1,23 @@
+contacts: []
+
+education: []
+
+experience: []
+
+languages: []
+
+location: {}
+
+person:
+  firstName:
+
+schemaVersion: 1.0.0
+
+skills: []
+
+summary:
+
+tagline:
+
+settings:
+  disableHeaderBrackets: false
