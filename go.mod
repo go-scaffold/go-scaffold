@@ -5,7 +5,7 @@ replace github.com/pasdam/go-scaffold/pkg => ./pkg
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/go-scaffold/go-sdk v0.0.0-20230723140645-5908bbfcad2e
-	github.com/iancoleman/strcase v0.1.3
+	github.com/iancoleman/strcase v0.3.0
 	github.com/pasdam/files-index v0.0.0-20230710145629-e18136627ae6 // indirect
 	github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f // indirect
 	github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e // indirect
