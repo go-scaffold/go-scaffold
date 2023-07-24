@@ -10,6 +10,9 @@ be general purpose.
 
 You can look at the [examples](./examples) folder to checkout some examples.
 
+**Note**: if you are looking for the legacy version of the application, please
+check the `legacy` branch.
+
 ## Build and install
 
 To build the executable:
