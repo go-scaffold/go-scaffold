@@ -23,7 +23,7 @@ jobs:
 
       - run: make go-coverage
 
-      - uses: actions/upload-artifact@v3.1.0
+      - uses: actions/upload-artifact@v3.1.2
         with:
           name: coverage.html
           path: /tmp/coverage.html
