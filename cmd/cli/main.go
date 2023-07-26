@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/pasdam/go-scaffold/pkg/app"
-	"github.com/pasdam/go-scaffold/pkg/config"
+	"github.com/go-scaffold/go-scaffold/pkg/app"
+	"github.com/go-scaffold/go-scaffold/pkg/config"
 	"github.com/spf13/cobra"
 )
 

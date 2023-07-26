@@ -1,7 +1,7 @@
 # go-scaffold
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/pasdam/go-scaffold)](https://goreportcard.com/report/github.com/pasdam/go-scaffold)
-[![CI Status](https://github.com/pasdam/go-scaffold/workflows/Continuous%20integration/badge.svg)](https://github.com/pasdam/go-scaffold/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-scaffold/go-scaffold)](https://goreportcard.com/report/github.com/go-scaffold/go-scaffold)
+[![CI Status](https://github.com/go-scaffold/go-scaffold/workflows/Continuous%20integration/badge.svg)](https://github.com/go-scaffold/go-scaffold/actions)
 
 Command line application that generates files/projects from a template.
 

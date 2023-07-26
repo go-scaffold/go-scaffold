@@ -4,13 +4,13 @@ import (
 	"log"
 
 	"github.com/Masterminds/sprig"
+	"github.com/go-scaffold/go-scaffold/pkg/config"
+	"github.com/go-scaffold/go-scaffold/pkg/helpers"
 	"github.com/go-scaffold/go-sdk/pkg/collectors"
 	"github.com/go-scaffold/go-sdk/pkg/filters"
 	"github.com/go-scaffold/go-sdk/pkg/pipeline"
 	"github.com/go-scaffold/go-sdk/pkg/templateproviders"
 	"github.com/go-scaffold/go-sdk/pkg/values"
-	"github.com/pasdam/go-scaffold/pkg/config"
-	"github.com/pasdam/go-scaffold/pkg/helpers"
 )
 
 var errHandler = log.Fatal

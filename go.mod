@@ -1,6 +1,6 @@
-module github.com/pasdam/go-scaffold
+module github.com/go-scaffold/go-scaffold
 
-replace github.com/pasdam/go-scaffold/pkg => ./pkg
+replace github.com/go-scaffold/go-scaffold/pkg => ./pkg
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pasdam/go-scaffold/pkg/config"
+	"github.com/go-scaffold/go-scaffold/pkg/config"
 )
 
 func TestOptions_ManifestPath(t *testing.T) {

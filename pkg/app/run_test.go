@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/go-scaffold/go-scaffold/pkg/config"
 	"github.com/pasdam/go-files-test/pkg/filestest"
-	"github.com/pasdam/go-scaffold/pkg/config"
 	"github.com/stretchr/testify/assert"
 )
 

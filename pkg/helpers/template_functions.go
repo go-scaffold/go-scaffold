@@ -4,9 +4,9 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig"
+	"github.com/go-scaffold/go-scaffold/pkg/helpers/collections"
+	"github.com/go-scaffold/go-scaffold/pkg/helpers/strings"
 	"github.com/iancoleman/strcase"
-	"github.com/pasdam/go-scaffold/pkg/helpers/collections"
-	"github.com/pasdam/go-scaffold/pkg/helpers/strings"
 )
 
 func TemplateFunctions(funcMap template.FuncMap) template.FuncMap {
