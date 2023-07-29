@@ -39,7 +39,7 @@ func RunWithFileProvider(options *config.Options, fileProvider pipeline.Template
 	valuesPaths = append(valuesPaths, options.Values...)
 	data, err := values.LoadYamlFilesWithPrefix("", valuesPaths...)
 	if err != nil {
-		log.Fatal("error while loading data.", err)
+		log.Fatal("error while loading data. ", err)
 		return
 	}
 
@@ -51,13 +51,13 @@ func RunWithFileProvider(options *config.Options, fileProvider pipeline.Template
 		WithCollector(collectors.NewFileWriterCollector(options.OutputPath, nil)).
 		Build()
 	if err != nil {
-		log.Fatal("error while building the processing pipeline.", err)
+		log.Fatal("error while building the processing pipeline. ", err)
 		return
 	}
 
 	err = pp.Process()
 	if err != nil {
-		log.Fatal("error while running the pipeline.", err)
+		log.Fatal("error while running the pipeline. ", err)
 		return
 	}
 }
