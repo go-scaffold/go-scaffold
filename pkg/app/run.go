@@ -2,8 +2,8 @@ package app
 
 import (
 	"log"
+	"text/template"
 
-	"github.com/Masterminds/sprig"
 	"github.com/go-scaffold/go-scaffold/pkg/config"
 	"github.com/go-scaffold/go-scaffold/pkg/helpers"
 	"github.com/go-scaffold/go-sdk/pkg/collectors"
@@ -16,13 +16,13 @@ import (
 var errHandler = log.Fatal
 
 // Run starts the app
-func Run(options *config.Options) {
+func Run(options *config.Options, funcMaps ...template.FuncMap) {
 	fileProvider := templateproviders.NewFileSystemProvider(string(options.TemplateDirPath()), filters.NewNoOpFilter())
-	RunWithFileProvider(options, fileProvider)
+	RunWithFileProvider(options, fileProvider, funcMaps...)
 }
 
 // Run starts the app
-func RunWithFileProvider(options *config.Options, fileProvider pipeline.TemplateProvider) {
+func RunWithFileProvider(options *config.Options, fileProvider pipeline.TemplateProvider, funcMaps ...template.FuncMap) {
 	if options.TemplateRootPath == options.OutputPath {
 		log.Fatal("Can't generate file in the input folder, please specify an output directory")
 		return
@@ -46,7 +46,7 @@ func RunWithFileProvider(options *config.Options, fileProvider pipeline.Template
 	pp, err := pipeline.NewBuilder().
 		WithMetadata(manifest).
 		WithData(data).
-		WithFunctions(helpers.TemplateFunctions(sprig.FuncMap())).
+		WithFunctions(helpers.TemplateFunctions(funcMaps...)).
 		WithTemplateProvider(fileProvider).
 		WithCollector(collectors.NewFileWriterCollector(options.OutputPath, nil)).
 		Build()

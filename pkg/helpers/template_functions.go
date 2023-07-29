@@ -9,10 +9,13 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
-func TemplateFunctions(funcMap template.FuncMap) template.FuncMap {
+func TemplateFunctions(funcMaps ...template.FuncMap) template.FuncMap {
 	sprigFuncMap := sprig.TxtFuncMap()
 	sprigFuncMap["camelcase"] = strcase.ToCamel
 	sprigFuncMap["replace"] = strings.Replace
 	sprigFuncMap["sequence"] = collections.Sequence
-	return mergeFuncMaps(sprigFuncMap, funcMap)
+	maps := make([]template.FuncMap, 0, len(funcMaps)+1)
+	maps = append(maps, sprigFuncMap)
+	maps = append(maps, funcMaps...)
+	return mergeFuncMaps(maps)
 }
