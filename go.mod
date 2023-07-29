@@ -13,7 +13,10 @@ require (
 	github.com/stretchr/testify v1.8.4
 )
 
-require github.com/pasdam/go-files-test v0.0.0-20200501091338-451ab9b14024
+require (
+	github.com/pasdam/go-files-test v0.0.0-20200501091338-451ab9b14024
+	github.com/pasdam/go-utils v0.0.0-20230718144448-c56c396f6c77
+)
 
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
@@ -31,7 +34,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 

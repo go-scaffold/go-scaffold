@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/go-scaffold/go-scaffold/pkg/app"
@@ -49,5 +50,8 @@ func generate(cmd *cobra.Command, args []string) {
 		Values:           values,
 	}
 
-	app.Run(options)
+	err = app.Run(options)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

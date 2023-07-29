@@ -1,6 +1,8 @@
 package app
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"text/template"
 
@@ -16,22 +18,20 @@ import (
 var errHandler = log.Fatal
 
 // Run starts the app
-func Run(options *config.Options, funcMaps ...template.FuncMap) {
+func Run(options *config.Options, funcMaps ...template.FuncMap) error {
 	fileProvider := templateproviders.NewFileSystemProvider(string(options.TemplateDirPath()), filters.NewNoOpFilter())
-	RunWithFileProvider(options, fileProvider, funcMaps...)
+	return RunWithFileProvider(options, fileProvider, funcMaps...)
 }
 
 // Run starts the app
-func RunWithFileProvider(options *config.Options, fileProvider pipeline.TemplateProvider, funcMaps ...template.FuncMap) {
+func RunWithFileProvider(options *config.Options, fileProvider pipeline.TemplateProvider, funcMaps ...template.FuncMap) error {
 	if options.TemplateRootPath == options.OutputPath {
-		log.Fatal("Can't generate file in the input folder, please specify an output directory")
-		return
+		return errors.New("can't generate file in the input folder, please specify an output directory")
 	}
 
 	manifest, err := values.LoadYamlFilesWithPrefix("", options.ManifestPath())
 	if err != nil {
-		log.Fatal("An error occurred while reading the manifest file: ", err.Error())
-		return
+		return errors.New(fmt.Sprintf("an error occurred while reading the manifest file: %s", err.Error()))
 	}
 
 	valuesPaths := make([]string, 0, len(options.Values)+1)
@@ -39,8 +39,7 @@ func RunWithFileProvider(options *config.Options, fileProvider pipeline.Template
 	valuesPaths = append(valuesPaths, options.Values...)
 	data, err := values.LoadYamlFilesWithPrefix("", valuesPaths...)
 	if err != nil {
-		log.Fatal("error while loading data. ", err)
-		return
+		return errors.New(fmt.Sprintf("error while loading data: %s", err.Error()))
 	}
 
 	pp, err := pipeline.NewBuilder().
@@ -51,13 +50,12 @@ func RunWithFileProvider(options *config.Options, fileProvider pipeline.Template
 		WithCollector(collectors.NewFileWriterCollector(options.OutputPath, nil)).
 		Build()
 	if err != nil {
-		log.Fatal("error while building the processing pipeline. ", err)
-		return
+		return errors.New(fmt.Sprintf("error while building the processing pipeline: %s", err))
 	}
 
 	err = pp.Process()
 	if err != nil {
-		log.Fatal("error while running the pipeline. ", err)
-		return
+		return errors.New(fmt.Sprintf("error while running the pipeline: %s", err.Error()))
 	}
+	return nil
 }
