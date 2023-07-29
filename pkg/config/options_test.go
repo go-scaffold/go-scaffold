@@ -10,6 +10,7 @@ import (
 
 func TestOptions_ManifestPath(t *testing.T) {
 	type fields struct {
+		ManifestName     string
 		OutputPath       string
 		TemplateRootPath string
 		Values           []string
@@ -20,14 +21,25 @@ func TestOptions_ManifestPath(t *testing.T) {
 		want   string
 	}{
 		{
-			name:   "Should return expected value",
-			fields: fields{TemplateRootPath: "manifest-test"},
-			want:   filepath.Join("manifest-test", "Manifest.yaml"),
+			name: "Should return expected value with default manifest",
+			fields: fields{
+				TemplateRootPath: "manifest-test",
+			},
+			want: filepath.Join("manifest-test", "Manifest.yaml"),
+		},
+		{
+			name: "Should return expected value with custom manifest",
+			fields: fields{
+				ManifestName:     "Chart.yaml",
+				TemplateRootPath: "chart-test",
+			},
+			want: filepath.Join("chart-test", "Chart.yaml"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			o := &config.Options{
+				ManifestName:     tt.fields.ManifestName,
 				OutputPath:       tt.fields.OutputPath,
 				TemplateRootPath: tt.fields.TemplateRootPath,
 				Values:           tt.fields.Values,
