@@ -15,8 +15,8 @@ func Test_Run_Success_ValidTemplate(t *testing.T) {
 
 	Run(options)
 
-	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "file.txt"), "This is a {{ .Values.text }}\n")
-	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "normal_file.txt"), "normal-file-content\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "templates", "file.txt"), "This is a {{ .Values.text }}\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "templates", "normal_file.txt"), "normal-file-content\n")
 	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
 	filestest.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
 }
@@ -27,8 +27,8 @@ func Test_Run_Success_ShouldNotRemoveSourceIfOptionIsSetButProcessIsNotInPlace(t
 
 	Run(options)
 
-	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "file.txt"), "This is a {{ .Values.text }}\n")
-	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "template", "normal_file.txt"), "normal-file-content\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "templates", "file.txt"), "This is a {{ .Values.text }}\n")
+	filestest.FileExistsWithContent(t, filepath.Join("testdata", "valid_template", "templates", "normal_file.txt"), "normal-file-content\n")
 	filestest.FileExistsWithContent(t, filepath.Join(outDir, "file.txt"), "This is a test!\n")
 	filestest.FileExistsWithContent(t, filepath.Join(outDir, "normal_file.txt"), "normal-file-content\n")
 }

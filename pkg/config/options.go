@@ -22,7 +22,7 @@ func (o *Options) ManifestPath() string {
 
 // TemplateDirPath returns the path of the template dir
 func (o *Options) TemplateDirPath() string {
-	return filepath.Join(string(o.TemplateRootPath), "template")
+	return filepath.Join(string(o.TemplateRootPath), "templates")
 }
 
 // ValuesPath returns the path of the template values definition

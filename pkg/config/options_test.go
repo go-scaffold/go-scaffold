@@ -53,7 +53,7 @@ func TestOptions_TemplateDirPath(t *testing.T) {
 		{
 			name:   "Should return expected value",
 			fields: fields{TemplateRootPath: "template-test"},
-			want:   filepath.Join("template-test", "template"),
+			want:   filepath.Join("template-test", "templates"),
 		},
 	}
 	for _, tt := range tests {
