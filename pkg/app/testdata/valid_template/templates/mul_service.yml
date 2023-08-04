@@ -1,0 +1,3 @@
+{{- range $v := .Values.services }}{{ fileHeader $v }}
+config: some-config-{{ $v }}
+{{ end -}}

@@ -44,6 +44,14 @@ func TestRun(t *testing.T) {
 					path:    "normal_file.txt",
 					content: "normal-file-content\n",
 				},
+				{
+					path:    "service-a",
+					content: "config: some-config-service-a\n",
+				},
+				{
+					path:    "service-b",
+					content: "config: some-config-service-b\n",
+				},
 			},
 		},
 		{

@@ -42,12 +42,20 @@ func RunWithFileProvider(options *config.Options, fileProvider pipeline.Template
 		return errors.New(fmt.Sprintf("error while loading data: %s", err.Error()))
 	}
 
+	collector := collectors.NewSplitterCollector(
+		collectors.NewFileWriterCollector(options.OutputPath, nil),
+	)
+
+	customFuncMap := make(template.FuncMap)
+	customFuncMap["fileHeader"] = collector.CreateHeaderWithName
+	funcMaps = append(funcMaps, customFuncMap)
+
 	pp, err := pipeline.NewBuilder().
 		WithMetadata(manifest).
 		WithData(data).
 		WithFunctions(helpers.TemplateFunctions(funcMaps...)).
 		WithTemplateProvider(fileProvider).
-		WithCollector(collectors.NewFileWriterCollector(options.OutputPath, nil)).
+		WithCollector(collector).
 		Build()
 	if err != nil {
 		return errors.New(fmt.Sprintf("error while building the processing pipeline: %s", err))
