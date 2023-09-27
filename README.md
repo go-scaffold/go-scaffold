@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-scaffold/go-scaffold)](https://goreportcard.com/report/github.com/go-scaffold/go-scaffold)
 [![CI Status](https://github.com/go-scaffold/go-scaffold/workflows/Continuous%20integration/badge.svg)](https://github.com/go-scaffold/go-scaffold/actions)
 
-Command line application that generates files/projects from a template.
+Command line application that generates files/projects from a [template](https://pkg.go.dev/text/template).
 
 The app is heavily inspired by [Helm](https://helm.sh/), but with the intent to
 be general purpose.
