@@ -47,9 +47,7 @@ func RunWithFileProvider(options *config.Options, templateProvider pipeline.Temp
 	customFuncMap["fileHeader"] = collector.CreateHeaderWithName
 	funcMaps = append(funcMaps, customFuncMap)
 
-	pp, err := pipeline.NewBuilder().
-		WithMetadata(manifest).
-		WithData(data).
+	pp, err := pipeline.NewPipelineBuilder().
 		WithFunctions(helpers.TemplateFunctions(funcMaps...)).
 		WithTemplateProvider(templateProvider).
 		WithCollector(collector).
@@ -58,7 +56,7 @@ func RunWithFileProvider(options *config.Options, templateProvider pipeline.Temp
 		return errors.New(fmt.Sprintf("error while building the processing pipeline: %s", err))
 	}
 
-	err = pp.Process()
+	err = pp.Process(manifest, data)
 	if err != nil {
 		return errors.New(fmt.Sprintf("error while running the pipeline: %s", err.Error()))
 	}

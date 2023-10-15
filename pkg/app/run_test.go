@@ -95,15 +95,6 @@ func TestRun(t *testing.T) {
 			wantErr: errors.New("error while loading data: open some-not-existing-file: no such file or directory"),
 		},
 		{
-			name: "Should return error if values are empty",
-			args: args{
-				options: &config.Options{
-					TemplateRootPath: filepath.Join("testdata", "invalid_templates", "empty_values"),
-				},
-			},
-			wantErr: errors.New("error while building the processing pipeline: no data specified in the context"),
-		},
-		{
 			name: "Should return error if processing the templates raises one",
 			args: args{
 				options: &config.Options{
@@ -135,4 +126,15 @@ func TestRun(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestRunWithFileProvider_ShouldReturnErrorIfTemplateProviderIsNil(t *testing.T) {
+	options := &config.Options{
+		TemplateRootPath: filepath.Join("testdata", "invalid_templates", "empty_values"),
+	}
+
+	err := RunWithFileProvider(options, nil)
+
+	assert.Error(t, err)
+	assert.Equal(t, "error while building the processing pipeline: no template processor specified for the pipeline", err.Error())
 }

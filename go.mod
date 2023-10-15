@@ -4,7 +4,7 @@ replace github.com/go-scaffold/go-scaffold/pkg => ./pkg
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/go-scaffold/go-sdk v0.0.0-20230804154129-307fdfa87c76
+	github.com/go-scaffold/go-sdk v0.0.0-20231015130948-fab195182328
 	github.com/iancoleman/strcase v0.3.0
 	github.com/pasdam/files-index v0.0.0-20230710145629-e18136627ae6 // indirect
 	github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f // indirect
