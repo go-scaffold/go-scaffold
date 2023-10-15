@@ -21,7 +21,7 @@ func Run(options *config.Options, funcMaps ...template.FuncMap) error {
 }
 
 // Run starts the app
-func RunWithFileProvider(options *config.Options, fileProvider pipeline.TemplateProvider, funcMaps ...template.FuncMap) error {
+func RunWithFileProvider(options *config.Options, templateProvider pipeline.TemplateProvider, funcMaps ...template.FuncMap) error {
 	if options.TemplateRootPath == options.OutputPath {
 		return errors.New("can't generate file in the input folder, please specify an output directory")
 	}
@@ -51,7 +51,7 @@ func RunWithFileProvider(options *config.Options, fileProvider pipeline.Template
 		WithMetadata(manifest).
 		WithData(data).
 		WithFunctions(helpers.TemplateFunctions(funcMaps...)).
-		WithTemplateProvider(fileProvider).
+		WithTemplateProvider(templateProvider).
 		WithCollector(collector).
 		Build()
 	if err != nil {
