@@ -3,7 +3,6 @@ package app
 import (
 	"errors"
 	"fmt"
-	"log"
 	"text/template"
 
 	"github.com/go-scaffold/go-scaffold/pkg/config"
@@ -14,8 +13,6 @@ import (
 	"github.com/go-scaffold/go-sdk/pkg/templateproviders"
 	"github.com/go-scaffold/go-sdk/pkg/values"
 )
-
-var errHandler = log.Fatal
 
 // Run starts the app
 func Run(options *config.Options, funcMaps ...template.FuncMap) error {
