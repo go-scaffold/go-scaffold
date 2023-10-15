@@ -8,6 +8,8 @@ import (
 	"text/template"
 
 	"github.com/go-scaffold/go-scaffold/pkg/config"
+	"github.com/go-scaffold/go-sdk/pkg/filters"
+	"github.com/go-scaffold/go-sdk/pkg/templateproviders"
 	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/go-utils/pkg/assertutils"
 	"github.com/stretchr/testify/assert"
@@ -128,13 +130,54 @@ func TestRun(t *testing.T) {
 	}
 }
 
-func TestRunWithFileProvider_ShouldReturnErrorIfTemplateProviderIsNil(t *testing.T) {
+func TestRunWithCustomComponents_ShouldReturnErrorIfTemplateProviderIsNil(t *testing.T) {
 	options := &config.Options{
 		TemplateRootPath: filepath.Join("testdata", "invalid_templates", "empty_values"),
 	}
 
-	err := RunWithFileProvider(options, nil)
+	err := RunWithCustomComponents(options, nil, nil)
 
 	assert.Error(t, err)
 	assert.Equal(t, "error while building the processing pipeline: no template processor specified for the pipeline", err.Error())
+}
+
+func TestRunWithCustomComponents_ShouldProcessValidTemplateWithCustomDataPreprocessor(t *testing.T) {
+	options := &config.Options{
+		TemplateRootPath: filepath.Join("testdata", "valid_template"),
+		OutputPath:       filestest.TempDir(t),
+	}
+	type wantFile struct {
+		path    string
+		content string
+	}
+	want := []*wantFile{
+		{
+			path:    "file.txt",
+			content: "This is a test with preprocessing!\n",
+		},
+		{
+			path:    "normal_file.txt",
+			content: "normal-file-content\n",
+		},
+		{
+			path:    "service-a",
+			content: "config: some-config-service-a\n",
+		},
+		{
+			path:    "service-b",
+			content: "config: some-config-service-b\n",
+		},
+	}
+	dataPreprocessor := func(m map[string]interface{}) (map[string]interface{}, error) {
+		m["Values"].(map[string]interface{})["text"] = "test with preprocessing!"
+		return m, nil
+	}
+	fileProvider := templateproviders.NewFileSystemProvider(string(options.TemplateDirPath()), filters.NewNoOpFilter())
+
+	err := RunWithCustomComponents(options, fileProvider, dataPreprocessor)
+
+	assert.NoError(t, err)
+	for _, file := range want {
+		filestest.FileExistsWithContent(t, filepath.Join(options.OutputPath, file.path), file.content)
+	}
 }

@@ -17,11 +17,11 @@ import (
 // Run starts the app
 func Run(options *config.Options, funcMaps ...template.FuncMap) error {
 	fileProvider := templateproviders.NewFileSystemProvider(string(options.TemplateDirPath()), filters.NewNoOpFilter())
-	return RunWithFileProvider(options, fileProvider, funcMaps...)
+	return RunWithCustomComponents(options, fileProvider, nil, funcMaps...)
 }
 
 // Run starts the app
-func RunWithFileProvider(options *config.Options, templateProvider pipeline.TemplateProvider, funcMaps ...template.FuncMap) error {
+func RunWithCustomComponents(options *config.Options, templateProvider pipeline.TemplateProvider, dataPreprocessor pipeline.DataPreprocessor, funcMaps ...template.FuncMap) error {
 	if options.TemplateRootPath == options.OutputPath {
 		return errors.New("can't generate file in the input folder, please specify an output directory")
 	}
@@ -47,7 +47,9 @@ func RunWithFileProvider(options *config.Options, templateProvider pipeline.Temp
 	customFuncMap["fileHeader"] = collector.CreateHeaderWithName
 	funcMaps = append(funcMaps, customFuncMap)
 
-	pp, err := pipeline.NewPipelineBuilder().
+	pp, err := pipeline.
+		NewPipelineBuilder().
+		WithDataPreprocessor(dataPreprocessor).
 		WithFunctions(helpers.TemplateFunctions(funcMaps...)).
 		WithTemplateProvider(templateProvider).
 		WithCollector(collector).
