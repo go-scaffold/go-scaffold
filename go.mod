@@ -9,7 +9,7 @@ require (
 	github.com/pasdam/files-index v0.0.0-20230710145629-e18136627ae6 // indirect
 	github.com/pasdam/go-io-utilx v0.0.0-20220330024157-8a4f40bb630f // indirect
 	github.com/pasdam/go-template-map-loader v0.0.0-20230710141516-e9f048463b7e // indirect
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 )
 
