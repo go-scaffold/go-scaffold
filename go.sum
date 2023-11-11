@@ -9,8 +9,8 @@ github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ3
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/go-scaffold/go-sdk v0.0.0-20231015130948-fab195182328 h1:ISuA9Y4umouNjHqxSgnYhdBjoPLW7fr3Ep+o2WGMltg=
-github.com/go-scaffold/go-sdk v0.0.0-20231015130948-fab195182328/go.mod h1:HUCZfnKOIywMSj2TcuPRRnXtzXx4hRqeIKECFCezRZc=
+github.com/go-scaffold/go-sdk v0.0.0-20231111010258-d523b0c1975c h1:2ciQcbQyhuNbePFUHnrHO6v22+jXx6qZMLHUR9SrPWs=
+github.com/go-scaffold/go-sdk v0.0.0-20231111010258-d523b0c1975c/go.mod h1:HUCZfnKOIywMSj2TcuPRRnXtzXx4hRqeIKECFCezRZc=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/huandu/xstrings v1.3.2 h1:L18LIDzqlW6xN2rEkpdV8+oL/IXWJ1APd+vsdYy4Wdw=
