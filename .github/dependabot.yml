@@ -1,9 +1,9 @@
 version: 2
 updates:
-  - package-ecosystem: "docker"
+  - package-ecosystem: docker
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: daily
 
   - package-ecosystem: github-actions
     directory: "/"
@@ -19,3 +19,4 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+
