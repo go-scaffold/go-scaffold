@@ -39,3 +39,4 @@ jobs:
 
       - name: Build the Docker image
         run: make docker-build
+
