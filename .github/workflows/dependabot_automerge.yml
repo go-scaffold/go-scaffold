@@ -1,9 +1,10 @@
-name: Dependabot auto-merge
+name: Dependabot auto-merge PR ${{ github.event.workflow_run.pull_requests[0].number }}
 on:
   workflow_run:
     branches:
       - dependabot/go_modules/**
       - dependabot/submodules/**
+      - dependabot/docker/**
     types:
       - completed
     workflows:
