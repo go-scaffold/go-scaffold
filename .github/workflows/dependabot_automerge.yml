@@ -4,11 +4,10 @@ on:
   workflow_run:
     branches:
       - dependabot/**
-      - dependabot/docker/**
     types:
       - completed
     workflows:
-      - 'Continuous integration'
+      - "Continuous integration"
 
 jobs:
   dependabot:
