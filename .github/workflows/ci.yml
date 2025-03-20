@@ -33,7 +33,7 @@ jobs:
           cat coverage.log | grep "$(basename $PWD).*coverage:" | cut -d$'\t' -f2,4 | sed "s/\tcoverage//" | sed "s/ of statements//" >> $GITHUB_STEP_SUMMARY
           cat coverage.log | grep "^total:" | sed "s/(statements)//" | tr -s "\t" | sed 's/\t/ /g' >> $GITHUB_STEP_SUMMARY
 
-      - uses: actions/upload-artifact@v4.6.1
+      - uses: actions/upload-artifact@v4.6.2
         with:
           name: coverage.html
           path: .build/coverage/coverage.html
