@@ -1,7 +1,5 @@
 module github.com/go-scaffold/go-scaffold
 
-replace github.com/go-scaffold/go-scaffold/pkg => ./pkg
-
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/go-scaffold/go-sdk v0.0.0-20231111010258-d523b0c1975c
