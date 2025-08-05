@@ -13,7 +13,7 @@ ADD ./go.sum ./go.sum
 ADD ./pkg ./pkg
 
 # Build the app
-RUN go build -o .build/app ./cmd/cli
+RUN go build -o .build/app ./cmd/go-scaffold
 
 # Final image
 ########################

@@ -39,6 +39,14 @@ To build and install it:
 make install
 ```
 
+## Install using Go
+
+If you have Go installed, you can install the go-scaffold directly:
+
+```sh
+go install github.com/go-scaffold/go-scaffold/cmd/go-scaffold@master
+```
+
 ## Usage
 
 ### Template generation

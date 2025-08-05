@@ -8,7 +8,7 @@ include scripts/makefiles/third_party/pasdam/makefiles/help.mk
 
 .DEFAULT_GOAL := help
 
-GO_MAIN_DIR := ./cmd/cli
+GO_MAIN_DIR := ./cmd/go-scaffold
 
 ## build: Build all artifacts (binary and docker image)
 .PHONY: build
