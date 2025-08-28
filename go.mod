@@ -8,7 +8,7 @@ require (
 	github.com/pasdam/go-io-utilx v0.0.0-20250508155440-19082ad033c1 // indirect
 	github.com/pasdam/go-template-map-loader v0.0.0-20250523114045-193fc9d99dd5 // indirect
 	github.com/spf13/cobra v1.9.1
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
