@@ -7,7 +7,7 @@ require (
 	github.com/pasdam/files-index v0.0.0-20250508145439-ad11776076f6 // indirect
 	github.com/pasdam/go-io-utilx v0.0.0-20250508155440-19082ad033c1 // indirect
 	github.com/pasdam/go-template-map-loader v0.0.0-20250523114045-193fc9d99dd5 // indirect
-	github.com/spf13/cobra v1.9.1
+	github.com/spf13/cobra v1.10.1
 	github.com/stretchr/testify v1.11.1
 )
 
@@ -29,7 +29,7 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/spf13/pflag v1.0.6 // indirect
+	github.com/spf13/pflag v1.0.9 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
