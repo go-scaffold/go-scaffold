@@ -21,9 +21,3 @@ clean: | go-clean docker-clean
 ## install: Install all artifacts
 .PHONY: install
 install: | go-install
-
-## gitlab-ci-test: Run the stages locally to verify that they execute correctly
-.PHONY: gitlab-ci-test
-gitlab-ci-test:
-	@gitlab-runner exec docker inspect
-	@gitlab-runner exec docker build
