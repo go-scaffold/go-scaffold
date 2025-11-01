@@ -7,11 +7,11 @@ import (
 
 	"github.com/go-scaffold/go-scaffold/pkg/config"
 	"github.com/go-scaffold/go-scaffold/pkg/helpers"
-	"github.com/go-scaffold/go-sdk/pkg/collectors"
-	"github.com/go-scaffold/go-sdk/pkg/filters"
-	"github.com/go-scaffold/go-sdk/pkg/pipeline"
-	"github.com/go-scaffold/go-sdk/pkg/templateproviders"
-	"github.com/go-scaffold/go-sdk/pkg/values"
+	"github.com/go-scaffold/go-sdk/v2/pkg/collectors"
+	"github.com/go-scaffold/go-sdk/v2/pkg/filters"
+	"github.com/go-scaffold/go-sdk/v2/pkg/pipeline"
+	"github.com/go-scaffold/go-sdk/v2/pkg/templateproviders"
+	"github.com/go-scaffold/go-sdk/v2/pkg/values"
 )
 
 // Run starts the app
@@ -26,17 +26,10 @@ func RunWithCustomComponents(options *config.Options, templateProvider pipeline.
 		return errors.New("can't generate file in the input folder, please specify an output directory")
 	}
 
-	manifest, err := values.LoadYamlFilesWithPrefix("", options.ManifestPath())
+	loader := values.NewLoader()
+	data, err := loader.LoadYAMLs(options.TemplateRootPath, options.Values)
 	if err != nil {
-		return errors.New(fmt.Sprintf("an error occurred while reading the manifest file: %s", err.Error()))
-	}
-
-	valuesPaths := make([]string, 0, len(options.Values)+1)
-	valuesPaths = append(valuesPaths, options.ValuesPath())
-	valuesPaths = append(valuesPaths, options.Values...)
-	data, err := values.LoadYamlFilesWithPrefix("", valuesPaths...)
-	if err != nil {
-		return errors.New(fmt.Sprintf("error while loading data: %s", err.Error()))
+		return fmt.Errorf("an error occurred while loading the data: %s", err.Error())
 	}
 
 	collector := collectors.NewSplitterCollector(
@@ -55,12 +48,12 @@ func RunWithCustomComponents(options *config.Options, templateProvider pipeline.
 		WithCollector(collector).
 		Build()
 	if err != nil {
-		return errors.New(fmt.Sprintf("error while building the processing pipeline: %s", err))
+		return fmt.Errorf("error while building the processing pipeline: %s", err)
 	}
 
-	err = pp.Process(manifest, data)
+	err = pp.Process(data)
 	if err != nil {
-		return errors.New(fmt.Sprintf("error while running the pipeline: %s", err.Error()))
+		return fmt.Errorf("error while running the pipeline: %s", err.Error())
 	}
 	return nil
 }

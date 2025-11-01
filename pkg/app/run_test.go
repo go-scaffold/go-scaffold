@@ -8,8 +8,8 @@ import (
 	"text/template"
 
 	"github.com/go-scaffold/go-scaffold/pkg/config"
-	"github.com/go-scaffold/go-sdk/pkg/filters"
-	"github.com/go-scaffold/go-sdk/pkg/templateproviders"
+	"github.com/go-scaffold/go-sdk/v2/pkg/filters"
+	"github.com/go-scaffold/go-sdk/v2/pkg/templateproviders"
 	"github.com/pasdam/go-files-test/pkg/filestest"
 	"github.com/pasdam/go-utils/pkg/assertutils"
 	"github.com/stretchr/testify/assert"
@@ -73,7 +73,7 @@ func TestRun(t *testing.T) {
 					TemplateRootPath: filepath.Join("testdata", "invalid_templates"),
 				},
 			},
-			wantErr: errors.New("an error occurred while reading the manifest file: open testdata/invalid_templates/Manifest.yaml: no such file or directory"),
+			wantErr: errors.New("an error occurred while loading the data: an error occurred while getting the manifest path: neither .yaml nor .yml file found for Manifest in testdata/invalid_templates"),
 		},
 		{
 			name: "Should return error if default values file does not exist",
@@ -82,7 +82,7 @@ func TestRun(t *testing.T) {
 					TemplateRootPath: filepath.Join("testdata", "invalid_templates", "no_values"),
 				},
 			},
-			wantErr: errors.New("error while loading data: open testdata/invalid_templates/no_values/values.yaml: no such file or directory"),
+			wantErr: errors.New("an error occurred while loading the data: an error occurred while getting the value path: neither .yaml nor .yml file found for values in testdata/invalid_templates/no_values"),
 		},
 		{
 			name: "Should return error if custom values file does not exist",
@@ -94,7 +94,7 @@ func TestRun(t *testing.T) {
 					},
 				},
 			},
-			wantErr: errors.New("error while loading data: open some-not-existing-file: no such file or directory"),
+			wantErr: errors.New("an error occurred while loading the data: error while loading data: open some-not-existing-file: no such file or directory"),
 		},
 		{
 			name: "Should return error if processing the templates raises one",
