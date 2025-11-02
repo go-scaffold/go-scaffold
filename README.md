@@ -62,3 +62,151 @@ i.e.:
 ```sh
 go-scaffold generate -f ./examples/hello-world-markdown/values-project1.yaml ./examples/hello-world-markdown build/
 ```
+
+### Template Functions
+
+The go-scaffold template engine provides a rich set of functions to use in your templates, including:
+
+#### Built-in functions from [Sprig](https://github.com/Masterminds/sprig)
+
+The template engine includes all functions from the Sprig library. These include:
+
+**String Functions:**
+- `abbrev`, `abbrevboth`, `trunc` - String abbreviation functions
+- `trim`, `upper`, `lower`, `title`, `untitle` - String case and trimming functions
+- `substr` - Substring function
+- `repeat` - Repeats a string n times
+- `trimAll`, `trimSuffix`, `trimPrefix` - Advanced trimming
+- `nospace`, `initials` - String manipulation
+- `randAlphaNum`, `randAlpha`, `randAscii`, `randNumeric` - Random string generators
+- `snakecase`, `camelcase`, `kebabcase` - Case conversion functions
+- `wrap`, `wrapWith` - Text wrapping
+- `contains`, `hasPrefix`, `hasSuffix` - String matching
+- `quote`, `squote` - Quote functions
+- `cat` - Concatenates strings
+- `indent`, `nindent` - Indentation functions
+- `replace` - Replaces occurrences of a string
+- `plural` - Creates pluralized strings
+- `regexMatch`, `regexFindAll`, `regexFind`, `regexReplaceAll`, `regexSplit` - Regex functions
+- `regexQuoteMeta` - Quotes regex metacharacters
+
+**Math Functions:**
+- `add`, `add1`, `addf`, `add1f` - Addition functions
+- `sub`, `subf` - Subtraction functions
+- `mul`, `mulf` - Multiplication functions
+- `div`, `divf` - Division functions
+- `mod` - Modulo operation
+- `max`, `maxf`, `min`, `minf` - Comparison functions
+- `ceil`, `floor`, `round` - Rounding functions
+- `randInt` - Generates random integer
+- `seq` - Generates sequence of integers
+
+**Date Functions:**
+- `date`, `date_in_zone` - Date formatting
+- `date_modify`, `ago` - Date manipulation
+- `duration`, `durationRound` - Duration formatting
+- `now` - Current time
+- `unixEpoch` - Unix epoch time
+
+**Collection/Array Functions:**
+- `join` - Joins array elements with separator
+- `split`, `splitList`, `splitn` - String splitting functions
+- `sortAlpha` - Sorts alphabetically
+- `uniq` - Removes duplicates
+- `without` - Returns list without specified values
+- `concat` - Concatenates arrays
+- `slice` - Returns a slice of an array
+- `first`, `last`, `rest`, `initial` - Array element access
+- `reverse` - Reverses an array
+- `append`, `push`, `prepend` - Array modification
+- `chunk` - Chunks array into smaller arrays
+
+**Dictionary Functions:**
+- `dict` - Creates a dictionary
+- `get`, `set`, `unset` - Dictionary access/modification
+- `hasKey` - Checks if key exists
+- `pluck`, `keys`, `pick`, `omit` - Dictionary manipulation
+- `merge`, `mergeOverwrite` - Dictionary merging
+- `values` - Returns all values
+- `dig` - Navigates nested dictionary
+
+**Type Conversion Functions:**
+- `atoi` - String to integer conversion
+- `int`, `int64`, `float64` - Type conversions
+- `toString`, `toStrings` - String conversions
+- `toJson`, `toPrettyJson`, `toRawJson` - JSON conversions
+- `fromJson` - JSON parsing
+
+**Reflection Functions:**
+- `typeOf`, `typeIs`, `typeIsLike` - Type checking
+- `kindOf`, `kindIs` - Kind checking
+- `deepEqual` - Deep equality check
+
+**Default/Conditional Functions:**
+- `default` - Provides default value
+- `empty` - Checks if value is empty
+- `coalesce` - Returns first non-empty value
+- `ternary` - Ternary operator
+- `all`, `any` - Logical functions
+- `fail` - Causes template to fail with error
+
+**Path Functions:**
+- `base`, `dir`, `clean`, `ext`, `isAbs` - Path manipulation
+- OS-specific variants with `os` prefix
+
+**Encoding Functions:**
+- `b64enc`, `b64dec` - Base64 encoding/decoding
+- `b32enc`, `b32dec` - Base32 encoding/decoding
+
+**Crypto Functions:**
+- `bcrypt`, `htpasswd` - Password hashing
+- Certificate generation functions
+- `encryptAES`, `decryptAES` - AES encryption/decryption
+
+**Hash/Checksum Functions:**
+- `sha1sum`, `sha256sum`, `sha512sum` - Hash functions
+- `adler32sum` - Adler32 checksum
+
+**Network Functions:**
+- `getHostByName` - Gets host IP by name
+
+**OS Environment Functions:**
+- `env`, `expandenv` - Environment variables
+
+**SemVer Functions:**
+- `semver`, `semverCompare` - Semantic versioning
+
+**Utility Functions:**
+- `tuple`, `list` - Creates lists
+- `until`, `untilStep` - Range functions
+- `deepCopy` - Deep copies data structure
+
+#### Custom functions provided by go-scaffold
+
+In addition to the Sprig functions, go-scaffold provides these custom functions:
+
+- `camelcase` - Converts a string to CamelCase using the [strcase](https://github.com/iancoleman/strcase) library
+- `replace` - Replaces all occurrences of a substring in a string (uses `strings.ReplaceAll`)
+- `sequence` - Generates a sequence of consecutive integers as a slice (e.g., `{{ sequence 5 }}` produces `[0, 1, 2, 3, 4]`)
+
+#### Examples of custom functions usage
+
+Here are some examples of how to use the custom functions in your templates:
+
+**Using camelcase:**
+```go
+{{ "hello world" | camelcase }} → "HelloWorld"
+{{ "my-package-name" | camelcase }} → "MyPackageName"
+```
+
+**Using replace:**
+```go
+{{ "hello world" | replace "world" "gopher" }} → "hello gopher"
+{{ "foo-bar-baz" | replace "-" "_" }} → "foo_bar_baz"
+```
+
+**Using sequence:**
+```go
+{{ range $i := sequence 3 }}{{ $i }}{{ end }} → "012"
+{{ range $i := sequence 5 }}Item {{ $i }}{{ end }} → "Item 0Item 1Item 2Item 3Item 4"
+```
