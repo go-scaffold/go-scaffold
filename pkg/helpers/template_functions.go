@@ -3,7 +3,7 @@ package helpers
 import (
 	"text/template"
 
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"github.com/go-scaffold/go-scaffold/pkg/helpers/collections"
 	"github.com/go-scaffold/go-scaffold/pkg/helpers/strings"
 	"github.com/iancoleman/strcase"
