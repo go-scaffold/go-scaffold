@@ -44,6 +44,7 @@ func RunWithCustomComponents(options *config.Options, templateProvider pipeline.
 		NewPipelineBuilder().
 		WithDataPreprocessor(dataPreprocessor).
 		WithFunctions(helpers.TemplateFunctions(funcMaps...)).
+		WithTemplateAwareFunctions(helpers.TemplateAwareFunctions()).
 		WithTemplateProvider(templateProvider).
 		WithCollector(collector).
 		Build()
