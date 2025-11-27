@@ -1,9 +1,12 @@
 # go-scaffold
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/go-scaffold/go-scaffold)](https://goreportcard.com/report/github.com/go-scaffold/go-scaffold)
-[![CI Status](https://github.com/go-scaffold/go-scaffold/workflows/Continuous%20integration/badge.svg)](https://github.com/go-scaffold/go-scaffold/actions)
+[![Go Report
+Card](https://goreportcard.com/badge/github.com/go-scaffold/go-scaffold)](https://goreportcard.com/report/github.com/go-scaffold/go-scaffold)
+[![CI
+Status](https://github.com/go-scaffold/go-scaffold/workflows/Continuous%20integration/badge.svg)](https://github.com/go-scaffold/go-scaffold/actions)
 
-Command line application that generates files/projects from a [template](https://pkg.go.dev/text/template).
+Command line application that generates files/projects from a
+[template](https://pkg.go.dev/text/template).
 
 The app is heavily inspired by [Helm](https://helm.sh/), but with the intent to
 be general purpose.
@@ -49,36 +52,83 @@ go install github.com/go-scaffold/go-scaffold/cmd/go-scaffold@master
 
 ## Usage
 
+The go-scaffold CLI provides two main commands:
+
+### Create a new template project
+
+Use the `create` command to initialize a new template project with the required
+file structure:
+
+```sh
+go-scaffold create [name]
+```
+
+This command creates:
+- `Manifest.yaml` - Defines the template configuration
+- `values.yaml` - Contains default values for the template
+- `templates/` directory - Contains the actual template files
+
+If no name is provided, the command will create the template structure in the
+current directory (which must be empty).
+
 ### Template generation
 
 In order to generate the output files from a template:
 
 ```sh
-go-scaffold generate [<flags>] <template_oath> <output_dir>
+go-scaffold generate [<flags>] <template-dir> <output-dir>
 ```
 
-i.e.:
+Use the `-f` flag to specify overriding values files:
 
 ```sh
 go-scaffold generate -f ./examples/hello-world-markdown/values-project1.yaml ./examples/hello-world-markdown build/
 ```
 
+The template directory should contain:
+- `Manifest.yaml` (optional, but recommended)
+- `values.yaml` - Default values for the template
+- `templates/` directory - Contains template files (all files will be processed
+  as templates)
+
+### Template Structure
+
+Templates should be organized as follows:
+
+```
+my-template/
+├── Manifest.yaml      # Template configuration (optional)
+├── values.yaml        # Default values
+└── templates/         # Template files
+    ├── file1.txt      # Template file
+    ├── file2.yaml     # Another template file
+    └── ...
+```
+
+Values in templates can be accessed using `.Values.key` syntax (e.g., `{{
+.Values.project }}`). In templates, use the `.Values` prefix to access values
+from the values.yaml file.
+
 ### Template Functions
 
-The go-scaffold template engine provides a rich set of functions to use in your templates, including:
+The go-scaffold template engine provides a rich set of functions to use in your
+templates, including:
 
 #### Built-in functions from [Sprig](https://github.com/Masterminds/sprig)
 
-The template engine includes all functions from the Sprig library. These include:
+The template engine includes all functions from the Sprig library. These
+include:
 
 **String Functions:**
 - `abbrev`, `abbrevboth`, `trunc` - String abbreviation functions
-- `trim`, `upper`, `lower`, `title`, `untitle` - String case and trimming functions
+- `trim`, `upper`, `lower`, `title`, `untitle` - String case and trimming
+  functions
 - `substr` - Substring function
 - `repeat` - Repeats a string n times
 - `trimAll`, `trimSuffix`, `trimPrefix` - Advanced trimming
 - `nospace`, `initials` - String manipulation
-- `randAlphaNum`, `randAlpha`, `randAscii`, `randNumeric` - Random string generators
+- `randAlphaNum`, `randAlpha`, `randAscii`, `randNumeric` - Random string
+  generators
 - `snakecase`, `camelcase`, `kebabcase` - Case conversion functions
 - `wrap`, `wrapWith` - Text wrapping
 - `contains`, `hasPrefix`, `hasSuffix` - String matching
@@ -87,7 +137,8 @@ The template engine includes all functions from the Sprig library. These include
 - `indent`, `nindent` - Indentation functions
 - `replace` - Replaces occurrences of a string
 - `plural` - Creates pluralized strings
-- `regexMatch`, `regexFindAll`, `regexFind`, `regexReplaceAll`, `regexSplit` - Regex functions
+- `regexMatch`, `regexFindAll`, `regexFind`, `regexReplaceAll`, `regexSplit` -
+  Regex functions
 - `regexQuoteMeta` - Quotes regex metacharacters
 
 **Math Functions:**
@@ -185,9 +236,15 @@ The template engine includes all functions from the Sprig library. These include
 
 In addition to the Sprig functions, go-scaffold provides these custom functions:
 
-- `camelcase` - Converts a string to CamelCase using the [strcase](https://github.com/iancoleman/strcase) library
-- `replace` - Replaces all occurrences of a substring in a string (uses `strings.ReplaceAll`)
-- `sequence` - Generates a sequence of consecutive integers as a slice (e.g., `{{ sequence 5 }}` produces `[0, 1, 2, 3, 4]`)
+- `camelcase` - Converts a string to CamelCase using the
+  [strcase](https://github.com/iancoleman/strcase) library
+- `replace` - Replaces all occurrences of a substring in a string (uses
+  `strings.ReplaceAll`)
+- `sequence` - Generates a sequence of consecutive integers as a slice (e.g.,
+  `{{ sequence 5 }}` produces `[0, 1, 2, 3, 4]`)
+- `include` - Includes and renders a named template (useful as a replacement of
+  the built in [template](https://pkg.go.dev/text/template#hdr-Actions), so it
+  can be used in [pipelines](https://pkg.go.dev/text/template#hdr-Pipelines))
 
 #### Examples of custom functions usage
 
@@ -209,4 +266,9 @@ Here are some examples of how to use the custom functions in your templates:
 ```go
 {{ range $i := sequence 3 }}{{ $i }}{{ end }} → "012"
 {{ range $i := sequence 5 }}Item {{ $i }}{{ end }} → "Item 0Item 1Item 2Item 3Item 4"
+```
+
+**Using include:**
+```go
+{{ include "partial_template_name" . }}
 ```
