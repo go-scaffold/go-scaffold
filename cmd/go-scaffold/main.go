@@ -25,6 +25,7 @@ func main() {
 		Args:  cobra.ExactArgs(2),
 	}
 	generateCmd.Flags().StringArrayP("values", "f", nil, "overriding values file")
+	generateCmd.Flags().Bool("skip-unchanged", false, "skip writing files that would be unchanged")
 	rootCmd.AddCommand(generateCmd)
 
 	createCmd := &cobra.Command{
@@ -152,10 +153,17 @@ func generate(cmd *cobra.Command, args []string) {
 		return
 	}
 
+	skipUnchanged, err := cmd.Flags().GetBool("skip-unchanged")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
 	options := &config.Options{
 		OutputPath:       args[1],
 		TemplateRootPath: args[0],
 		Values:           values,
+		SkipUnchanged:    skipUnchanged,
 	}
 
 	err = app.Run(options)

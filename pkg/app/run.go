@@ -32,8 +32,13 @@ func RunWithCustomComponents(options *config.Options, templateProvider pipeline.
 		return fmt.Errorf("an error occurred while loading the data: %s", err.Error())
 	}
 
+	fileWriterOptions := collectors.FileWriterCollectorOptions{
+		OutDir:        options.OutputPath,
+		SkipUnchanged: options.SkipUnchanged,
+	}
+
 	collector := collectors.NewSplitterCollector(
-		collectors.NewFileWriterCollector(options.OutputPath, nil),
+		collectors.NewFileWriterCollectorWithOpts(fileWriterOptions, nil),
 	)
 
 	customFuncMap := make(template.FuncMap)

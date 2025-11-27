@@ -9,6 +9,7 @@ type Options struct {
 	OutputPath       string
 	TemplateRootPath string
 	Values           []string
+	SkipUnchanged    bool
 }
 
 // TemplateDirPath returns the path of the template dir
