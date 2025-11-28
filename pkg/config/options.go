@@ -10,6 +10,7 @@ type Options struct {
 	TemplateRootPath string
 	Values           []string
 	SkipUnchanged    bool
+	CleanupUntracked bool
 }
 
 // TemplateDirPath returns the path of the template dir

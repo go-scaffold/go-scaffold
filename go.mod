@@ -10,7 +10,7 @@ require (
 )
 
 require (
-	github.com/go-scaffold/go-sdk/v2 v2.1.0
+	github.com/go-scaffold/go-sdk/v2 v2.1.1
 	github.com/pasdam/go-files-test v0.0.0-20200501091338-451ab9b14024
 	github.com/pasdam/go-utils v0.1.0
 )

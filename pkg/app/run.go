@@ -33,8 +33,9 @@ func RunWithCustomComponents(options *config.Options, templateProvider pipeline.
 	}
 
 	fileWriterOptions := collectors.FileWriterCollectorOptions{
-		OutDir:        options.OutputPath,
-		SkipUnchanged: options.SkipUnchanged,
+		OutDir:           options.OutputPath,
+		SkipUnchanged:    options.SkipUnchanged,
+		CleanupUntracked: options.CleanupUntracked,
 	}
 
 	collector := collectors.NewSplitterCollector(

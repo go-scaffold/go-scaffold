@@ -26,6 +26,7 @@ func main() {
 	}
 	generateCmd.Flags().StringArrayP("values", "f", nil, "overriding values file")
 	generateCmd.Flags().Bool("skip-unchanged", false, "skip writing files that would be unchanged")
+	generateCmd.Flags().Bool("cleanup-untracked", false, "remove untracked files that are no longer part of the template")
 	rootCmd.AddCommand(generateCmd)
 
 	createCmd := &cobra.Command{
@@ -159,11 +160,18 @@ func generate(cmd *cobra.Command, args []string) {
 		return
 	}
 
+	cleanupUntracked, err := cmd.Flags().GetBool("cleanup-untracked")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
 	options := &config.Options{
 		OutputPath:       args[1],
 		TemplateRootPath: args[0],
 		Values:           values,
 		SkipUnchanged:    skipUnchanged,
+		CleanupUntracked: cleanupUntracked,
 	}
 
 	err = app.Run(options)
