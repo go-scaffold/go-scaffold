@@ -5,7 +5,7 @@ require (
 	github.com/pasdam/files-index v0.0.0-20251121140831-26461ddd8218 // indirect
 	github.com/pasdam/go-io-utilx v0.0.0-20251121150153-9bcd90b931fb // indirect
 	github.com/pasdam/go-template-map-loader v0.0.0-20251124154658-3494918d97eb // indirect
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
 )
 
