@@ -5,13 +5,23 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig/v3"
+	"github.com/gertd/go-pluralize"
 	"github.com/go-scaffold/go-sdk/v2/pkg/templates"
 )
 
 func TemplateFunctions(funcMaps ...template.FuncMap) template.FuncMap {
 	sprigFuncMap := sprig.TxtFuncMap()
-	maps := make([]template.FuncMap, 0, len(funcMaps)+1)
+
+	customFuncs := make(template.FuncMap)
+	pluralizeClient := pluralize.NewClient()
+	customFuncs["pluralize"] = pluralizeClient.Plural
+	customFuncs["singularize"] = pluralizeClient.Singular
+	customFuncs["isPlural"] = pluralizeClient.IsPlural
+	customFuncs["isSingular"] = pluralizeClient.IsSingular
+
+	maps := make([]template.FuncMap, 0, len(funcMaps)+2)
 	maps = append(maps, sprigFuncMap)
+	maps = append(maps, customFuncs)
 	maps = append(maps, funcMaps...)
 	return mergeFuncMaps(maps)
 }
