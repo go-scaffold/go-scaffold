@@ -1,7 +1,6 @@
 module github.com/go-scaffold/go-scaffold
 
 require (
-	github.com/iancoleman/strcase v0.3.0
 	github.com/pasdam/files-index v0.0.0-20251121140831-26461ddd8218 // indirect
 	github.com/pasdam/go-io-utilx v0.0.0-20251121150153-9bcd90b931fb // indirect
 	github.com/pasdam/go-template-map-loader v0.0.0-20251124154658-3494918d97eb // indirect

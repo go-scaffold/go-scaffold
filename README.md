@@ -236,12 +236,6 @@ include:
 
 In addition to the Sprig functions, go-scaffold provides these custom functions:
 
-- `camelcase` - Converts a string to CamelCase using the
-  [strcase](https://github.com/iancoleman/strcase) library
-- `replace` - Replaces all occurrences of a substring in a string (uses
-  `strings.ReplaceAll`)
-- `sequence` - Generates a sequence of consecutive integers as a slice (e.g.,
-  `{{ sequence 5 }}` produces `[0, 1, 2, 3, 4]`)
 - `include` - Includes and renders a named template (useful as a replacement of
   the built in [template](https://pkg.go.dev/text/template#hdr-Actions), so it
   can be used in [pipelines](https://pkg.go.dev/text/template#hdr-Pipelines))
