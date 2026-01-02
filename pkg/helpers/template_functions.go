@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"bytes"
+	"log"
 	"text/template"
 
 	"github.com/Masterminds/sprig/v3"
@@ -18,6 +19,10 @@ func TemplateFunctions(funcMaps ...template.FuncMap) template.FuncMap {
 	customFuncs["singularize"] = pluralizeClient.Singular
 	customFuncs["isPlural"] = pluralizeClient.IsPlural
 	customFuncs["isSingular"] = pluralizeClient.IsSingular
+	customFuncs["debug"] = func(v ...any) string {
+		log.Printf("[TEMPLATE DEBUG] %v", v)
+		return "" // Return empty string to not affect template output
+	}
 
 	maps := make([]template.FuncMap, 0, len(funcMaps)+2)
 	maps = append(maps, sprigFuncMap)

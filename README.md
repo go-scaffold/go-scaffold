@@ -239,6 +239,7 @@ In addition to the Sprig functions, go-scaffold provides these custom functions:
 - `include` - Includes and renders a named template (useful as a replacement of
   the built in [template](https://pkg.go.dev/text/template#hdr-Actions), so it
   can be used in [pipelines](https://pkg.go.dev/text/template#hdr-Pipelines))
+- `debug` - Prints debug information to console during template rendering, useful for troubleshooting variable values (e.g., `{{ debug .Values.myVariable }}` or `{{ debug "Debug info:" .Values.someValue }}`). Note: This function returns an empty string and doesn't affect template output.
 
 #### Examples of custom functions usage
 
@@ -266,3 +267,11 @@ Here are some examples of how to use the custom functions in your templates:
 ```go
 {{ include "partial_template_name" . }}
 ```
+
+**Using debug:**
+```go
+{{ debug .Values.myVariable }}
+{{ debug "Current value:" .Values.someValue }}
+{{ debug "Multiple values:" .Values.val1 .Values.val2 }}
+```
+This function prints debug information to the console during template rendering and returns an empty string, so it doesn't affect the template output.
