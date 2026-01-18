@@ -1,0 +1,5 @@
+# Default values for the named templates example
+projectName: "My Project"
+author: "John Doe"
+version: "1.0.0"
+description: "A sample project demonstrating named templates"

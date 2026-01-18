@@ -1,0 +1,4 @@
+# Manifest.yaml for named templates example
+version: "1.0"
+name: named-templates-example
+description: Example template demonstrating named templates functionality

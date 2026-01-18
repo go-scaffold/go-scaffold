@@ -27,6 +27,7 @@ func main() {
 	generateCmd.Flags().StringArrayP("values", "f", nil, "overriding values file")
 	generateCmd.Flags().Bool("skip-unchanged", false, "skip writing files that would be unchanged")
 	generateCmd.Flags().Bool("cleanup-untracked", false, "remove untracked files that are no longer part of the template")
+	generateCmd.Flags().String("named-templates-pattern", "partials/*", "Regex to search for named template files")
 	rootCmd.AddCommand(generateCmd)
 
 	createCmd := &cobra.Command{
@@ -166,12 +167,19 @@ func generate(cmd *cobra.Command, args []string) {
 		return
 	}
 
+	namedTemplatesPattern, err := cmd.Flags().GetString("named-templates-pattern")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
 	options := &config.Options{
-		OutputPath:       args[1],
-		TemplateRootPath: args[0],
-		Values:           values,
-		SkipUnchanged:    skipUnchanged,
-		CleanupUntracked: cleanupUntracked,
+		OutputPath:            args[1],
+		TemplateRootPath:      args[0],
+		Values:                values,
+		SkipUnchanged:         skipUnchanged,
+		CleanupUntracked:      cleanupUntracked,
+		NamedTemplatesPattern: namedTemplatesPattern,
 	}
 
 	err = app.Run(options)

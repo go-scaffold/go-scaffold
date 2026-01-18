@@ -91,6 +91,29 @@ The template directory should contain:
 - `templates/` directory - Contains template files (all files will be processed
   as templates)
 
+### Named Templates
+
+`go-scaffold` supports named templates similar to
+[Helm charts](https://helm.sh/docs/chart_template_guide/named_templates/).
+
+Named templates allow you to define reusable snippets that can be shared across
+multiple template files.
+
+By default all files in `partials` are considered name templates, but you can
+use a different path by specifying the `named-templates-pattern` argument for
+the cli command.
+
+Example:
+
+```sh
+go-scaffold generate --named-templates-pattern ./shared/*.tpl ./my-template build/
+```
+
+Named templates use Go template syntax:
+`{{ define "template.name" }}...{{ end }}`. Please refer to the official
+[go template documentation](https://pkg.go.dev/text/template#hdr-Nested_template_definitions)
+for more info.
+
 ### Template Structure
 
 Templates should be organized as follows:
@@ -99,8 +122,10 @@ Templates should be organized as follows:
 my-template/
 ├── Manifest.yaml      # Template configuration (optional)
 ├── values.yaml        # Default values
+├── partials/          # Named template files (optional)
+│   └── header.tpl     # Named template file
 └── templates/         # Template files
-    ├── file1.txt      # Template file
+    ├── file1.txt      # Template file that can include named templates
     ├── file2.yaml     # Another template file
     └── ...
 ```

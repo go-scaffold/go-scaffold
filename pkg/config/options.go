@@ -6,11 +6,12 @@ import (
 
 // Options contains the app run configuration
 type Options struct {
-	OutputPath       string
-	TemplateRootPath string
-	Values           []string
-	SkipUnchanged    bool
-	CleanupUntracked bool
+	OutputPath            string
+	TemplateRootPath      string
+	Values                []string
+	SkipUnchanged         bool
+	CleanupUntracked      bool
+	NamedTemplatesPattern string
 }
 
 // TemplateDirPath returns the path of the template dir

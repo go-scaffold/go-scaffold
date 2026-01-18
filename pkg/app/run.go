@@ -16,12 +16,19 @@ import (
 
 // Run starts the app
 func Run(options *config.Options, funcMaps ...template.FuncMap) error {
-	fileProvider := templateproviders.NewFileSystemProvider(string(options.TemplateDirPath()), filters.NewNoOpFilter())
-	return RunWithCustomComponents(options, fileProvider, nil, funcMaps...)
+	templateProvider := templateproviders.NewFileSystemProvider(options.TemplateDirPath(), filters.NewNoOpFilter())
+
+	namedTempaltesFilter, err := filters.NewPatternFilter(true, options.NamedTemplatesPattern)
+	if err != nil {
+		return fmt.Errorf("Invalid named templates pattern: %w", err)
+	}
+	namedTemplateProvider := templateproviders.NewFileSystemProvider(options.TemplateRootPath, namedTempaltesFilter)
+
+	return RunWithCustomComponents(options, templateProvider, nil, namedTemplateProvider, funcMaps...)
 }
 
-// Run starts the app
-func RunWithCustomComponents(options *config.Options, templateProvider pipeline.TemplateProvider, dataPreprocessor pipeline.DataPreprocessor, funcMaps ...template.FuncMap) error {
+// RunWithCustomComponents starts the app with custom components
+func RunWithCustomComponents(options *config.Options, templateProvider pipeline.TemplateProvider, dataPreprocessor pipeline.DataPreprocessor, namedTemplateProvider pipeline.TemplateProvider, funcMaps ...template.FuncMap) error {
 	if options.TemplateRootPath == options.OutputPath {
 		return errors.New("can't generate file in the input folder, please specify an output directory")
 	}
@@ -52,6 +59,7 @@ func RunWithCustomComponents(options *config.Options, templateProvider pipeline.
 		WithFunctions(helpers.TemplateFunctions(funcMaps...)).
 		WithTemplateAwareFunctions(helpers.TemplateAwareFunctions()).
 		WithTemplateProvider(templateProvider).
+		WithNamedTemplatesProvider(namedTemplateProvider).
 		WithCollector(collector).
 		Build()
 	if err != nil {

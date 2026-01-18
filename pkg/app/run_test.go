@@ -135,7 +135,7 @@ func TestRunWithCustomComponents_ShouldReturnErrorIfTemplateProviderIsNil(t *tes
 		TemplateRootPath: filepath.Join("testdata", "invalid_templates", "empty_values"),
 	}
 
-	err := RunWithCustomComponents(options, nil, nil)
+	err := RunWithCustomComponents(options, nil, nil, nil, nil)
 
 	assert.Error(t, err)
 	assert.Equal(t, "error while building the processing pipeline: no template processor specified for the pipeline", err.Error())
@@ -174,27 +174,10 @@ func TestRunWithCustomComponents_ShouldProcessValidTemplateWithCustomDataPreproc
 	}
 	fileProvider := templateproviders.NewFileSystemProvider(string(options.TemplateDirPath()), filters.NewNoOpFilter())
 
-	err := RunWithCustomComponents(options, fileProvider, dataPreprocessor)
+	err := RunWithCustomComponents(options, fileProvider, dataPreprocessor, nil, nil)
 
 	assert.NoError(t, err)
 	for _, file := range want {
 		filestest.FileExistsWithContent(t, filepath.Join(options.OutputPath, file.path), file.content)
 	}
-}
-
-func Test_real(t *testing.T) {
-	// Precondition(s)
-
-	templateRoot := filepath.Join("..", "..", "examples", "openresume")
-
-	// Operation
-	Run(&config.Options{
-		OutputPath: filepath.Join(templateRoot, "out"),
-		Values: []string{
-			filepath.Join("..", "..", "examples", "openresume", "values-pasquale.yaml"),
-		},
-		TemplateRootPath: templateRoot,
-	})
-
-	// Assertion(s)
 }
