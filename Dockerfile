@@ -17,7 +17,7 @@ RUN go build -o .build/app ./cmd/go-scaffold
 
 # Final image
 ########################
-FROM alpine:3.23.4
+FROM alpine:3.24.0
 
 WORKDIR /opt/app
 
