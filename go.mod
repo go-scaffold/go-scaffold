@@ -5,7 +5,7 @@ require (
 	github.com/pasdam/go-io-utilx v0.0.0-20251121150153-9bcd90b931fb // indirect
 	github.com/pasdam/go-template-map-loader v0.0.0-20251124154658-3494918d97eb // indirect
 	github.com/spf13/cobra v1.10.2
-	github.com/stretchr/testify v1.12.0
+	github.com/stretchr/testify v1.12.1
 )
 
 require (
@@ -19,6 +19,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 )
 
 require (
